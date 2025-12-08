@@ -1,0 +1,220 @@
+@font-face {
+  font-family: "Metamorphous";
+  src: url("../public/fonts/Metamorphous-Regular.ttf") format("truetype");
+  font-weight: 100 900; /* Variable font weight range */
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Questrial";
+  src: url("../public/fonts/Questrial-Regular.ttf") format("truetype");
+  font-weight: 100 900; /* Variable font weight range */
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ===== THEME VARIABLES ===== */
+
+/* Forest Theme - Decaying, sombre, muted greens */
+[data-theme="forest"] {
+  --color-bg-primary: #171f14;
+  --color-bg-secondary: #252f22;
+  --color-bg-tertiary: #2f3a2b;
+  --color-bg-accent: #3d4a38;
+
+  --color-text-primary: #a8b5a0;
+  --color-text-secondary: #7a8873;
+  --color-text-muted: #5a6655;
+  --color-text-accent: #c4d4b8;
+
+  --color-border: #3a4536;
+  --color-border-accent: #4d5c47;
+
+  --color-accent-primary: #5c7a52;
+  --color-accent-secondary: #4a6343;
+  --color-accent-glow: rgba(92, 122, 82, 0.3);
+
+  --color-shadow: rgba(10, 15, 8, 0.6);
+}
+
+/* Elegy Theme - Stark white, grey, black */
+[data-theme="elegy"] {
+  --color-bg-primary: #0a0a0a;
+  --color-bg-secondary: #141414;
+  --color-bg-tertiary: #1f1f1f;
+  --color-bg-accent: #2a2a2a;
+
+  --color-text-primary: #e8e8e8;
+  --color-text-secondary: #b0b0b0;
+  --color-text-muted: #707070;
+  --color-text-accent: #ffffff;
+
+  --color-border: #333333;
+  --color-border-accent: #4a4a4a;
+
+  --color-accent-primary: #888888;
+  --color-accent-secondary: #666666;
+  --color-accent-glow: rgba(255, 255, 255, 0.1);
+
+  --color-shadow: rgba(0, 0, 0, 0.8);
+}
+
+/* Default to forest if no theme set */
+:root {
+  --color-bg-primary: #1a2418;
+  --color-bg-secondary: #252f22;
+  --color-bg-tertiary: #2f3a2b;
+  --color-bg-accent: #3d4a38;
+
+  --color-text-primary: #a8b5a0;
+  --color-text-secondary: #7a8873;
+  --color-text-muted: #5a6655;
+  --color-text-accent: #c4d4b8;
+
+  --color-border: #3a4536;
+  --color-border-accent: #4d5c47;
+
+  --color-accent-primary: #5c7a52;
+  --color-accent-secondary: #4a6343;
+  --color-accent-glow: rgba(92, 122, 82, 0.3);
+
+  --color-shadow: rgba(10, 15, 8, 0.6);
+}
+
+/* Apply theme colors to html and body */
+html,
+body {
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  font-family: "Questrial", sans-serif;
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+html {
+  min-height: 100%;
+}
+
+body {
+  min-height: 100vh;
+}
+
+.App {
+  text-align: center;
+  background-color: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: "Metamorphous", cursive;
+  font-weight: 500;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  display: inline-block;
+  vertical-align: middle;
+  width: 0.75rem;
+  height: 0.75rem;
+  min-width: 0.75rem;
+  min-height: 0.75rem;
+  flex-shrink: 0;
+  aspect-ratio: 1;
+  border: 1px solid var(--color-border-accent);
+  border-radius: 0.125rem;
+  background-color: transparent;
+  font-size: 8px;
+  line-height: 0.6rem;
+  text-align: center;
+  margin-right: 0.125rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+input[type="checkbox"]:hover:not(:disabled) {
+  border-color: var(--color-accent-primary);
+}
+
+input[type="checkbox"]:checked {
+  background-color: var(--color-accent-primary);
+  border-color: var(--color-accent-primary);
+}
+
+input[type="checkbox"]:disabled {
+  cursor: default;
+  opacity: 0.7;
+}
+
+/* ===== SCROLLBAR STYLES ===== */
+/* Hide scrollbars by default, show on hover/scroll, zero width overlay */
+
+/* Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+
+*:hover,
+*:focus-within {
+  scrollbar-color: var(--color-border-accent) transparent;
+}
+
+/* Chrome, Safari, Edge */
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+  background: transparent;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 3px;
+  transition: background 0.2s ease;
+}
+
+*:hover::-webkit-scrollbar-thumb,
+*:focus-within::-webkit-scrollbar-thumb {
+  background: var(--color-border-accent);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-primary);
+}
