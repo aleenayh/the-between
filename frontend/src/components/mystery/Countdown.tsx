@@ -85,6 +85,21 @@ export function Countdown({ mystery }: { mystery: Mystery }) {
 			<div className="text-theme-text-secondary text-sm">
 				{mystery.countdownCurrent} / {mystery.countdownTotal}
 			</div>
+			{mystery.questions && mystery.questions.length > 0 && (
+				<div className="py-4 flex flex-col gap-2">
+					<h2 className="text-md text-center whitespace-nowrap" style={style}>
+						Questions
+					</h2>
+					{mystery.questions.map((question) => (
+						<div key={question.text}>
+							{question.text}{" "}
+							<span className="text-sm text-theme-text-secondary italic">
+								(Complexity: {question.complexity})
+							</span>
+						</div>
+					))}
+				</div>
+			)}
 			{role === PlayerRole.KEEPER && (
 				<button
 					type="button"
