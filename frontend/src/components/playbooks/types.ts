@@ -64,7 +64,7 @@ export type Character = {
 	moves: {
 		title: string;
 		text?: string[]; //only necessary for custom moves
-		checks: boolean[];
+		checks: number[];
 		lines: string[];
 	}[];
 	coreMoveState: CoreMoveState;

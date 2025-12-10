@@ -2,6 +2,7 @@ import { AbilityBoxes } from "./sharedComponents/AbilityBoxes";
 import { Cinders } from "./sharedComponents/Cinders";
 import { Conditions } from "./sharedComponents/Conditions";
 import { ExperienceTracker } from "./sharedComponents/ExperienceTracker";
+import { Extras } from "./sharedComponents/Extras";
 import { Fires } from "./sharedComponents/Fires";
 import { Moves } from "./sharedComponents/Moves";
 import { Questions } from "./sharedComponents/Questions";
@@ -22,7 +23,7 @@ export function PlaybookPane({ character }: { character: Character }) {
 				<Section title="Conditions">
 					<Conditions character={character} />
 				</Section>
-				<AbilityBoxes stats={character.abilities} />
+				<AbilityBoxes stats={character.abilities} abbreviate />
 				<ExperienceTracker character={character} />
 
 				<Section title="Moves" collapsible={true}>
@@ -38,6 +39,7 @@ export function PlaybookPane({ character }: { character: Character }) {
 				<Section title="Questions" collapsible={true}>
 					<Questions character={character} />
 				</Section>
+				<Extras character={character} />
 			</div>
 		</section>
 	);

@@ -363,7 +363,7 @@ function MoveWriter({
 		const newMove = {
 			title: data.title,
 			text: parseAspects(data.text.split("\n")),
-			checks: Array.from({ length: data.numberChecks }, () => false),
+			checks: Array.from({ length: data.numberChecks }, () => 0),
 			lines: Array.from({ length: data.numberLines }, () => ""),
 		};
 		if (advancementIndex === null) {
@@ -373,6 +373,7 @@ function MoveWriter({
 			...character.advancements,
 			[advancementIndex]: true,
 		};
+		const priorMoves = existingMoves ? existingMoves : [];
 		updateGameState({
 			players: gameState.players.map((player) =>
 				player.character && player.id === id
@@ -380,7 +381,7 @@ function MoveWriter({
 							...player,
 							character: {
 								...character,
-								moves: [...existingMoves, newMove],
+								moves: [...priorMoves, newMove],
 								advancements: newAdvancements,
 							},
 						}

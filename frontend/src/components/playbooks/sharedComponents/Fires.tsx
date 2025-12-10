@@ -45,7 +45,7 @@ export function Fires({ character }: { character: Character }) {
 					The Old Fire
 				</h3>
 				<div
-					className={`${editable ? "flex flex-col" : "flex flex-row gap-0 justify-start"}`}
+					className={`${editable ? "flex flex-col" : "flex flex-row gap-x-0 gap-y-2 justify-start flex-wrap"}`}
 				>
 					{oldFire.map((fire, i) => {
 						const marked = markedOldFire >= i + 1; //zero indexed
@@ -87,7 +87,8 @@ export function Fires({ character }: { character: Character }) {
 								onChange={(e) => onToggle(e.target.checked, "fire-to-come")}
 							/>
 							<label className="text-xs" htmlFor={`fire-fire-${fire}`}>
-								<strong>{key}</strong>:{" "}
+								<strong>{key}</strong>
+								{editable ? ": " : " "}
 								{editable && (
 									<span
 										className={`${marked ? "text-theme-text-muted line-through" : ""}`}

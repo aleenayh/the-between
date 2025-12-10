@@ -1,10 +1,21 @@
 import type { Abilities, Abilities as AbilityType } from "../types";
 
-export function AbilityBoxes({ stats }: { stats: AbilityType }) {
+export function AbilityBoxes({
+	stats,
+	abbreviate = false,
+}: {
+	stats: AbilityType;
+	abbreviate?: boolean;
+}) {
 	return (
 		<div className={`flex flex-wrap justify-center gap-1 mx-10 md:mx-auto`}>
 			{orderAbilities(stats).map(({ ability, value }) => (
-				<AbilityBox key={ability} ability={ability} value={value} />
+				<AbilityBox
+					key={ability}
+					ability={ability}
+					value={value}
+					abbreviate={abbreviate}
+				/>
 			))}
 		</div>
 	);
@@ -22,13 +33,18 @@ const order = ["vitality", "composure", "reason", "presence", "cinder"];
 type AbilityBoxProps = {
 	ability: keyof AbilityType;
 	value: number;
+	abbreviate?: boolean;
 };
 
-export function AbilityBox({ ability, value }: AbilityBoxProps) {
+export function AbilityBox({
+	ability,
+	value,
+	abbreviate = false,
+}: AbilityBoxProps) {
 	return (
 		<div className="flex flex-col gap-1 rounded-lg border border-theme-border-accent p-1 bg-theme-bg-secondary justify-center items-center min-w-[10%]">
-			<h2 className="text-[0.7rem] text-theme-text-muted truncate max-w-full">
-				{ability}
+			<h2 className="text-theme-text-muted text-[0.5rem] truncate max-w-full">
+				{abbreviate ? ability.slice(0, 4) : ability}
 			</h2>
 			<div className="text-center text-lg font-bold bg-transparent">
 				{value}

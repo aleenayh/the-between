@@ -40,7 +40,7 @@ export function CharacterOverview() {
 			</h1>
 			{user.role === PlayerRole.KEEPER && <KeeperPill />}
 			{user.role === PlayerRole.KEEPER && <div className="w-full h-8" />}
-			<div className="flex flex-1 min-h-0 overflow-hidden">
+			<div className="flex flex-1 min-h-0 overflow-hidden gap-1">
 				{/* Other players' playbooks - takes up ~60% width, shows up to 4 in a grid */}
 				<div
 					className={`hidden  min-w-0 md:grid  gap-2 auto-rows-fr overflow-hidden ${user.role === PlayerRole.KEEPER ? "w-full grid-cols-4" : "w-[60%] grid-cols-3"}`}

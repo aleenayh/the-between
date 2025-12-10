@@ -33,8 +33,8 @@ const tabsConfig = (character: Character) => [
 		component: <Questions character={character} />,
 	},
 	{
-		label: "Advance",
-		component: <AdvancementTab />,
+		label: "More",
+		component: <AdvancementTab character={character} />,
 	},
 ];
 export function PlaybookExpanded({ character }: { character: Character }) {
