@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useGame } from "../context/GameContext";
 import { resetGameToDefaults } from "../lib/firebase";
 import { Drawers } from "./Drawers";
@@ -8,18 +8,12 @@ import { CharacterOverview } from "./playbooks/CharacterOverview";
 const DEBUG_MODE = false;
 
 export function Game() {
-	const { gameState, gameHash } = useGame();
-	const land = gameState.land;
-
-	// Set theme based on current land
-	useEffect(() => {
-		document.documentElement.setAttribute("data-theme", land);
-	}, [land]);
+	const { gameHash } = useGame();
 
 	return (
 		<div className="flex flex-col w-full h-full p-4 overflow-hidden">
 			<Drawers />
-			<div className="flex-1 min-h-0 overflow-hidden">
+			<div className="ml-8 flex-1 min-h-0 overflow-hidden">
 				{DEBUG_MODE && <DebugControls gameHash={gameHash} />}
 				<CharacterOverview />
 			</div>
