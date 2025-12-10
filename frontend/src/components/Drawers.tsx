@@ -7,7 +7,7 @@ export function Drawers() {
 	const [pullOutOpen, setPullOutOpen] = useState(false);
 
 	return (
-		<div className="absolute top-0 left-0 w-full h-auto flex flex-col justify-start items-start">
+		<div className="absolute top-0 left-0 w-auto h-auto flex flex-col justify-start items-start">
 			<ReferenceSheet isOpen={refOpen} setIsOpen={setRefOpen} />
 			<PullOutCharacterOverview
 				isOpen={pullOutOpen}
