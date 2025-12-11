@@ -84,13 +84,14 @@ function Legion({ character }: { character: Character }) {
 	};
 
 	return (
-		<div className="grid grid-cols-4 text-xs gap-1 justify-center items-center">
+		<div className="grid grid-cols-4 text-xs gap-1 justify-stretch items-stretch">
 			{legionState.map((isNamed, index) => (
-				<div key={`${legionNames[index]}`}>
+				<div key={`${legionNames[index]}`} className="h-full">
 					<AnimatePresence>
 						{!isNamed && (
 							<motion.div
 								key={`${legionNames[index]}-${isNamed}`}
+								className="h-full"
 								initial={{ opacity: 1 }}
 								animate={{ opacity: 1 }}
 								exit={{ opacity: 0 }}
@@ -98,7 +99,7 @@ function Legion({ character }: { character: Character }) {
 							>
 								<button
 									type="button"
-									className="w-full h-full bg-theme-bg-secondary text-theme-text-primary rounded-md p-2 transition-opacity duration-1000"
+									className="w-full h-full bg-theme-bg-secondary text-theme-text-primary rounded-md p-2 transition-opacity duration-1000 flex items-center justify-center"
 									onClick={() => nameLegionaire(index)}
 									disabled={!editable}
 								>

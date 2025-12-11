@@ -109,7 +109,7 @@ export function CoreMoveCandleBearer({ character }: { character: Character }) {
 				const index = parseInt(indexString, 10);
 				const blank = candle.aspect === "";
 				if (blank) {
-					if (!editable) return <div />;
+					if (!editable) return <div key={`candle-create-form-${index}`} />;
 					return (
 						<CandleCreateForm
 							character={character}
