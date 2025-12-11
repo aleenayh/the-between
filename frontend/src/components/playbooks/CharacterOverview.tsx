@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useGame } from "../../context/GameContext";
 import { PlayerRole } from "../../context/types";
 import { KeeperPill } from "../keeper/KeeperPill";
+import { KeeperSummary } from "../keeper/KeeperSummary";
+import { CopyInvite } from "../settings/GameInfo";
 import { playbookBases } from "./content";
 import { CharacterCreateForm } from "./creation/CharacterCreateForm";
 import { PlaybookExpanded } from "./PlaybookExpanded";
@@ -35,22 +37,37 @@ export function CharacterOverview() {
 
 	return (
 		<div className="flex flex-col h-full w-full overflow-hidden gap-3">
-			<h1 className="text-2xl font-bold text-center text-theme-text-accent shrink-0">
-				Character Keeper
+			<h1 className="text-2xl font-bold text-center text-theme-text-accent shrink-0 flex flex-col justify-evenly md:flex-row">
+				<div className="w-0 h-0 md:w-1/3" />
+				<span className="w-full md:w-2/3 text-md text-theme-text-primary flex justify-center">
+					Character Keeper
+				</span>
+				{user.role === PlayerRole.KEEPER ? (
+					<KeeperPill />
+				) : (
+					<div className="w-0 h-0 md:w-1/3" />
+				)}
 			</h1>
-			{user.role === PlayerRole.KEEPER && <KeeperPill />}
-			{user.role === PlayerRole.KEEPER && <div className="w-full h-8" />}
+			{user.role === PlayerRole.KEEPER && <KeeperSummary />}
 			<div className="flex flex-1 min-h-0 overflow-hidden gap-1">
 				{/* Other players' playbooks - takes up ~60% width, shows up to 4 in a grid */}
-				<div
-					className={`hidden  min-w-0 md:grid  gap-2 auto-rows-fr overflow-hidden ${user.role === PlayerRole.KEEPER ? "w-full grid-cols-4" : "w-[60%] grid-cols-3"}`}
-				>
-					{otherCharacters.map((character) => (
-						<div key={character.playerId} className="min-h-0 overflow-hidden">
-							<PlaybookPane character={character} />
-						</div>
-					))}
-				</div>
+				{otherCharacters.length > 0 ? (
+					<div
+						className={`hidden  min-w-0 md:grid  gap-2 auto-rows-fr overflow-hidden ${user.role === PlayerRole.KEEPER ? "w-full grid-cols-4" : "w-[60%] grid-cols-3"}`}
+					>
+						{otherCharacters.map((character) => (
+							<div key={character.playerId} className="min-h-0 overflow-hidden">
+								<PlaybookPane character={character} />
+							</div>
+						))}
+					</div>
+				) : (
+					<div
+						className={`h-full flex justify-center items-center text-center text-sm text-theme-text-muted p-10 ${user.role === PlayerRole.KEEPER ? "w-full" : "w-[60%]"}`}
+					>
+						<CopyInvite />
+					</div>
+				)}
 
 				{/* Your playbook - slightly larger, takes ~40% width */}
 				{user.role !== PlayerRole.KEEPER && (

@@ -15,15 +15,15 @@ export function KeeperPill() {
 	};
 
 	return (
-		<div className="absolute top-4 right-4 flex flex-col gap-2">
-			<div className="rounded-lg p-2 bg-theme-bg-secondary border-2 border-theme-border-accent">
+		<div className="align-self-end flex flex-col gap-2 text-sm">
+			<div className="rounded-lg p-2 bg-theme-bg-secondary border-2 border-theme-border-accent text-sm">
 				You are the Keeper.
 			</div>
-			<p className="inline text-sm text-theme-text-muted">
+			<p className="inline text-xs text-theme-text-muted">
 				To join as a character,{" "}
 				<button
 					type="button"
-					className="text-theme-text-accent hover:text-theme-accent-primary transition-colors"
+					className="text-theme-text-accent hover:text-theme-accent-primary transition-colors pointer-events-auto"
 					onClick={resetRole}
 				>
 					reset your role.

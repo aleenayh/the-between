@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useGame } from "../../../context/GameContext";
+import { CopyInvite } from "../../settings/GameInfo";
 import { PlaybookPane } from "../PlaybookPane";
 import { Section } from "../sharedComponents/Section";
 import type { Character } from "../types";
@@ -50,17 +51,21 @@ export function PullOutCharacterOverview({
 						<h1 className="text-2xl font-bold text-theme-text-accent">
 							Other Embers
 						</h1>
-						<div className="w-full min-w-0 flex flex-col gap-2 overflow-y-auto">
-							{otherCharacters.map((character) => (
-								<Section
-									key={character.playerId}
-									title={character.name}
-									collapsible={true}
-								>
-									<PlaybookPane character={character} />
-								</Section>
-							))}
-						</div>
+						{otherCharacters.length > 0 ? (
+							<div className="w-full min-w-0 flex flex-col gap-2 overflow-y-auto">
+								{otherCharacters.map((character) => (
+									<Section
+										key={character.playerId}
+										title={character.name}
+										collapsible={true}
+									>
+										<PlaybookPane character={character} />
+									</Section>
+								))}
+							</div>
+						) : (
+							<CopyInvite />
+						)}
 					</motion.div>
 				)}
 			</AnimatePresence>
