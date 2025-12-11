@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { MysterySheet } from "./mystery/MysterySheet";
+import { NotesPane } from "./notes/NotesPane";
 import { PullOutCharacterOverview } from "./playbooks/drawer/PullOutDrawer";
 import { ReferenceSheet } from "./referenceSheet/referenceSheet";
 import { SettingsPane } from "./settings/SettingsPane";
@@ -9,14 +10,16 @@ export function Drawers() {
 	const [pullOutOpen, setPullOutOpen] = useState(false);
 	const [mysteryOpen, setMysteryOpen] = useState(false);
 	const [settingsOpen, setSettingsOpen] = useState(false);
+	const [notesOpen, setNotesOpen] = useState(false);
 	return (
-		<nav className="absolute top-0 left-0 w-full h-auto flex flex-col justify-start items-start">
+		<nav className="absolute top-0 left-0 w-full h-auto flex flex-col justify-start items-start pointer-events-none">
 			<ReferenceSheet isOpen={refOpen} setIsOpen={setRefOpen} />
 			<MysterySheet isOpen={mysteryOpen} setIsOpen={setMysteryOpen} />
 			<PullOutCharacterOverview
 				isOpen={pullOutOpen}
 				setIsOpen={setPullOutOpen}
 			/>
+			<NotesPane isOpen={notesOpen} setIsOpen={setNotesOpen} />
 			<SettingsPane isOpen={settingsOpen} setIsOpen={setSettingsOpen} />
 		</nav>
 	);
