@@ -1,14 +1,13 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { useGame } from "../../../context/GameContext";
 import { playbookBases } from "../content";
 import { coreMoves } from "../coreMoves";
-import type { Character, PlaybookMove } from "../types";
+import type { Character } from "../types";
 import { parseRelicText } from "./Relics";
 
 export function Moves({ character }: { character: Character }) {
 	const coreMove = coreMoves(character)[character.playbook];
 	const otherMoves = character.moves ? character.moves : [];
-	const moveContent = playbookBases[character.playbook].moves;
 
 	return (
 		<div className="text-sm">
@@ -16,19 +15,8 @@ export function Moves({ character }: { character: Character }) {
 			<div className="h-6" />
 			{otherMoves.length > 0 &&
 				otherMoves.map((move) => {
-					const contentDef = moveContent.find((m) => m.title === move.title);
-					const content = move.text ? move.text : contentDef?.text;
-					if (!content) {
-						return null;
-					}
 					return (
-						<MoveDisplay
-							key={move.title}
-							character={character}
-							move={move}
-							content={content}
-							contentDef={contentDef}
-						/>
+						<MoveDisplay key={move.title} character={character} move={move} />
 					);
 				})}
 		</div>
@@ -38,13 +26,9 @@ export function Moves({ character }: { character: Character }) {
 function MoveDisplay({
 	character,
 	move,
-	content,
-	contentDef,
 }: {
 	character: Character;
 	move: Character["moves"][number];
-	content: string[];
-	contentDef?: PlaybookMove;
 }) {
 	const {
 		gameState,
@@ -52,13 +36,20 @@ function MoveDisplay({
 		user: { id },
 	} = useGame();
 	const editable = id === character.playerId;
+	const stateMove = gameState.players
+		.find((p) => p.id === character.playerId && p.character)
+		?.character?.moves.find((m) => m.title === move.title);
+	const contentDef = playbookBases[character.playbook].moves.find(
+		(m) => m.title === move.title,
+	);
+	const content = stateMove?.text ? stateMove.text : contentDef?.text;
 
 	// Count aspects in the content by joining and parsing
-	const fullText = content.join("\n");
+	const fullText = content?.join("\n") ?? "";
 	const aspectCount = (fullText.match(/<aspect>/g) || []).length;
 
 	// Checkboxes come after aspects in the checks array
-	const checkboxCount = contentDef?.checkboxes?.length ?? 0;
+	const checkboxCount = stateMove?.checks?.length ?? 0;
 
 	const toggleCheck = useCallback(
 		(index: number) => {
@@ -95,35 +86,64 @@ function MoveDisplay({
 		[editable, move, updateGameState, gameState.players, id],
 	);
 
+	const syncLines = () => {
+		if (!editable) return;
+		const newLines = [...localLines];
+		updateGameState({
+			players: gameState.players.map((player) =>
+				player.id === id && player.character
+					? {
+							...player,
+							character: {
+								...player.character,
+								moves: player.character.moves.map((m) =>
+									m.title === move.title ? { ...m, lines: newLines } : m,
+								),
+							},
+						}
+					: player,
+			),
+		});
+	};
+
+	const [localLines, setLocalLines] = useState(move.lines);
+	const updateLineLocal = (index: number, line: string) => {
+		const newLines = [...localLines];
+		newLines[index] = line;
+		setLocalLines(newLines);
+	};
+
 	// Track aspect index across all lines
 	let globalAspectIndex = 0;
 
 	return (
 		<div className="flex flex-col justify-center gap-1">
 			<h3 className="text-sm font-bold text-theme-text-accent">{move.title}</h3>
-			{content.map((line, lineIndex) => {
-				const parsed = parseRelicText(
-					line,
-					move.checks ?? [],
-					globalAspectIndex,
-					editable,
-					toggleCheck,
-				);
-				globalAspectIndex = parsed.nextAspectIndex;
+			{content &&
+				content.length > 0 &&
+				content.map((line, lineIndex) => {
+					const parsed = parseRelicText(
+						line,
+						move.checks ?? [],
+						globalAspectIndex,
+						editable,
+						toggleCheck,
+					);
+					globalAspectIndex = parsed.nextAspectIndex;
 
-				return (
-					<p
-						className="text-left leading-relaxed"
-						key={`${move.title}-line-${lineIndex}`}
-					>
-						{parsed.elements}
-					</p>
-				);
-			})}
+					return (
+						<p
+							className="text-left leading-relaxed"
+							key={`${move.title}-line-${lineIndex}`}
+						>
+							{parsed.elements}
+						</p>
+					);
+				})}
 
 			{/* Checkboxes row - rendered after aspects */}
 			{checkboxCount > 0 && (
-				<div className="flex gap-2 mt-1 ml-4">
+				<div className="w-full flex justify-center items-center gap-2">
 					{Array.from({ length: checkboxCount }).map((_, idx) => {
 						const checkIndex = aspectCount + idx;
 						const isChecked = (move.checks ?? [])[checkIndex] === 1;
@@ -148,6 +168,27 @@ function MoveDisplay({
 			)}
 
 			<div className="h-6" />
+			{move.lines.length > 0 &&
+				move.lines.map((line, lineIndex) => {
+					return editable ? (
+						<input
+							type="text"
+							key={`${move.title}-line-${lineIndex}-${line}`}
+							value={localLines[lineIndex]}
+							disabled={!editable}
+							onChange={(e) => updateLineLocal(lineIndex, e.target.value)}
+							onBlur={syncLines}
+							className="border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent flex-grow"
+						/>
+					) : (
+						<p
+							key={`${move.title}-line-${lineIndex}-${line}`}
+							className="text-left leading-relaxed"
+						>
+							◆ {line}
+						</p>
+					);
+				})}
 		</div>
 	);
 }
