@@ -12,18 +12,40 @@ export function AbilityBoxes({
 }) {
 	return (
 		<div className={`flex justify-center gap-1 mx-0 md:mx-auto`}>
-			{orderAbilities(stats).map(({ ability, value }) => (
-				<AbilityBox
-					key={ability}
-					ability={ability}
-					value={value}
-					abbreviate={abbreviate}
-				/>
-			))}
+			{orderAbilities(stats).map(({ ability, value }) =>
+				abbreviate ? (
+					<StaticAbilityBox ability={ability} value={value} key={ability} />
+				) : (
+					<AbilityBox
+						ability={ability}
+						value={value}
+						abbreviate={abbreviate}
+						key={ability}
+					/>
+				),
+			)}
 		</div>
 	);
 }
 
+function StaticAbilityBox({
+	ability,
+	value,
+}: {
+	ability: keyof AbilityType;
+	value: number;
+}) {
+	return (
+		<div className="flex flex-col gap-1 rounded-lg border border-theme-border-accent p-1 bg-theme-bg-secondary justify-center items-center min-w-[10%]">
+			<h2 className="text-theme-text-muted text-[0.5rem] truncate max-w-full whitespace-nowrap overflow-hidden text-ellipsis">
+				{ability.slice(0, 4)}
+			</h2>
+			<div className="text-center text-lg font-bold bg-transparent">
+				{value}
+			</div>
+		</div>
+	);
+}
 export function orderAbilities(abilities: Abilities) {
 	return order.map((stat) => ({
 		ability: stat as keyof Abilities,
@@ -137,8 +159,7 @@ export function AbilityBox({
 
 	return (
 		<Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
-			{/* bit of a hack. abbreviate is passed when the stats aren't yours */}
-			<Dialog.Trigger asChild disabled={abbreviate}>
+			<Dialog.Trigger asChild>
 				<div className="flex flex-col gap-1 rounded-lg border border-theme-border-accent p-1 bg-theme-bg-secondary justify-center items-center min-w-[10%]">
 					<h2 className="text-theme-text-muted text-[0.5rem] truncate max-w-full whitespace-nowrap overflow-hidden text-ellipsis">
 						{abbreviate ? ability.slice(0, 4) : ability}
