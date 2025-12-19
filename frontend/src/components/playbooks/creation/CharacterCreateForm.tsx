@@ -1,5 +1,10 @@
 import { useId, useState } from "react";
-import { type UseFormRegister, useForm } from "react-hook-form";
+import {
+	type UseFormRegister,
+	type UseFormSetValue,
+	type UseFormWatch,
+	useForm,
+} from "react-hook-form";
 import { useGame } from "../../../context/GameContext";
 import { PlayerRole } from "../../../context/types";
 import { playbookBases } from "../content";
@@ -46,21 +51,22 @@ export function CharacterCreateForm({
 	const base: PlaybookBase = playbookBases[playbookKey];
 	const [introExpanded, setIntroExpanded] = useState(true);
 
-	const { register, handleSubmit } = useForm<CharacterCreateFormInputs>({
-		defaultValues: {
-			characterName: getRandomValue(base.names),
-			honorific: getRandomValue(base.honorifics),
-			look1: getRandomValue(base.look),
-			look2: getRandomValue(base.look),
-			look3: getRandomValue(base.look),
-			ritual: getRandomValue(base.rituals),
-			vitality: base.abilities.vitality,
-			composure: base.abilities.composure,
-			reason: base.abilities.reason,
-			presence: base.abilities.presence,
-			cinder: base.abilities.cinder,
-		},
-	});
+	const { register, handleSubmit, setValue, watch } =
+		useForm<CharacterCreateFormInputs>({
+			defaultValues: {
+				characterName: getRandomValue(base.names),
+				honorific: getRandomValue(base.honorifics),
+				look1: getRandomValue(base.look),
+				look2: getRandomValue(base.look),
+				look3: getRandomValue(base.look),
+				ritual: getRandomValue(base.rituals),
+				vitality: base.abilities.vitality,
+				composure: base.abilities.composure,
+				reason: base.abilities.reason,
+				presence: base.abilities.presence,
+				cinder: base.abilities.cinder,
+			},
+		});
 
 	const saveCharacter = (formInputs: CharacterCreateFormInputs) => {
 		const character = constructCharacter(
@@ -134,7 +140,12 @@ export function CharacterCreateForm({
 
 			{/* Looks - 3 */}
 			<Section title="Build Your Look">
-				<LookSelector options={base.look} register={register} />
+				<LookSelector
+					options={base.look}
+					register={register}
+					setValue={setValue}
+					watch={watch}
+				/>
 			</Section>
 
 			<Section title="Your Story">
@@ -215,34 +226,44 @@ type SelectOrEditFieldName = keyof Pick<
 function LookSelector({
 	options,
 	register,
+	setValue,
+	watch,
 }: {
 	options: string[];
 	register: UseFormRegister<CharacterCreateFormInputs>;
+	setValue: UseFormSetValue<CharacterCreateFormInputs>;
+	watch: UseFormWatch<CharacterCreateFormInputs>;
 }) {
-	const [selectedLooks, setSelectedLooks] = useState<string[]>(() => {
-		// Initialize with first 3 options (matches default form values)
-		return options.slice(0, 3);
-	});
+	// Read current look values directly from the form
+	const look1 = watch("look1");
+	const look2 = watch("look2");
+	const look3 = watch("look3");
+	const selectedLooks = [look1, look2, look3].filter(Boolean);
 
 	const toggleLook = (option: string) => {
-		setSelectedLooks((prev) => {
-			if (prev.includes(option)) {
-				// Remove if already selected
-				return prev.filter((look) => look !== option);
-			}
-			if (prev.length < 3) {
-				// Add if under limit
-				return [...prev, option];
-			}
-			// At limit, replace the oldest selection
-			return [...prev.slice(1), option];
-		});
+		if (selectedLooks.includes(option)) {
+			// Remove - shift remaining looks up
+			const remaining = selectedLooks.filter((look) => look !== option);
+			setValue("look1", remaining[0] ?? "");
+			setValue("look2", remaining[1] ?? "");
+			setValue("look3", remaining[2] ?? "");
+		} else if (selectedLooks.length < 3) {
+			// Add to next empty slot
+			if (!look1) setValue("look1", option);
+			else if (!look2) setValue("look2", option);
+			else if (!look3) setValue("look3", option);
+		} else {
+			// At limit, replace oldest (shift and add new at end)
+			setValue("look1", look2);
+			setValue("look2", look3);
+			setValue("look3", option);
+		}
 	};
 
 	return (
 		<>
 			{/* Desktop: 3 separate selects */}
-			<div className="hidden sm:flex flex-col gap-2 justify-stretch items-stretch w-full">
+			<div className="hidden sm:flex flex-col gap-2 justify-stretch items-stretch">
 				<SelectOrEdit name="look1" options={options} register={register} />
 				<SelectOrEdit name="look2" options={options} register={register} />
 				<SelectOrEdit name="look3" options={options} register={register} />
@@ -250,23 +271,6 @@ function LookSelector({
 
 			{/* Mobile: checklist with exactly 3 selections */}
 			<div className="sm:hidden flex flex-col gap-1 w-full">
-				{/* Hidden inputs to sync with react-hook-form */}
-				<input
-					type="hidden"
-					{...register("look1")}
-					value={selectedLooks[0] ?? ""}
-				/>
-				<input
-					type="hidden"
-					{...register("look2")}
-					value={selectedLooks[1] ?? ""}
-				/>
-				<input
-					type="hidden"
-					{...register("look3")}
-					value={selectedLooks[2] ?? ""}
-				/>
-
 				<p className="text-sm text-theme-text-muted mb-1">
 					Select 3 ({selectedLooks.length}/3)
 				</p>
