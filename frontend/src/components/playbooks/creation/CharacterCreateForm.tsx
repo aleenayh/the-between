@@ -263,7 +263,7 @@ function LookSelector({
 	return (
 		<>
 			{/* Desktop: 3 separate selects */}
-			<div className="hidden sm:flex flex-col gap-2 justify-stretch items-stretch w-[80%]">
+			<div className="hidden sm:flex flex-col gap-2 justify-stretch items-stretch">
 				<SelectOrEdit name="look1" options={options} register={register} />
 				<SelectOrEdit name="look2" options={options} register={register} />
 				<SelectOrEdit name="look3" options={options} register={register} />
