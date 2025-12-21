@@ -132,11 +132,14 @@ export const CruxDruid: PlaybookBase = {
 		"Narrate a flashback to the final rite you performed before the Great Unmaking. Who was crucified, what prophecy did you receive, and what doubt—small but indelible—did you carry with you into the end?",
 	],
 	fireToCome: {
-		1: "The Kindling Gate: Pick a Cinder (do not mark it if it is unmarked) and cross out all others; tell the other Embers they cannot mark The Kindling Gate on their own sheets. Take the Condition: Herald of [Name of Cinder]. Whenever you act in accordance with—or are negatively affected by—the Condition, mark a box below. When all the boxes are marked, you can unmark them to unmark the Cinder. The Herald Condition cannot be cleared in the normal ways, but you can choose to clear it in order to get an automatic 12+ on a roll. If you do this, cross out The Kindling Gate.",
-		2: "The Tinder Arch: Mark 3 Stigma.",
-		3: "The Hearth’s Fuel: Unmark 1 Stigma.",
-		4: "The Ashen Passage: Increase Cinder by 1 (max 3) and decrease another ability of your choice by 1.",
-		5: "The Pyre’s Crown (locked until the sapling is fully grafted): Narrate the moment you turn from the company and walk alone toward the Throne at the heart of the Old Capital. Then, at the end of this play session, read Ascend the Throne",
+		"The Kindling Gate":
+			"Pick a Cinder (do not mark it if it is unmarked) and cross out all others; tell the other Embers they cannot mark The Kindling Gate on their own sheets. Take the Condition: Herald of [Name of Cinder]. Whenever you act in accordance with—or are negatively affected by—the Condition, mark a box below. When all the boxes are marked, you can unmark them to unmark the Cinder. The Herald Condition cannot be cleared in the normal ways, but you can choose to clear it in order to get an automatic 12+ on a roll. If you do this, cross out The Kindling Gate.",
+		"The Tinder Arch": "Mark 3 Stigma.",
+		"The Hearth’s Fuel": "Unmark 1 Stigma.",
+		"The Ashen Passage":
+			"Increase Cinder by 1 (max 3) and decrease another ability of your choice by 1.",
+		"The Pyre’s Crown":
+			"Narrate the moment you turn from the company and walk alone toward the Throne at the heart of the Old Capital. Then, at the end of this play session, read Ascend the Throne",
 	},
 	ascendTheThrone: [
 		"You carry the grafted ash sapling into the Old Capital. The tree is heavy with blood, bone, and memory. The halls resist you—stone cracks, iron weeps rust, the obsidian dead turn their faces away—but the land beneath the city listens. The Throne of the Old King waits, split and hollow, a wound where rule once sat.",
