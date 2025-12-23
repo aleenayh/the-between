@@ -27,7 +27,7 @@ export const coreMoveTitles: Record<playbookKey, string> = {
 	[playbookKeys.crownsPearl]: "My Word, My Vow…",
 	[playbookKeys.famisher]: "There is no god greater than Hunger…",
 	[playbookKeys.cruxDruid]:
-		"Do Not Let Me Hang Alone & Plant Me Where My Power Can Grow",
+		"Do Not Let Me Hang Alone… & …Plant Me Where My Power Can Grow.",
 };
 
 export function generateCoreMoveState(playbookKey: playbookKey): CoreMoveState {

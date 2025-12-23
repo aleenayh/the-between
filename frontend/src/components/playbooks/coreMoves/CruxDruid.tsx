@@ -232,6 +232,7 @@ function BodyPartList({
 							{showEdit[index] ? (
 								<ConditionInput
 									condition={viscera}
+									placeholder="Add body part..."
 									onSave={(value) => handleSaveCondition(index, value)}
 								/>
 							) : (
@@ -275,9 +276,9 @@ function Sapling({
 
 	return (
 		<div className="flex flex-col md:grid md:grid-cols-[2fr_1fr_2fr] gap-2 px-2">
-			<h2 className="text-center col-span-3 text-lg font-bold text-theme-text-accent">
+			<h3 className="text-center col-span-3 text-sm font-bold text-theme-text-accent">
 				Sacred Ash Sapling
-			</h2>
+			</h3>
 			<div className="flex flex-col gap-3">
 				<SaplingInput
 					label="Branches"
@@ -377,6 +378,7 @@ function SaplingInput({
 			>
 				{showEdit ? (
 					<ConditionInput
+						placeholder={label}
 						condition={value}
 						onSave={(value) => onChange(value)}
 					/>

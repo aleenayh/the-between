@@ -285,12 +285,12 @@ function MoveSelector({
 			<h2>Your Current Moves</h2>
 			<div
 				key={coreMoveTitles[character.playbook]}
-				className="flex flex-col gap-2 text-theme-text-muted"
+				className="flex flex-col text-theme-text-muted"
 			>
 				{coreMoveTitles[character.playbook]}
 			</div>
 			{existingMoves.length > 0 && (
-				<div className="flex flex-col gap-2 text-theme-text-muted">
+				<div className="flex flex-col text-theme-text-muted">
 					{existingMoves.map((move) => (
 						<div key={move.title}>{move.title}</div>
 					))}
