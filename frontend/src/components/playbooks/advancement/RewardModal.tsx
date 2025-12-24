@@ -87,13 +87,13 @@ type AddRelicFormInputs = {
 	extraLines: number;
 };
 
-function AddRelicForm({ onClose }: { onClose: () => void }) {
+export function AddRelicForm({ onClose }: { onClose: () => void }) {
 	const {
 		gameState,
 		updateGameState,
 		user: { id },
 	} = useGame();
-	const { register, handleSubmit } = useForm<AddRelicFormInputs>({
+	const { register, handleSubmit, reset } = useForm<AddRelicFormInputs>({
 		defaultValues: {
 			title: "",
 			description: "",
@@ -137,6 +137,7 @@ function AddRelicForm({ onClose }: { onClose: () => void }) {
 					: player,
 			),
 		});
+		reset();
 		onClose();
 	};
 

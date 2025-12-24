@@ -1,5 +1,7 @@
+import { Dialog } from "radix-ui";
 import { useCallback, useState } from "react";
 import { useGame } from "../../../context/GameContext";
+import { AddRelicForm } from "../advancement/RewardModal";
 import { PencilIconButton } from "../creation/PencilIconButton";
 import type { Character } from "../types";
 import { parseRelicText } from "../utils";
@@ -41,38 +43,69 @@ export function Relics({ character }: { character: Character }) {
 	let globalAspectIndex = 0;
 
 	return (
-		<div className="flex flex-col gap-3 w-full">
-			{character.relics.map((relic) => {
-				const parsed = parseRelicText(
-					relic.text,
-					character.relicAspects ?? [],
-					globalAspectIndex,
-					editable,
-					toggleAspect,
-				);
-				globalAspectIndex = parsed.nextAspectIndex;
+		<Dialog.Root>
+			<div className="flex flex-col gap-3 w-full">
+				{character.relics.map((relic) => {
+					const parsed = parseRelicText(
+						relic.text,
+						character.relicAspects ?? [],
+						globalAspectIndex,
+						editable,
+						toggleAspect,
+					);
+					globalAspectIndex = parsed.nextAspectIndex;
 
-				return (
-					<div key={relic.title} className="flex flex-col gap-1 text-left">
-						<h3 className="text-sm font-bold text-theme-text-accent text-center">
-							{relic.title}
-						</h3>
-						<p className="text-sm leading-relaxed">{parsed.elements}</p>
-						{editable &&
-							relic.extraLines > 0 &&
-							Array.from({ length: relic.extraLines }).map((_, index) => (
-								<EditableLine
-									relic={relic}
-									key={`extra-line-${
-										// biome-ignore lint/suspicious/noArrayIndexKey: order unimportant
-										index
-									}`}
-								/>
-							))}
-					</div>
-				);
-			})}
-		</div>
+					return (
+						<div key={relic.title} className="flex flex-col gap-1 text-left">
+							<h3 className="text-sm font-bold text-theme-text-accent text-center">
+								{relic.title}
+							</h3>
+							<p className="text-sm leading-relaxed">{parsed.elements}</p>
+							{editable &&
+								relic.extraLines > 0 &&
+								Array.from({ length: relic.extraLines }).map((_, index) => (
+									<EditableLine
+										relic={relic}
+										key={`extra-line-${
+											// biome-ignore lint/suspicious/noArrayIndexKey: order unimportant
+											index
+										}`}
+									/>
+								))}
+						</div>
+					);
+				})}
+				<Dialog.Trigger asChild>
+					<button
+						type="button"
+						className={`mx-auto w-1/2 h-10 bg-theme-bg-accent text-theme-text-primary rounded-md hover:bg-theme-bg-accent-hover hover:text-theme-text-primary-hover transition-colors ${!editable && "hidden"}`}
+						disabled={!editable}
+					>
+						Manage Equipment
+					</button>
+				</Dialog.Trigger>
+				<Dialog.Portal>
+					<Dialog.Overlay className="DialogOverlay" />
+					<Dialog.Content className="DialogContent">
+						<Dialog.Close asChild>
+							<button
+								type="button"
+								className="absolute top-2 right-2 aspect-square w-8 h-8 bg-theme-bg-accent text-theme-text-primary rounded-full flex justify-center items-center"
+							>
+								X
+							</button>
+						</Dialog.Close>
+						<Dialog.Title className="DialogTitle">
+							Manage Equipment
+						</Dialog.Title>
+						<Dialog.Description className="DialogDescription">
+							Add or remove relics and equipment.
+						</Dialog.Description>
+						<EquipmentManagementForm character={character} />
+					</Dialog.Content>
+				</Dialog.Portal>
+			</div>
+		</Dialog.Root>
 	);
 }
 
@@ -130,6 +163,64 @@ function EditableLine({
 				isEditing={showEdit}
 				setIsEditing={() => setShowEdit(!showEdit)}
 			/>
+		</div>
+	);
+}
+
+function EquipmentManagementForm({ character }: { character: Character }) {
+	const { gameState, updateGameState } = useGame();
+	const currentRelics = character.relics;
+
+	const handleRemoveRelic = (title: string) => {
+		const newRelics = currentRelics.filter((r) => r.title !== title);
+		updateGameState({
+			players: gameState.players.map((player) =>
+				player.character && player.id === character.playerId
+					? {
+							...player,
+							character: { ...player.character, relics: newRelics },
+						}
+					: player,
+			),
+		});
+	};
+
+	return (
+		<div className="flex flex-col gap-2 justify-center items-center w-full">
+			<h3 className="text-lg font-bold text-theme-text-accent">
+				Current Items
+			</h3>
+			{currentRelics.map((relic) => (
+				<div
+					key={relic.title}
+					className="flex flex-col gap-1 justify-center items-center w-full"
+				>
+					<h4 className="text-sm font-bold text-theme-text-accent text-center">
+						{relic.title}
+					</h4>
+					<p className="text-xs text-theme-text-primary">
+						{
+							parseRelicText(
+								relic.text,
+								character.relicAspects,
+								0,
+								false,
+								() => {},
+							).elements
+						}
+					</p>
+					<button
+						type="button"
+						className="mx-auto bg-theme-bg-accent text-theme-text-primary rounded-md p-2"
+						onClick={() => handleRemoveRelic(relic.title)}
+					>
+						Remove {relic.title}
+					</button>
+				</div>
+			))}
+			<div className="h-12" />
+			<h3 className="text-lg font-bold text-theme-text-accent">Add an Item</h3>
+			<AddRelicForm onClose={() => {}} />
 		</div>
 	);
 }
