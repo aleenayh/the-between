@@ -227,14 +227,16 @@ export const characterSchema = z.object({
 		.array(z.number())
 		.catch(catchWithWarning("character.relicAspects", [0])),
 	experience: z.number().catch(catchWithWarning("character.experience", 0)),
-	//no warning - false record is valid but dropped by firebase
-	questions: z.record(z.string(), z.boolean()).catch({
-		1: false,
-		2: false,
-		3: false,
-		4: false,
-		5: false,
-	}),
+
+	questions: z.record(z.string(), z.boolean()).catch(
+		catchWithWarning("character.questions", {
+			1: false,
+			2: false,
+			3: false,
+			4: false,
+			5: false,
+		}),
+	),
 });
 
 export type Character = z.infer<typeof characterSchema>;

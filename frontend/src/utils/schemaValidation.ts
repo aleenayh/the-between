@@ -75,6 +75,7 @@ function arrayToRecord<T>(arr: T[]): Record<string, T> {
 function fixFirebaseArrays(
 	state: unknown,
 	parentKey: string | null = null,
+	grandparentKey: string | null = null,
 ): unknown {
 	if (state === null || state === undefined) {
 		return state;
@@ -82,6 +83,7 @@ function fixFirebaseArrays(
 
 	// Check if this array should be converted to a record
 	// (cinders, questions, advancements, candles are the affected fields)
+	// Note: mystery.questions is a legitimate array, only character.questions needs conversion
 	if (Array.isArray(state)) {
 		if (
 			parentKey &&
@@ -89,8 +91,12 @@ function fixFirebaseArrays(
 		) {
 			return arrayToRecord(state);
 		}
-		// Otherwise, recurse into array elements (e.g., players array)
-		return state.map((item) => fixFirebaseArrays(item, null));
+		// character.questions is Record<string, boolean>, but mystery.questions is Question[]
+		if (parentKey === "questions" && grandparentKey === "character") {
+			return arrayToRecord(state);
+		}
+		// Otherwise, recurse into array elements (e.g., players array, mysteries array)
+		return state.map((item) => fixFirebaseArrays(item, null, null));
 	}
 
 	if (typeof state === "object") {
@@ -98,7 +104,7 @@ function fixFirebaseArrays(
 		const fixed: Record<string, unknown> = {};
 
 		for (const key of Object.keys(obj)) {
-			fixed[key] = fixFirebaseArrays(obj[key], key);
+			fixed[key] = fixFirebaseArrays(obj[key], key, parentKey);
 		}
 
 		return fixed;
