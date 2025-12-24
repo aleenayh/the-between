@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { catchWithWarning } from "../../utils/schemaValidation";
 
 export const abilitiesSchema = z.object({
 	vitality: z.number(),
@@ -161,17 +162,20 @@ const defaultAbilities: Abilities = {
 	presence: 0,
 	cinder: -2,
 };
+
 export const characterSchema = z.object({
 	playbook: z.enum(playbookKeysTuple),
 	playerId: z.string(),
 	name: z.string(),
-	look: z.string().catch(""),
-	ritual: z.string().catch(""),
-	oldFire: z.number().catch(0),
+	look: z.string().catch(catchWithWarning("character.look", "")),
+	ritual: z.string().catch(catchWithWarning("character.ritual", "")),
+	oldFire: z.number().catch(catchWithWarning("character.oldFire", 0)),
 	fireToCome: z
 		.record(z.enum(fireToComeKeysTuple), z.boolean())
-		.catch(fireToComeDefault),
-	conditions: z.array(z.string()).catch(["", "", ""]),
+		.catch(catchWithWarning("character.fireToCome", fireToComeDefault)),
+	conditions: z
+		.array(z.string())
+		.catch(catchWithWarning("character.conditions", ["", "", ""])),
 	moves: z
 		.array(
 			z.object({
@@ -181,23 +185,34 @@ export const characterSchema = z.object({
 				lines: z.array(z.string()).optional(),
 			}),
 		)
+		//no warning - empty moves array is valid, but dropped by firebase
 		.catch([]),
 	coreMoveState: coreMoveStateSchema,
-	advancements: z.record(z.string(), z.boolean()).catch({
-		1: false,
-		2: false,
-		3: false,
-		4: false,
-		5: false,
-		6: false,
-		7: false,
-		8: false,
-		9: false,
-	}),
-	abilities: abilitiesSchema.catch(defaultAbilities),
-	cinders: z
-		.record(z.string(), z.boolean())
-		.catch({ 1: false, 2: false, 3: false, 4: false, 5: false }),
+	advancements: z.record(z.string(), z.boolean()).catch(
+		catchWithWarning("character.advancements", {
+			1: false,
+			2: false,
+			3: false,
+			4: false,
+			5: false,
+			6: false,
+			7: false,
+			8: false,
+			9: false,
+		}),
+	),
+	abilities: abilitiesSchema.catch(
+		catchWithWarning("character.abilities", defaultAbilities),
+	),
+	cinders: z.record(z.string(), z.boolean()).catch(
+		catchWithWarning("character.cinders", {
+			1: false,
+			2: false,
+			3: false,
+			4: false,
+			5: false,
+		}),
+	),
 	relics: z
 		.array(
 			z.object({
@@ -206,13 +221,22 @@ export const characterSchema = z.object({
 				extraLines: z.number(),
 			}),
 		)
-		.catch([]),
+		.catch(catchWithWarning("character.relics", [])),
 	/** Tracks which relic aspects are checked. Array of 0|1 values in order of appearance. */
-	relicAspects: z.array(z.number()).catch([0]),
-	experience: z.number().catch(0),
-	questions: z
-		.record(z.string(), z.boolean())
-		.catch({ 1: false, 2: false, 3: false, 4: false, 5: false }),
+	relicAspects: z
+		.array(z.number())
+		.catch(catchWithWarning("character.relicAspects", [0])),
+	experience: z.number().catch(catchWithWarning("character.experience", 0)),
+
+	questions: z.record(z.string(), z.boolean()).catch(
+		catchWithWarning("character.questions", {
+			1: false,
+			2: false,
+			3: false,
+			4: false,
+			5: false,
+		}),
+	),
 });
 
 export type Character = z.infer<typeof characterSchema>;

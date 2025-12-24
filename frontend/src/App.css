@@ -241,6 +241,19 @@ input[type="radio"]:checked {
   border-color: var(--color-accent-primary);
   accent-color: var(--color-accent-primary);
 }
+
+input[type="text"],
+input[type="textarea"] {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-accent);
+  border-radius: 0.125rem;
+  padding: 0.25rem 0.5rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  cursor: text;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
 /* ===== SCROLLBAR STYLES ===== */
 /* Hide scrollbars by default, show on hover/scroll, zero width overlay */
 

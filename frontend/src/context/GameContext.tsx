@@ -74,9 +74,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({
 	} = useFirebase({
 		gameHash,
 		onStateSync: (state: GameState) => {
-			//once per session, validate the received state to ensure it matches current code
 			const { state: validatedState, warnings } = validateGameState(state);
-
 			if (warnings.length > 0) {
 				toast.error(
 					`The expected game state did not match your last synced state. Some default values have been applied. 
