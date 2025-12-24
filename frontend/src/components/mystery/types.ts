@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { catchWithWarning } from "../../utils/schemaValidation";
 
 export const questionSchema = z.object({
 	text: z.string(),
@@ -15,11 +16,19 @@ export enum MysteryTheme {
 }
 
 export const mysterySchema = z.object({
-	title: z.string().catch("Mystery"),
-	questions: z.array(questionSchema).catch([]),
-	theme: z.nativeEnum(MysteryTheme).catch(MysteryTheme.Dandelion),
-	countdownTotal: z.coerce.number().catch(3),
-	countdownCurrent: z.coerce.number().catch(0),
+	title: z.string().catch(catchWithWarning("mystery.title", "Mystery")),
+	questions: z
+		.array(questionSchema)
+		.catch(catchWithWarning("mystery.questions", [])),
+	theme: z
+		.nativeEnum(MysteryTheme)
+		.catch(catchWithWarning("mystery.theme", MysteryTheme.Dandelion)),
+	countdownTotal: z.coerce
+		.number()
+		.catch(catchWithWarning("mystery.countdownTotal", 3)),
+	countdownCurrent: z.coerce
+		.number()
+		.catch(catchWithWarning("mystery.countdownCurrent", 0)),
 });
 
 export type Mystery = z.infer<typeof mysterySchema>;
