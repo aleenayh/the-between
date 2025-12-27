@@ -14,7 +14,7 @@ import type { Character } from "./types";
 export function PlaybookPane({ character }: { character: Character }) {
 	return (
 		<section
-			aria-label={`Playbook for ${character.name}`}
+			aria-label={`Ember for ${character.name}`}
 			className="border-2 border-theme-border-accent bg-theme-bg-primary rounded-lg p-4 h-full flex flex-col gap-2 overflow-hidden relative"
 		>
 			<PlayerPill playerId={character.playerId} />

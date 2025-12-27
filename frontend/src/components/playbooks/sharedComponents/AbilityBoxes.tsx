@@ -145,7 +145,7 @@ export function AbilityBox({
 				setBounceValue(true);
 				calcTotal(rolledDice);
 			}
-		}, 5000);
+		}, 2500);
 	};
 
 	const handleOpenChange = (open: boolean) => {

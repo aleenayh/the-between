@@ -49,9 +49,14 @@ export function CopyInvite() {
 		toast.success("Copied to clipboard!");
 	};
 
+	const copyUrlToClipboard = () => {
+		navigator.clipboard.writeText(window.location.href);
+		toast.success("Copied to clipboard!");
+	};
+
 	return (
 		<div className="flex flex-col gap-2 text-theme-text-primary">
-			<p>When other players join, their playbooks will appear here.</p>
+			<p>When other players join, their Embers will appear here.</p>
 
 			<p>Invite others to join your game:</p>
 			<button
@@ -60,6 +65,13 @@ export function CopyInvite() {
 				onClick={copyToClipboard}
 			>
 				<CopyIcon className="w-4 h-4" /> {gameHash}
+			</button>
+			<button
+				type="button"
+				className="bg-theme-bg-accent border-2 border-theme-border-accent hover:bg-theme-bg-accent transition-colors flex justify-center items-center rounded-lg p-2 gap-2"
+				onClick={copyUrlToClipboard}
+			>
+				<CopyIcon className="w-4 h-4" /> Join Link
 			</button>
 		</div>
 	);

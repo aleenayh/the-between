@@ -96,7 +96,7 @@ function CharacterCreationStarter({ onCollapse }: { onCollapse: () => void }) {
 						onClick={() => setKey(null)}
 						className="self-start text-sm text-theme-text-muted hover:text-theme-text-primary mb-2 shrink-0"
 					>
-						← Back to playbooks
+						← Back to Embers
 					</button>
 					<div className="flex-1 overflow-y-auto min-h-0">
 						<CharacterCreateForm playbookKey={key} />
@@ -105,7 +105,7 @@ function CharacterCreationStarter({ onCollapse }: { onCollapse: () => void }) {
 			) : (
 				<div className="flex flex-col gap-4 h-full">
 					<h1 className="text-2xl font-bold text-center text-theme-text-accent shrink-0">
-						Choose a Playbook
+						Choose an Ember
 					</h1>
 					<div className="flex flex-col gap-2 flex-1 overflow-y-auto">
 						{Object.values(playbookKeys).map((playbookKey) => {
