@@ -46,6 +46,7 @@ export const playbookBaseSchema = z.object({
 			title: z.string(),
 			text: z.string(),
 			extraLines: z.number(),
+			type: z.enum(["relic", "equipment"]),
 		}),
 	),
 	oldFire: z.array(z.string()),
@@ -256,6 +257,7 @@ export const characterSchema = z.object({
 				title: z.string().catch("Relic"),
 				text: z.string().catch(""),
 				extraLines: z.coerce.number().catch(0),
+				type: z.enum(["relic", "equipment"]).catch("relic"),
 			}),
 		)
 		.catch(catchWithWarning("character.relics", [])),

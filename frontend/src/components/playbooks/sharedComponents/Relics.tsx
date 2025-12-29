@@ -51,36 +51,72 @@ export function Relics({ character }: { character: Character }) {
 	return (
 		<Dialog.Root>
 			<div className="flex flex-col gap-3 w-full">
-				{character.relics.map((relic) => {
-					const parsed = parseRelicText(
-						relic.text,
-						character.relicAspects ?? [],
-						globalAspectIndex,
-						editable,
-						toggleAspect,
-					);
-					globalAspectIndex = parsed.nextAspectIndex;
+				<h3 className="text-lg font-bold text-theme-text-accent">Relics</h3>
+				{character.relics
+					.filter((relic) => relic.type === "relic")
+					.map((relic) => {
+						const parsed = parseRelicText(
+							relic.text,
+							character.relicAspects ?? [],
+							globalAspectIndex,
+							editable,
+							toggleAspect,
+						);
+						globalAspectIndex = parsed.nextAspectIndex;
 
-					return (
-						<div key={relic.title} className="flex flex-col gap-1 text-left">
-							<h3 className="text-sm font-bold text-theme-text-accent text-center">
-								{relic.title}
-							</h3>
-							<p className="text-sm leading-relaxed">{parsed.elements}</p>
-							{editable &&
-								relic.extraLines > 0 &&
-								Array.from({ length: relic.extraLines }).map((_, index) => (
-									<EditableLine
-										relic={relic}
-										key={`extra-line-${
-											// biome-ignore lint/suspicious/noArrayIndexKey: order unimportant
-											index
-										}`}
-									/>
-								))}
-						</div>
-					);
-				})}
+						return (
+							<div key={relic.title} className="flex flex-col gap-1 text-left">
+								<h3 className="text-sm font-bold text-theme-text-accent text-center">
+									{relic.title}
+								</h3>
+								<p className="text-sm leading-relaxed">{parsed.elements}</p>
+								{editable &&
+									relic.extraLines > 0 &&
+									Array.from({ length: relic.extraLines }).map((_, index) => (
+										<EditableLine
+											relic={relic}
+											key={`extra-line-${
+												// biome-ignore lint/suspicious/noArrayIndexKey: order unimportant
+												index
+											}`}
+										/>
+									))}
+							</div>
+						);
+					})}
+				<h3 className="text-lg font-bold text-theme-text-accent">Equipment</h3>
+				{character.relics
+					.filter((relic) => relic.type === "equipment")
+					.map((relic) => {
+						const parsed = parseRelicText(
+							relic.text,
+							character.relicAspects ?? [],
+							globalAspectIndex,
+							editable,
+							toggleAspect,
+						);
+						globalAspectIndex = parsed.nextAspectIndex;
+
+						return (
+							<div key={relic.title} className="flex flex-col gap-1 text-left">
+								<h3 className="text-sm font-bold text-theme-text-accent text-center">
+									{relic.title}
+								</h3>
+								<p className="text-sm leading-relaxed">{parsed.elements}</p>
+								{editable &&
+									relic.extraLines > 0 &&
+									Array.from({ length: relic.extraLines }).map((_, index) => (
+										<EditableLine
+											relic={relic}
+											key={`extra-line-${
+												// biome-ignore lint/suspicious/noArrayIndexKey: order unimportant
+												index
+											}`}
+										/>
+									))}
+							</div>
+						);
+					})}
 				<Dialog.Trigger asChild>
 					<button
 						type="button"
@@ -104,7 +140,7 @@ export function Relics({ character }: { character: Character }) {
 						<Dialog.Title className="DialogTitle">
 							Manage Equipment
 						</Dialog.Title>
-						<Dialog.Description className="DialogDescription">
+						<Dialog.Description className="DialogDescription hidden">
 							Add or remove relics and equipment.
 						</Dialog.Description>
 						<EquipmentManagementForm character={character} />
@@ -175,6 +211,7 @@ function EditableLine({
 
 function EquipmentManagementForm({ character }: { character: Character }) {
 	const { gameState, updateGameState } = useGame();
+	const [step, setStep] = useState<"view-remove" | "add-relic">("view-remove");
 	const currentRelics = character.relics;
 
 	const handleRemoveRelic = (title: string) => {
@@ -193,40 +230,93 @@ function EquipmentManagementForm({ character }: { character: Character }) {
 
 	return (
 		<div className="flex flex-col gap-2 justify-center items-center w-full">
-			<h3 className="text-lg font-bold text-theme-text-accent">
-				Current Items
-			</h3>
-			{currentRelics.map((relic) => (
-				<div
-					key={relic.title}
-					className="flex flex-col gap-1 justify-center items-center w-full"
-				>
-					<h4 className="text-sm font-bold text-theme-text-accent text-center">
-						{relic.title}
-					</h4>
-					<p className="text-xs text-theme-text-primary">
-						{
-							parseRelicText(
-								relic.text,
-								character.relicAspects,
-								0,
-								false,
-								() => {},
-							).elements
-						}
-					</p>
+			{step === "view-remove" && (
+				<div className="flex flex-col gap-2 justify-center items-center w-full pb-10">
 					<button
 						type="button"
-						className="mx-auto bg-theme-bg-accent text-theme-text-primary rounded-md p-2"
-						onClick={() => handleRemoveRelic(relic.title)}
+						onClick={() => setStep("add-relic")}
+						className="self-end text-sm text-theme-text-secondary bg-theme-bg-secondary rounded-md px-2 py-1 hover:text-theme-text-primary hover:bg-theme-bg-accent mb-2 shrink-0 border border-theme-border-accent"
 					>
-						Remove {relic.title}
+						Add an Item →
 					</button>
+					<h3 className="text-lg font-bold text-theme-text-accent">Relics</h3>
+					{currentRelics
+						.filter((relic) => relic.type === "relic")
+						.map((relic) => (
+							<div
+								key={relic.title}
+								className="flex flex-col gap-1 justify-center items-center w-full"
+							>
+								<h4 className="text-sm font-bold text-theme-text-accent text-center">
+									{relic.title}
+								</h4>
+								<p className="text-xs text-theme-text-primary">
+									{
+										parseRelicText(
+											relic.text,
+											character.relicAspects,
+											0,
+											false,
+											() => {},
+										).elements
+									}
+								</p>
+							</div>
+						))}
+					<div className="my-4 h-[0.25rem] bg-theme-bg-accent w-full" />
+					<h3 className="text-lg font-bold text-theme-text-accent">
+						Equipment
+					</h3>
+					{currentRelics
+						.filter((relic) => relic.type === "equipment")
+						.map((relic) => (
+							<div
+								key={relic.title}
+								className="flex flex-col gap-1 justify-center items-center w-full"
+							>
+								<div className="flex flex-col md:flex-row gap-2 justify-center items-center w-full">
+									<h4 className="text-sm font-bold text-theme-text-accent text-center">
+										{relic.title}
+									</h4>
+									<button
+										type="button"
+										className="border border-theme-border-accent px-2 bg-theme-bg-accent text-theme-text-primary rounded-md hover:bg-theme-bg-primary hover:text-theme-text-accent"
+										onClick={() => handleRemoveRelic(relic.title)}
+									>
+										Remove
+									</button>
+								</div>
+								<p className="text-xs text-theme-text-primary text-left">
+									{
+										parseRelicText(
+											relic.text,
+											character.relicAspects,
+											0,
+											false,
+											() => {},
+										).elements
+									}
+								</p>
+							</div>
+						))}
 				</div>
-			))}
-			<div className="h-12" />
-			<h3 className="text-lg font-bold text-theme-text-accent">Add an Item</h3>
-			<AddRelicForm onClose={() => {}} />
+			)}
+
+			{step === "add-relic" && (
+				<div className="flex flex-col gap-2 justify-center items-center w-full">
+					<h3 className="text-lg font-bold text-theme-text-accent">
+						Add an Item
+					</h3>
+					<button
+						type="button"
+						onClick={() => setStep("view-remove")}
+						className="self-start text-sm text-theme-text-secondary bg-theme-bg-secondary rounded-md px-2 py-1 hover:text-theme-text-primary hover:bg-theme-bg-accent mb-2 shrink-0 border border-theme-border-accent"
+					>
+						← Back to Equipment
+					</button>
+					<AddRelicForm onClose={() => {}} />
+				</div>
+			)}
 		</div>
 	);
 }

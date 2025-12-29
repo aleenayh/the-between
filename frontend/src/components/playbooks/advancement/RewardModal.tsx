@@ -85,6 +85,7 @@ type AddRelicFormInputs = {
 	title: string;
 	description: string;
 	extraLines: number;
+	type: "relic" | "equipment";
 };
 
 export function AddRelicForm({ onClose }: { onClose: () => void }) {
@@ -98,6 +99,7 @@ export function AddRelicForm({ onClose }: { onClose: () => void }) {
 			title: "",
 			description: "",
 			extraLines: 0,
+			type: "equipment",
 		},
 	});
 
@@ -118,6 +120,7 @@ export function AddRelicForm({ onClose }: { onClose: () => void }) {
 			title: data.title,
 			text: parseAspects(data.description.split("\n")).join("\n"),
 			extraLines: data.extraLines,
+			type: data.type,
 		};
 		const newAspects = countAspects(data.description.split("\n"));
 		updateGameState({
@@ -152,7 +155,7 @@ export function AddRelicForm({ onClose }: { onClose: () => void }) {
 				/>
 
 				<p>
-					Write or paste the description of the relic below. To include aspects,
+					Write or paste the description of the item below. To include aspects,
 					surround your text with &lt; &gt; symbols. For example:{" "}
 					<span className="italic">
 						a burnished sword that &lt;glows with the light of the morning&gt;
@@ -164,14 +167,29 @@ export function AddRelicForm({ onClose }: { onClose: () => void }) {
 				/>
 
 				<p>
-					If the relic includes customizable aspects you may add later, include
-					a number of blank lines for them below.
+					If the item includes customizable aspects you may add later, include a
+					number of blank lines for them below.
 				</p>
 				<input
 					type="number"
 					{...register("extraLines")}
 					className="border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent flex-grow"
 				/>
+
+				<p>
+					Relics are special items that cannot be targeted by Keeper reactions.
+					Is this item a relic or equipment?
+				</p>
+				<div className="flex gap-2 justify-evenly">
+					<div className="flex items-center justify-start">
+						<input type="radio" {...register("type")} value="relic" />
+						<label htmlFor="type">Relic</label>
+					</div>
+					<div className="flex items-center justify-start">
+						<input type="radio" {...register("type")} value="equipment" />
+						<label htmlFor="type">Equipment</label>
+					</div>
+				</div>
 
 				<button
 					type="submit"
