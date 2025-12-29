@@ -85,7 +85,13 @@ export function CharacterOverview() {
 }
 
 function CharacterCreationStarter({ onCollapse }: { onCollapse: () => void }) {
+	const { gameState } = useGame();
 	const [key, setKey] = useState<playbookKey | null>(null);
+	const activeEmbers = gameState.players
+		.filter((player) => player.character !== null)
+		.map((player) => {
+			return { name: player.name, playbook: player.character?.playbook };
+		});
 
 	return (
 		<div className="border-2 border-theme-border-accent rounded-lg p-4 h-full flex flex-col overflow-hidden">
@@ -107,17 +113,23 @@ function CharacterCreationStarter({ onCollapse }: { onCollapse: () => void }) {
 					<h1 className="text-2xl font-bold text-center text-theme-text-accent shrink-0">
 						Choose an Ember
 					</h1>
-					<div className="flex flex-col gap-2 flex-1 overflow-y-auto">
+					<div className="flex flex-col md:grid md:grid-cols-2 gap-2 flex-1 overflow-y-auto md:flex-none">
 						{Object.values(playbookKeys).map((playbookKey) => {
 							const base = playbookBases[playbookKey];
+							const activeEmber = activeEmbers.find(
+								(ember) => ember.playbook === playbookKey,
+							);
 							return (
 								<button
 									key={playbookKey}
 									type="button"
-									className="border border-theme-border px-4 py-3 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent transition-colors"
+									className={`border border-theme-border px-4 py-3 rounded-lg bg-theme-bg-secondary hover:bg-theme-bg-accent hover:text-theme-text-accent transition-colors flex flex-col ${activeEmber ? "text-theme-text-secondary opacity-60" : "text-theme-text-primary"}`}
 									onClick={() => setKey(playbookKey)}
 								>
-									{base.title}
+									{base.title}{" "}
+									<span className="text-sm text-theme-text-muted italic hover:text-theme-text-accent">
+										{activeEmber ? `(Played by ${activeEmber.name})` : ""}
+									</span>
 								</button>
 							);
 						})}

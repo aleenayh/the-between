@@ -1,6 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
+import { useGame } from "../../context/GameContext";
 import { ReactComponent as NotesIcon } from "./quill.svg";
 
 export function NotesPane({
@@ -10,13 +11,16 @@ export function NotesPane({
 	isOpen: boolean;
 	setIsOpen: (open: boolean) => void;
 }) {
-	const localNotes = localStorage.getItem("TLR_notes");
+	const { gameHash } = useGame();
+	const localNotes =
+		localStorage.getItem(`TLR_notes_${gameHash}`) ||
+		localStorage.getItem(`TLR_notes`);
 	const [notes, setNotes] = useState(localNotes || "");
 	const [buttonText, setButtonText] = useState("Save");
 
 	const saveLocal = () => {
 		setButtonText("Saving...");
-		localStorage.setItem("TLR_notes", notes);
+		localStorage.setItem(`TLR_notes_${gameHash}`, notes);
 		setTimeout(() => {
 			toast.success("Notes saved!");
 			setButtonText("Saved!");

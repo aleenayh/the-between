@@ -41,6 +41,16 @@ export function Countdown({ mystery }: { mystery: Mystery }) {
 		});
 	};
 
+	const resolveQuestion = (question: string) => {
+		updateGameState({
+			mysteries: gameState.mysteries.map((m) =>
+				m.title === mystery.title
+					? { ...m, questions: m.questions?.filter((q) => q.text !== question) }
+					: m,
+			),
+		});
+	};
+
 	const style = useHighContrastDark
 		? {
 				color: "#fff",
@@ -125,6 +135,15 @@ export function Countdown({ mystery }: { mystery: Mystery }) {
 								<span className="italic">Opportunity:</span>{" "}
 								{question.opportunity}
 							</div>
+							{role === PlayerRole.KEEPER && (
+								<button
+									type="button"
+									className="border border-theme-border bg-theme-bg-primary hover:bg-theme-bg-accent px-2 py-1 rounded-lg text-sm text-theme-text-secondary hover:text-theme-text-primary"
+									onClick={() => resolveQuestion(question.text)}
+								>
+									Resolve Question
+								</button>
+							)}
 						</div>
 					))}
 				</div>
@@ -251,7 +270,7 @@ function ClueSection({
 			</div>
 			<div className="flex flex-col justify-start items-start text-left gap-2 w-full">
 				{earnedClues && earnedClues.length > 0 ? (
-					earnedClues?.map((clue) => (
+					earnedClues.map((clue) => (
 						<div
 							key={clue.text}
 							className="grid grid-cols-[20px_20px_1fr] gap-4 items-center w-full"
