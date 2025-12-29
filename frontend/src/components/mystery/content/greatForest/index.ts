@@ -41,5 +41,29 @@ export const GreatForestMysteries: MysteryContent[] = [
 					"Resolve the Mystery by seeking the heart of the swamp and immediately engaging in a Struggle against the Putrescent Queen.",
 			},
 		],
+		rewards: {
+			supplicants: {
+				Muck: "Gain one extra Clue on the Information Move when consulting him about matters related to fungus, decay, or the unseen workings of the natural world, even on a miss.",
+				Periwinkle:
+					"Gain one extra Clue on the Information Move when consulting him about matters of courtly intrigue, beauty, or Fae etiquette, even on a miss.",
+			},
+			items: [
+				"Roseglass locket: A heart-shaped locket of pale rose crystal, warm to the touch. When opened, it <reveals the strongest emotion lingering in a place.> When held over water, it <shows a fleeting image of someone the water remembers.>",
+				"Waterproof reed satchel: A satchel woven from the broad reeds of the swamp. It <keeps its contents dry even when submerged.>",
+				"Lion Guard cloth: A square of bright-red cloth that <bolsters resolve against fear or hesitation>, and <always draws attention from nearby foes or beasts.>",
+				"Brass resonator: A small brass tube <engraved with the sigil of House Aurene>. It <carries your voice clearly across long distances.>",
+				"Granny Lew’s tonic kit: A bundle of corked vials wrapped in oilcloth, smelling sharply of herbs and swampwater. Tonics that <cure nausea>, <ease fever>, and <soothe bloom rot>.",
+			],
+			special: [
+				{
+					condition:
+						"Additionally, if you defeated Chevalier Scarabine, you get both of the following (Embers decide who gets to add them to Equipment). These can be claimed at any time after the mystery is resolved:",
+					rewards: [
+						"Beetle plate: <Glossy, black plate armor>, like a beetle’s carapace.",
+						"Scarab blade: A <sword of blackened steel>, decorated with <beetle motifs>.",
+					],
+				},
+			],
+		},
 	},
 ];

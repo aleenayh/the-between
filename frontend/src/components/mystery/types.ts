@@ -56,6 +56,11 @@ export type MysteryContent = {
 	intro: string[];
 	countdownTotal: number;
 	clues: string[];
+	rewards: {
+		supplicants: Record<string, string>;
+		items: string[];
+		special?: { condition: string; rewards: string[] }[];
+	};
 };
 
 export const AvailableLands = {
