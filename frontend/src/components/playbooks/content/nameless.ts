@@ -85,17 +85,20 @@ export const Nameless: PlaybookBase = {
 			title: "Name-Taker",
 			text: "<aspect>A long sword of flawless steel</aspect>, its blade etched with names from hilt to tip—every life the knight has taken. When drawn, <aspect>the blade hums low, a chorus of quiet voices repeating the names inscribed upon it.</aspect> Some say the sword grows heavier with each name, <aspect>burdened not by guilt, but by identity.</aspect>",
 			extraLines: 2,
+			type: "relic",
 		},
 		{
 			title: "Vowplate",
 			text: "<aspect>A suit of burnished steel</aspect> without crest or mark, <aspect>every plate engraved on the inside with the oaths of the Nameless Legion.</aspect> They say <aspect>no vow sworn while wearing it can be broken</aspect>—that the gods themselves will intercede if necessary.",
 			extraLines: 2,
+			type: "relic",
 		},
 
 		{
 			title: "The Banner of the Nameless Legion",
 			text: "A length of pale cloth that has never borne sigil or bright color. Once, <aspect>it led a thousand knights who refused to march beneath any emblem.</aspect> In its blankness they found purity; in its emptiness, pride. When unfurled, <aspect>the air grows still and the world seems to hold its breath.</aspect> On the battlefield, it was said that <aspect>its nothingness was so profound, even the Old Fire dimmed when the banner was raised.</aspect>",
 			extraLines: 2,
+			type: "relic",
 		},
 	],
 	oldFire: [

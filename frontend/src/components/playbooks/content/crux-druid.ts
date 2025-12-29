@@ -110,16 +110,19 @@ export const CruxDruid: PlaybookBase = {
 			title: "Harrow the Martyr-Catcher",
 			text: "An <aspect>iron sickle attached to a long chain</aspect>. A weapon from the ancient world, it is thought to contain <aspect>the life force of the first crux druid, Harrow the Martyr-Catcher</aspect>. Some say it does its dark work independent of the desires of its wielder, and <aspect>can only be satisfied if the whole world hangs</aspect>.",
 			extraLines: 2,
+			type: "relic",
 		},
 		{
 			title: "The Heartwood Nails",
 			text: "A bundle of <aspect>iron spikes</aspect>, each forged with a vein of heartwood: <aspect>ash for healing and rebirth</aspect>, <aspect>blackthorn for dispelling magic</aspect>, <aspect>silver birch for punishment</aspect>, and <aspect>yew to purify the dead</aspect>.",
 			extraLines: 2,
+			type: "relic",
 		},
 		{
 			title: "The Tenderbark Confessor",
 			text: "Sometimes called the Rib-Rake, this is <aspect>a long staff twisted with vines and flowers</aspect>, nails roughly hammered along its length. It ends in <aspect>a claw of sharpened branches and iron splints</aspect>, used to peel skin and muscle from bone. They say its “tenderbark embrace” is <aspect>the most exquisite pain known to man or beast</aspect>.",
 			extraLines: 2,
+			type: "relic",
 		},
 	],
 	oldFire: [

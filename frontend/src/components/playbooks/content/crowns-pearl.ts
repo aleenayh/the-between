@@ -106,16 +106,19 @@ export const CrownsPearl: PlaybookBase = {
 			title: "The Coral Horn",
 			text: "A spiraling horn of coral in the likeness of a spiked conch shell, azure merfolk runes etched in its surface. When sounded in or near the water, it summons a kelpie, appearing like a charcoal black horse with kelp tangled in its mane. <aspect>It has the strength of ten horses</aspect>. Your kelpie can carry you anywhere so long as it remains in view of a body of water, but <aspect>it will drown anyone else who attempts to ride it</aspect>. Having carried you in your wedding procession, <aspect>it knows the difference between a regret and a mistake</aspect>.",
 			extraLines: 2,
+			type: "relic",
 		},
 		{
 			title: "The Gem of Drowned Flame",
 			text: "A brilliant sphere of blue encapsulating what looks like <aspect>a frozen explosion, perhaps a shard of the Old Flame itself</aspect>. Worn as a necklace, but can be set in a tiara. Those who accept an invitation to stare into it are <aspect>lulled into a pleasant waking sleep, amenable to suggestion</aspect>. It is said to be <aspect>the key to a sunken vault of merfolk treasure</aspect>.",
 			extraLines: 2,
+			type: "relic",
 		},
 		{
 			title: "The Sea Witch’s Quiver",
 			text: "<aspect>A quiver containing arrows fletched by fish fins instead of feathers</aspect>. <aspect>They fly true, even when fired underwater</aspect>. The arrows stored in this quiver are anointed with sea urchin oil that can <aspect>petrify the dead or poison the living</aspect>.",
 			extraLines: 2,
+			type: "relic",
 		},
 	],
 	oldFire: [
