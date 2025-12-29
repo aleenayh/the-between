@@ -186,7 +186,7 @@ export const CandleBearer: PlaybookBase = {
 		{
 			title: "…And I Am a Beacon Most Lonely.",
 			text: [
-				"When you walk through a Location with no other Embers present, the light of your candle acting as a beacon to the dark things in the world, roll with Cinder. On a hit, a Danger or other threatening entity is drawn to you. You may ask them two questions from the list below. They will not answer directly, but in the form of a Clue. On a 10+, the Threat or Danger departs as soon as the questions are answered.",
+				"When you walk through a Location with no other Embers present, the light of your candle acting as a beacon to the dark things in the world, roll with Cinder. On a hit, a Danger or other threatening entity is drawn to you. You may ask them two questions from the list below. They will not answer directly, but in the form of a Clue. On a 10+, the threat or Danger departs as soon as the questions are answered.",
 				"<li>Where is your lair?</li>",
 				"<li>How can I get you to ________?</li>",
 				"<li>What do you intend to do?</li>",
