@@ -44,5 +44,20 @@ export const ElegyMysteries: MysteryContent[] = [
 			"A procession mask made of wax, still warm and pliable to the touch.",
 			"A lantern that <burns with a pale violet flame, even without oil.>",
 		],
+		rewards: {
+			supplicants: {
+				Veyra:
+					"Gain one extra Clue on the Information Move when consulting her about matters related to assassins, the dead, or secret orders, even on a miss.",
+				"Sir Calen":
+					"Gain one extra Clue on the Information Move when consulting him about matters related to roads and paths, even on a miss.",
+			},
+			items: [
+				"Bell of the Long Wake: A small handbell, tarnished and cracked, that <rings without sound.> The bell <grows colder each time it’s used.>",
+				"Mourner’s candle: A long black candle that <never shortens.> When lit beside the dying or the dead, <the flame turns blue and whispers their final thoughts aloud.>",
+				"Moonlight shroud: A funerary cloth woven from grave moss and moonlight. When wrapped around a body—or yourself—it <masks breath and heartbeat>, <hiding the living from spirits and the restless dead.>",
+				"Gravedigger’s nail: A single rusted coffin nail, worn smooth from frequent handling. When pressed into the palm, it <lets you sense hollow spaces, buried things, or the nearness of graves.>",
+				"Salt of the Departed: A small pouch of coarse gray salt said to be <drawn from the tears of the dead.> Scattered in a circle, it <wards off spirits and shades until the circle is broken.>",
+			],
+		},
 	},
 ];

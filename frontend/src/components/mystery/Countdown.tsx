@@ -1,4 +1,7 @@
+import { Dialog } from "radix-ui";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { ReactComponent as CopyIcon } from "../../components/settings/copy.svg";
 import { useGame } from "../../context/GameContext";
 import { PlayerRole } from "../../context/types";
 import { Section } from "../playbooks/sharedComponents/Section";
@@ -72,93 +75,122 @@ export function Countdown({ mystery }: { mystery: Mystery }) {
 		clues: [],
 	};
 	return (
-		<div>
-			<h1 className="text-xl text-center mb-2 whitespace-nowrap" style={style}>
-				{mystery.title}
-			</h1>
-			{intro && intro.length > 0 && (
-				<Section title="Introduction" collapsible={true} minify={true}>
-					<div className="text-sm text-left">
-						{intro?.map((line) => (
-							<p key={line}>{line}</p>
-						))}
+		<Dialog.Root>
+			<div className="flex flex-col gap-0">
+				<h1 className="text-xl text-center whitespace-nowrap" style={style}>
+					{mystery.title}
+				</h1>
+				{role === PlayerRole.KEEPER && (
+					<div className="flex gap-2 justify-center items-center">
+						<button
+							type="button"
+							onClick={onRemove}
+							className="border border-theme-border bg-theme-bg-primary hover:bg-theme-bg-accent px-2 py-1 rounded-lg text-sm text-theme-text-secondary hover:text-theme-text-primary"
+						>
+							Remove this mystery
+						</button>
+						<Dialog.Trigger className="border border-theme-border bg-theme-bg-primary hover:bg-theme-bg-accent px-2 py-1 rounded-lg text-sm text-theme-text-secondary hover:text-theme-text-primary">
+							Issue Rewards
+						</Dialog.Trigger>
 					</div>
-				</Section>
-			)}
-			{mystery.countdownTotal > 0 && (
-				<div>
-					<div
-						className={`flex gap-3 min-h-[100px] justify-center items-center mx-auto`}
-					>
-						{Array.from({ length: mystery.countdownTotal }).map((_, index) => (
-							<CountdownItem
-								key={`mc-${mystery.title}-${index}`}
-								theme={mystery.theme}
-								index={index}
-								filled={mystery.countdownCurrent > index}
-							/>
-						))}
-					</div>
-					{role === PlayerRole.KEEPER && (
-						<div className="flex gap-3 justify-center items-center">
+				)}
+				{intro && intro.length > 0 && (
+					<Section title="Introduction" collapsible={true} minify={true}>
+						<div className="text-sm text-left">
+							{intro?.map((line) => (
+								<p key={line}>{line}</p>
+							))}
+						</div>
+					</Section>
+				)}
+				{mystery.countdownTotal > 0 && (
+					<div>
+						<div
+							className={`flex gap-3 min-h-[100px] justify-center items-center mx-auto`}
+						>
 							{Array.from({ length: mystery.countdownTotal }).map(
 								(_, index) => (
-									<input
-										type="checkbox"
+									<CountdownItem
 										key={`mc-${mystery.title}-${index}`}
-										defaultChecked={mystery.countdownCurrent > index}
-										onChange={(e) => onToggle(e.target.checked)}
+										theme={mystery.theme}
+										index={index}
+										filled={mystery.countdownCurrent > index}
 									/>
 								),
 							)}
 						</div>
-					)}
-					<div className="text-theme-text-secondary text-sm">
-						{mystery.countdownCurrent} / {mystery.countdownTotal}
-					</div>
-				</div>
-			)}
-			{mystery.questions && mystery.questions.length > 0 && (
-				<div className="py-4 flex flex-col gap-2">
-					<h2 className="text-md text-center whitespace-nowrap" style={style}>
-						Questions
-					</h2>
-					{mystery.questions.map((question) => (
-						<div key={question.text}>
-							<div className="flex gap-2 justify-start items-center">
-								{question.text}{" "}
-								<span className="text-sm text-theme-text-secondary italic">
-									(Complexity: {question.complexity})
-								</span>
+						{role === PlayerRole.KEEPER && (
+							<div className="flex gap-3 justify-center items-center">
+								{Array.from({ length: mystery.countdownTotal }).map(
+									(_, index) => (
+										<input
+											type="checkbox"
+											key={`mc-${mystery.title}-${index}`}
+											defaultChecked={mystery.countdownCurrent > index}
+											onChange={(e) => onToggle(e.target.checked)}
+										/>
+									),
+								)}
 							</div>
-							<div className="text-sm text-theme-text-secondary text-left">
-								<span className="italic">Opportunity:</span>{" "}
-								{question.opportunity}
-							</div>
-							{role === PlayerRole.KEEPER && (
-								<button
-									type="button"
-									className="border border-theme-border bg-theme-bg-primary hover:bg-theme-bg-accent px-2 py-1 rounded-lg text-sm text-theme-text-secondary hover:text-theme-text-primary"
-									onClick={() => resolveQuestion(question.text)}
-								>
-									Resolve Question
-								</button>
-							)}
+						)}
+						<div className="text-theme-text-secondary text-sm">
+							{mystery.countdownCurrent} / {mystery.countdownTotal}
 						</div>
-					))}
-				</div>
-			)}
-			<ClueSection clues={clues} mystery={mystery} role={role} />
-			{role === PlayerRole.KEEPER && (
-				<button
-					type="button"
-					onClick={onRemove}
-					className="my-2 bg-theme-bg-accent text-theme-text-accent px-4 py-2 rounded-lg opacity-80 hover:opacity-100"
-				>
-					Remove this mystery
-				</button>
-			)}
-		</div>
+					</div>
+				)}
+				{mystery.questions && mystery.questions.length > 0 && (
+					<div className="py-4 flex flex-col gap-2">
+						<h2 className="text-md text-center whitespace-nowrap" style={style}>
+							Questions
+						</h2>
+						{mystery.questions.map((question) => (
+							<div key={question.text}>
+								<div className="flex gap-2 justify-start items-center">
+									{question.text}{" "}
+									<span className="text-sm text-theme-text-secondary italic">
+										(Complexity: {question.complexity})
+									</span>
+								</div>
+								<div className="text-sm text-theme-text-secondary text-left">
+									<span className="italic">Opportunity:</span>{" "}
+									{question.opportunity}
+								</div>
+								{role === PlayerRole.KEEPER && (
+									<button
+										type="button"
+										className="border border-theme-border bg-theme-bg-primary hover:bg-theme-bg-accent px-2 py-1 rounded-lg text-sm text-theme-text-secondary hover:text-theme-text-primary"
+										onClick={() => resolveQuestion(question.text)}
+									>
+										Resolve Question
+									</button>
+								)}
+							</div>
+						))}
+					</div>
+				)}
+				<ClueSection clues={clues} mystery={mystery} role={role} />
+			</div>
+			<Dialog.Portal>
+				<Dialog.Overlay className="DialogOverlay" />
+				<Dialog.Content className="DialogContent">
+					<Dialog.Close asChild>
+						<button
+							type="button"
+							className="absolute top-2 right-2 aspect-square w-8 h-8 bg-theme-bg-accent text-theme-text-primary rounded-full flex justify-center items-center"
+						>
+							X
+						</button>
+					</Dialog.Close>
+					<Dialog.Title className="DialogTitle">
+						Rewards for {mystery.title}
+					</Dialog.Title>
+					<Dialog.Description className="DialogDescription">
+						Rewards for resolving the mystery.
+					</Dialog.Description>
+					<RewardForm mystery={mystery} />
+				</Dialog.Content>
+			</Dialog.Portal>
+		</Dialog.Root>
 	);
 }
 
@@ -338,5 +370,101 @@ function ClueSection({
 				</button>
 			</form>
 		</Section>
+	);
+}
+
+function RewardForm({ mystery }: { mystery: Mystery }) {
+	const { register, handleSubmit } = useForm<{ supplicant: string }>();
+	const { updateGameState, gameState } = useGame();
+
+	const onSubmit = (data: { supplicant: string }) => {
+		updateGameState({
+			supplicants: [...(gameState.supplicants ?? []), data.supplicant],
+		});
+		toast.success(`Supplicant chosen: ${data.supplicant}`);
+	};
+
+	const rewards = lookupMystery(mystery.title)?.rewards;
+	if (!rewards) {
+		return <div>No rewards found for {mystery.title}.</div>;
+	}
+
+	const allItems = rewards.items.join("\n\n");
+	const copyToClipboard = () => {
+		navigator.clipboard.writeText(allItems);
+		toast.success("Copied to clipboard");
+	};
+	return (
+		<form
+			onSubmit={handleSubmit(onSubmit)}
+			className="flex flex-col gap-2 justify-start items-center"
+		>
+			<div className="flex flex-col gap-2">
+				First, as a group, choose a Side Character to become a Supplicant:
+			</div>
+
+			{Object.keys(rewards.supplicants).map((supplicant) => (
+				<div key={supplicant} className="flex flex-col gap-2 items-center">
+					<div className="w-full flex gap-2 items-center justify-start">
+						<input
+							type="radio"
+							{...register("supplicant")}
+							value={supplicant}
+						/>
+						<label key={supplicant} htmlFor={supplicant}>
+							{supplicant}
+						</label>
+					</div>
+					<div className="ml-4 text-sm text-theme-text-secondary text-left">
+						{rewards.supplicants[supplicant]}
+					</div>
+				</div>
+			))}
+			<button
+				type="submit"
+				className="bg-theme-bg-accent text-theme-text-accent px-4 py-2 rounded-lg opacity-80 hover:opacity-100 hover:bg-theme-bg-accent-hover hover:text-theme-text-accent-hover"
+			>
+				Confirm Supplicant
+			</button>
+
+			<div className="flex flex-col gap-0">
+				<p>Then, each Ember chooses one.</p>
+				<p className="text-sm text-theme-text-secondary text-left italic">
+					{" "}
+					(Pre-formatted. Click button to copy and Embers can paste directly
+					into their 'Add equipment' form.)
+				</p>
+			</div>
+			<button
+				type="button"
+				className="bg-theme-bg-accent border-2 border-theme-border-accent hover:bg-theme-bg-accent transition-colors flex justify-center items-center rounded-lg p-2 gap-2"
+				onClick={copyToClipboard}
+			>
+				<CopyIcon className="w-4 h-4" />
+			</button>
+			<textarea
+				value={rewards.items.join("\n\n")}
+				readOnly
+				className="mx-2 p-2 h-40 w-full box-border"
+			/>
+
+			{rewards.special && rewards.special.length > 0 && (
+				<div className="flex flex-col gap-2">
+					<h3 className="text-sm text-theme-text-primary text-center">
+						Special Rewards
+					</h3>
+					{rewards.special.map((special) => (
+						<div key={special.condition}>
+							<div>{special.condition}</div>
+							{special.rewards.map((reward) => (
+								<div key={reward} className="ml-4 py-1">
+									{reward}
+								</div>
+							))}
+						</div>
+					))}
+				</div>
+			)}
+		</form>
 	);
 }

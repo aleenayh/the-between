@@ -26,5 +26,22 @@ export function lookupMystery(title: string): MysteryContent | undefined {
 		intro: mystery.intro,
 		countdownTotal: mystery.countdownTotal,
 		clues: mystery.clues,
+		rewards: mystery.rewards,
 	};
+}
+
+export function findSupplicant(key: string): string | undefined {
+	const allSupplicants = Object.values(canonicalMysteries)
+		.flat()
+		.flatMap((m) => {
+			return Object.keys(m.rewards.supplicants).map((s) => ({
+				key: s,
+				value: m.rewards.supplicants[s],
+			}));
+		});
+	const supplicant = allSupplicants.find((s) => s.key === key);
+	if (!supplicant) {
+		return undefined;
+	}
+	return supplicant.value;
 }

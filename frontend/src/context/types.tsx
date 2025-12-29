@@ -29,6 +29,7 @@ export const gameStateSchema = z.object({
 	gameHash: z.string().catch(catchWithWarning("gameHash", "")),
 	//no catchWithWarning for mysteries - empty array is valid, but dropped by firebase
 	mysteries: z.array(mysterySchema).catch([]),
+	supplicants: z.array(z.string()).optional().catch(undefined),
 	players: z.array(playerSchema).catch(catchWithWarning("players", [])),
 	timestamp: z.coerce.date().catch(catchWithWarning("timestamp", new Date())),
 });
