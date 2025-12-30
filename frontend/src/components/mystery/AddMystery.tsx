@@ -313,6 +313,7 @@ function MysteryLookup({
 				text: c,
 				earned: false,
 				explained: false,
+				removed: false,
 			})),
 		};
 		updateGameState({

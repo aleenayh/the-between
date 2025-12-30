@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { DominionSheet } from "./dominion/DominionSheet";
 import { TowerSheet } from "./mourningTower/towerSheet";
 import { MysterySheet } from "./mystery/MysterySheet";
 import { NotesPane } from "./notes/NotesPane";
@@ -13,10 +14,12 @@ export function Drawers() {
 	const [settingsOpen, setSettingsOpen] = useState(false);
 	const [notesOpen, setNotesOpen] = useState(false);
 	const [towerOpen, setTowerOpen] = useState(false);
+	const [dominionOpen, setDominionOpen] = useState(false);
 	return (
 		<nav className="absolute top-0 left-0 w-full h-auto flex flex-col justify-start items-start pointer-events-none">
 			<ReferenceSheet isOpen={refOpen} setIsOpen={setRefOpen} />
 			<MysterySheet isOpen={mysteryOpen} setIsOpen={setMysteryOpen} />
+			<DominionSheet isOpen={dominionOpen} setIsOpen={setDominionOpen} />
 			<PullOutCharacterOverview
 				isOpen={pullOutOpen}
 				setIsOpen={setPullOutOpen}

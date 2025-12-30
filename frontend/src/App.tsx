@@ -1,4 +1,5 @@
 import "./App.css";
+import { Tooltip } from "radix-ui";
 import { useState } from "react";
 import { Toaster } from "react-hot-toast";
 import { Game } from "./components/Game";
@@ -46,8 +47,10 @@ function App() {
 		<div className="App">
 			<ErrorBoundary>
 				<GameProvider gameHash={gameHash} userInfo={userInfo}>
-					<Toaster />
-					<Game />
+					<Tooltip.Provider>
+						<Toaster />
+						<Game />
+					</Tooltip.Provider>
 				</GameProvider>
 			</ErrorBoundary>
 		</div>
