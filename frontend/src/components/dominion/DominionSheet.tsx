@@ -442,7 +442,7 @@ function ClueSection({
 						</div>
 					))
 				) : (
-					<div className="col-span-3 text-sm text-theme-text-muted italic text-left">
+					<div className="text-sm text-theme-text-muted italic w-full text-center">
 						No clues yet
 					</div>
 				)}
