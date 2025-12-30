@@ -1,10 +1,11 @@
-import { Dialog } from "radix-ui";
+import { Dialog, Tooltip } from "radix-ui";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { ReactComponent as CopyIcon } from "../../components/settings/copy.svg";
 import { useGame } from "../../context/GameContext";
 import { PlayerRole } from "../../context/types";
 import { Section } from "../playbooks/sharedComponents/Section";
+import { StyledTooltip } from "../shared/Tooltip";
 import { lookupMystery } from "./content";
 import { themeElements } from "./themes";
 import type { Mystery } from "./types";
@@ -45,10 +46,21 @@ export function Countdown({ mystery }: { mystery: Mystery }) {
 	};
 
 	const resolveQuestion = (question: string) => {
+		const newClues = mystery.clues
+			? mystery.clues.map((c) =>
+					c.explained
+						? { ...c, earned: false, explained: false, removed: true }
+						: c,
+				)
+			: [{ text: question, earned: false, explained: false, removed: true }];
 		updateGameState({
 			mysteries: gameState.mysteries.map((m) =>
 				m.title === mystery.title
-					? { ...m, questions: m.questions?.filter((q) => q.text !== question) }
+					? {
+							...m,
+							questions: m.questions?.filter((q) => q.text !== question),
+							clues: [...newClues],
+						}
 					: m,
 			),
 		});
@@ -82,13 +94,23 @@ export function Countdown({ mystery }: { mystery: Mystery }) {
 				</h1>
 				{role === PlayerRole.KEEPER && (
 					<div className="flex gap-2 justify-center items-center">
-						<button
-							type="button"
-							onClick={onRemove}
-							className="border border-theme-border bg-theme-bg-primary hover:bg-theme-bg-accent px-2 py-1 rounded-lg text-sm text-theme-text-secondary hover:text-theme-text-primary"
-						>
-							Remove this mystery
-						</button>
+						<Tooltip.Root>
+							<Tooltip.Trigger>
+								<button
+									type="button"
+									onClick={onRemove}
+									className="border border-theme-border bg-theme-bg-primary hover:bg-theme-bg-accent px-2 py-1 rounded-lg text-sm text-theme-text-secondary hover:text-theme-text-primary"
+								>
+									Remove this mystery
+								</button>
+							</Tooltip.Trigger>
+							<Tooltip.Content>
+								<StyledTooltip>
+									Remove the mystery without claiming a Supplicant. If your
+									Embers resolved the mystery, use Issue Rewards instead.
+								</StyledTooltip>
+							</Tooltip.Content>
+						</Tooltip.Root>
 						<Dialog.Trigger className="border border-theme-border bg-theme-bg-primary hover:bg-theme-bg-accent px-2 py-1 rounded-lg text-sm text-theme-text-secondary hover:text-theme-text-primary">
 							Issue Rewards
 						</Dialog.Trigger>
@@ -156,13 +178,26 @@ export function Countdown({ mystery }: { mystery: Mystery }) {
 									{question.opportunity}
 								</div>
 								{role === PlayerRole.KEEPER && (
-									<button
-										type="button"
-										className="border border-theme-border bg-theme-bg-primary hover:bg-theme-bg-accent px-2 py-1 rounded-lg text-sm text-theme-text-secondary hover:text-theme-text-primary"
-										onClick={() => resolveQuestion(question.text)}
-									>
-										Resolve Question
-									</button>
+									<div className="flex flex-col gap-2 justify-center items-center">
+										<Tooltip.Root>
+											<Tooltip.Trigger>
+												<button
+													type="button"
+													className="border border-theme-border bg-theme-bg-primary hover:bg-theme-bg-accent px-2 py-1 rounded-lg text-sm text-theme-text-secondary hover:text-theme-text-primary"
+													onClick={() => resolveQuestion(question.text)}
+												>
+													Resolve Question
+												</button>
+											</Tooltip.Trigger>
+											<Tooltip.Content>
+												<StyledTooltip>
+													Resolving a Question automatically clears all clues
+													marked "explained." If the Mystery has only one
+													Question, you can skip this and instead Issue Rewards.
+												</StyledTooltip>
+											</Tooltip.Content>
+										</Tooltip.Root>
+									</div>
 								)}
 							</div>
 						))}
@@ -187,7 +222,7 @@ export function Countdown({ mystery }: { mystery: Mystery }) {
 					<Dialog.Description className="DialogDescription">
 						Rewards for resolving the mystery.
 					</Dialog.Description>
-					<RewardForm mystery={mystery} />
+					<RewardForm mystery={mystery} onRemove={onRemove} />
 				</Dialog.Content>
 			</Dialog.Portal>
 		</Dialog.Root>
@@ -233,19 +268,34 @@ function ClueSection({
 }) {
 	const { updateGameState, gameState } = useGame();
 	const earnedClues = mystery.clues?.filter((clue) => clue.earned);
+	const removedClues = mystery.clues?.filter((clue) => clue.removed);
 	const { register, handleSubmit, reset } = useForm<{ customClue: string }>();
 
 	const availableCanonicalClues = clues.filter(
-		(clue) => !earnedClues?.some((c) => c.text === clue),
+		(clue) =>
+			!earnedClues?.some((c) => c.text === clue) &&
+			!removedClues?.some((c) => c.text === clue),
 	);
 
 	const addCustomClue = (data: { customClue: string }) => {
 		const newClues = mystery.clues
 			? [
 					...mystery.clues,
-					{ text: data.customClue.trim(), earned: true, explained: false },
+					{
+						text: data.customClue.trim(),
+						earned: true,
+						explained: false,
+						removed: false,
+					},
 				]
-			: [{ text: data.customClue.trim(), earned: true, explained: false }];
+			: [
+					{
+						text: data.customClue.trim(),
+						earned: true,
+						explained: false,
+						removed: false,
+					},
+				];
 		updateGameState({
 			mysteries: gameState.mysteries.map((m) =>
 				m.title === mystery.title ? { ...m, clues: [...newClues] } : m,
@@ -259,11 +309,11 @@ function ClueSection({
 		const newClues =
 			existingClue && mystery.clues
 				? mystery.clues.map((c) =>
-						c.text === clue ? { ...c, earned: checked } : c,
+						c.text === clue ? { ...c, earned: checked, removed: false } : c,
 					)
 				: [
 						...(mystery.clues ?? []),
-						{ text: clue, earned: checked, explained: false },
+						{ text: clue, earned: checked, explained: false, removed: false },
 					];
 		updateGameState({
 			mysteries: gameState.mysteries.map((m) =>
@@ -279,8 +329,20 @@ function ClueSection({
 
 	const explainClue = (clue: string, checked: boolean) => {
 		const newClues = mystery.clues?.map((c) =>
-			c.text === clue ? { ...c, explained: checked } : c,
-		) ?? [{ text: clue, earned: true, explained: checked }];
+			c.text === clue ? { ...c, explained: checked, removed: false } : c,
+		) ?? [{ text: clue, earned: true, explained: checked, removed: false }];
+		updateGameState({
+			mysteries: gameState.mysteries.map((m) =>
+				m.title === mystery.title ? { ...m, clues: [...newClues] } : m,
+			),
+		});
+	};
+
+	const removeClue = (clue: string) => {
+		const newClues = mystery.clues?.map((c) =>
+			c.text === clue ? { ...c, removed: true } : c,
+		) ?? [{ text: clue, earned: false, explained: false, removed: true }];
+
 		updateGameState({
 			mysteries: gameState.mysteries.map((m) =>
 				m.title === mystery.title ? { ...m, clues: [...newClues] } : m,
@@ -294,22 +356,37 @@ function ClueSection({
 				Earned Clues
 			</h3>
 			<div className="flex gap-2 text-sm text-theme-text-secondary text-left justify-center items-center">
-				<div>Earned: {earnedClues?.length}</div>
+				<div>Earned: {earnedClues?.length}</div> <div>|</div>
 				<div>
 					{" "}
 					Explained: {earnedClues?.filter((clue) => clue.explained).length}
 				</div>
+				<div>|</div>{" "}
+				<div>
+					{" "}
+					Remaining: {earnedClues?.filter((clue) => !clue.explained).length}
+				</div>
 			</div>
 			<div className="flex flex-col justify-start items-start text-left gap-2 w-full">
+				<div
+					key={"header-row"}
+					className="grid grid-cols-[20px_20px_20px_1fr] gap-4 text-xs whitespace-nowrap overflow-ellipsis items-center w-full"
+				>
+					<span className="text-left -rotate-45">Earned</span>
+					<span className="text-left -rotate-45">Explained</span>
+					<span className="text-left -rotate-45">Remove</span>
+					<span></span>
+				</div>
 				{earnedClues && earnedClues.length > 0 ? (
 					earnedClues.map((clue) => (
 						<div
 							key={clue.text}
-							className="grid grid-cols-[20px_20px_1fr] gap-4 items-center w-full"
+							className="grid grid-cols-[20px_20px_20px_1fr] gap-2 items-center w-full"
 						>
 							<input
 								type="checkbox"
 								checked={clue.earned}
+								disabled={role !== PlayerRole.KEEPER}
 								onChange={(e) => earnClue(clue.text, e.target.checked)}
 							/>
 							<input
@@ -317,6 +394,13 @@ function ClueSection({
 								checked={clue.explained}
 								onChange={(e) => explainClue(clue.text, e.target.checked)}
 							/>
+							<button
+								type="button"
+								className="text-xs text-theme-text-secondary bg-theme-bg-primary rounded-full px-0 aspect-square hover:bg-theme-bg-accent hover:text-theme-text-accent hover:border hover:border-theme-border-accent"
+								onClick={() => removeClue(clue.text)}
+							>
+								X
+							</button>
 							<span className="text-left">{clue.text}</span>
 						</div>
 					))
@@ -373,7 +457,13 @@ function ClueSection({
 	);
 }
 
-function RewardForm({ mystery }: { mystery: Mystery }) {
+function RewardForm({
+	mystery,
+	onRemove,
+}: {
+	mystery: Mystery;
+	onRemove: () => void;
+}) {
 	const { register, handleSubmit } = useForm<{ supplicant: string }>();
 	const { updateGameState, gameState } = useGame();
 
@@ -465,6 +555,14 @@ function RewardForm({ mystery }: { mystery: Mystery }) {
 					))}
 				</div>
 			)}
+
+			<button
+				type="button"
+				className="bg-theme-bg-accent text-theme-text-accent px-4 py-2 rounded-lg opacity-80 hover:opacity-100 hover:bg-theme-bg-accent-hover hover:text-theme-text-accent-hover"
+				onClick={onRemove}
+			>
+				Remove this Mystery
+			</button>
 		</form>
 	);
 }
