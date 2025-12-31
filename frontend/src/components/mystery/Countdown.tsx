@@ -340,7 +340,9 @@ function ClueSection({
 
 	const removeClue = (clue: string) => {
 		const newClues = mystery.clues?.map((c) =>
-			c.text === clue ? { ...c, removed: true } : c,
+			c.text === clue
+				? { ...c, earned: false, explained: false, removed: true }
+				: c,
 		) ?? [{ text: clue, earned: false, explained: false, removed: true }];
 
 		updateGameState({
