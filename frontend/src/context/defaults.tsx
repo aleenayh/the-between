@@ -6,4 +6,8 @@ export const defaultGameState: GameState = {
 	dominion: null,
 	players: [],
 	timestamp: new Date(),
+	safety: {
+		lines: [],
+		veils: [],
+	},
 };

@@ -31,6 +31,11 @@ const playerSchema = z.object({
 	character: characterSchema.nullable().catch(null),
 });
 
+const safetySchema = z.object({
+	lines: z.array(z.string()).optional().catch(undefined),
+	veils: z.array(z.string()).optional().catch(undefined),
+});
+
 export const gameStateSchema = z.object({
 	gameHash: z.string().catch(catchWithWarning("gameHash", "")),
 	//no catchWithWarning for mysteries - empty array is valid, but dropped by firebase
@@ -39,6 +44,7 @@ export const gameStateSchema = z.object({
 	supplicants: z.array(z.string()).optional().catch(undefined),
 	players: z.array(playerSchema).catch(catchWithWarning("players", [])),
 	timestamp: z.coerce.date().catch(catchWithWarning("timestamp", new Date())),
+	safety: safetySchema,
 });
 
 export type GameState = z.infer<typeof gameStateSchema>;
