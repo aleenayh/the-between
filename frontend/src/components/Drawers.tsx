@@ -5,6 +5,7 @@ import { MysterySheet } from "./mystery/MysterySheet";
 import { NotesPane } from "./notes/NotesPane";
 import { PullOutCharacterOverview } from "./playbooks/drawer/PullOutDrawer";
 import { ReferenceSheet } from "./referenceSheet/referenceSheet";
+import { SafetyPane } from "./safety/SafetySheet";
 import { SettingsPane } from "./settings/SettingsPane";
 
 export function Drawers() {
@@ -15,6 +16,7 @@ export function Drawers() {
 	const [notesOpen, setNotesOpen] = useState(false);
 	const [towerOpen, setTowerOpen] = useState(false);
 	const [dominionOpen, setDominionOpen] = useState(false);
+	const [safetyOpen, setSafetyOpen] = useState(false);
 	return (
 		<nav className="absolute top-0 left-0 w-full h-auto flex flex-col justify-start items-start pointer-events-none">
 			<ReferenceSheet isOpen={refOpen} setIsOpen={setRefOpen} />
@@ -26,6 +28,7 @@ export function Drawers() {
 			/>
 			<TowerSheet isOpen={towerOpen} setIsOpen={setTowerOpen} />
 			<NotesPane isOpen={notesOpen} setIsOpen={setNotesOpen} />
+			<SafetyPane isOpen={safetyOpen} setIsOpen={setSafetyOpen} />
 			<SettingsPane isOpen={settingsOpen} setIsOpen={setSettingsOpen} />
 		</nav>
 	);
