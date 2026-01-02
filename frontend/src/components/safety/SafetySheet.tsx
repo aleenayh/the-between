@@ -3,7 +3,6 @@ import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useGame } from "../../context/GameContext";
 import { ReactComponent as HeartShieldIcon } from "./heartshield.svg";
-import { ControlledSection } from "../playbooks/sharedComponents/Section";
 import { useForm } from "react-hook-form";
 import { Dialog } from "radix-ui";
 
@@ -44,7 +43,7 @@ export function SafetyPane({
 							Safety Tools
 						</h1>
 						<div className="flex flex-col gap-4 justify-start items-center h-full">
-							<p className="text-balance">
+							<p className="text-balance text-sm">
 								No game is more important than the people playing it. Your game may use any safety tools you wish, but the Gauntlet typically recommends the Open Door Policy, the X-Card, and Lines and Veils. Each are explained below, and this app includes support to share Lines and Veils between players.
 							</p>
 

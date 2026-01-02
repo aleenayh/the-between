@@ -42,11 +42,20 @@ export function DiceIndicator({ playerId }: { playerId: string }) {
 		}
 	}, [lastRoll, isSelf]);
 
+	const openForThreeSeconds = () => {
+		setIsOpen(true);
+		setTimeout(() => {
+			setIsOpen(false);
+		}, 3000);
+	};
+
 	return (
 		<Tooltip.Root open={isOpen} onOpenChange={setIsOpen}>
 			<div className="absolute top-1 left-1 text-theme-border-accent">
 				<Tooltip.Trigger>
-					<DiceIcon className="w-10 h-10" />
+					<button type="button" onClick={openForThreeSeconds}>
+						<DiceIcon className="w-10 h-10" />
+					</button>
 				</Tooltip.Trigger>
 			</div>
 			<Tooltip.Content>
