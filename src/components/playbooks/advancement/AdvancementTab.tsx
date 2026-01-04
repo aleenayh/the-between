@@ -1,0 +1,18 @@
+import { Extras } from "../sharedComponents/Extras";
+import type { Character } from "../types";
+import { AdjustmentModal } from "./AdjustModal";
+import { AdvancementModal } from "./AdvancementModal";
+import { RetireCharacterModal } from "./RetireModal";
+
+export function AdvancementTab({ character }: { character: Character }) {
+	return (
+		<div className="flex flex-col gap-2">
+			<div className="grid grid-cols-2 gap-4 p-10">
+				<AdvancementModal />
+				<RetireCharacterModal />
+				<AdjustmentModal />
+			</div>
+			<Extras character={character} />
+		</div>
+	);
+}
