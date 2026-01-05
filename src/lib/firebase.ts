@@ -3,10 +3,17 @@ import { get, getDatabase, ref, set } from "firebase/database"
 import { defaultGameState } from "../context/defaults"
 import { type GameState, PlayerRole } from "../context/types"
 
-// Firebase configuration
+// Firebase configuration 
 const firebaseConfig = {
-  //TODO
-}
+  apiKey: "AIzaSyDShe0PWSZswuvaEWQf18RUNz1ZXtG9cWQ",
+  authDomain: "the-between-ttrpg.firebaseapp.com",
+  databaseURL: "https://the-between-ttrpg-default-rtdb.firebaseio.com",
+  projectId: "the-between-ttrpg",
+  storageBucket: "the-between-ttrpg.firebasestorage.app",
+  messagingSenderId: "213609825072",
+  appId: "1:213609825072:web:9935d1cd52a0e9696fbef5",
+  measurementId: "G-H7N6WZ7706"
+};
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig)
