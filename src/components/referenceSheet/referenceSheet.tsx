@@ -1,6 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion"
 import { useState } from "react"
-//import { ReactComponent as Logo } from "../assets/tlr-logo.svg";
+import { ReactComponent as Logo } from "../assets/between-logo.svg";
 import { ReactComponent as BookIcon } from "./book.svg"
 
 export function ReferenceSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void }) {
@@ -26,9 +26,8 @@ export function ReferenceSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsOp
             <button type="button" className="absolute top-0 right-0 w-8 h-8" onClick={() => setIsOpen(!isOpen)}>
               X
             </button>
-            <h1 className="text-[60px] font-bold text-center text-theme-text-accent">
-              {/* <Logo className="w-1/3 h-auto mx-auto mb-4" /> */}
-              The Between
+            <h1 className="flex justify-center w-full text-theme-text-accent">
+              <Logo className="w-1/4 h-auto mx-auto mb-4" />
             </h1>
             <h1 className="text-2xl font-bold text-theme-text-accent">Reference Sheet</h1>
             <div className="flex flex-col justify-stretch items-start text-left">
@@ -46,7 +45,7 @@ function MovesSection() {
   const [view, setView] = useState<"day" | "night" | "information" | "vulnerable" | "answer-question">("day")
   return (
     <div className="m-2 rounded-md border border-theme-border-accent p-4 w-full">
-      <h2 className="text-lg font-bold text-theme-text-accent text-center">Moves</h2>
+      <h2 className="text-xl font-bold text-theme-text-accent text-center">Moves</h2>
       <div className="w-full flex flex-col md:grid md:grid-cols-5 gap-2 text-xs">
         <button type="button" className="gridButton" onClick={() => setView("day")}>
           <span className="text-xs font-bold">The Day Move</span>
@@ -200,7 +199,7 @@ function PhaseSection() {
   const [view, setView] = useState<"day" | "night" | "dawn" | "dusk">("dawn")
   return (
     <div className="m-2 rounded-md border border-theme-border-accent p-4 w-full">
-      <h2 className="text-lg font-bold text-theme-text-accent text-center">Phases</h2>
+      <h2 className="text-xl font-bold text-theme-text-accent text-center">Phases</h2>
       <div className="w-full flex flex-col md:grid md:grid-cols-4 gap-2 text-xs">
         <button type="button" className="gridButton" onClick={() => setView("dawn")}>
           Dawn

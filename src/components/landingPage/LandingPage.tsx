@@ -8,8 +8,7 @@ import {
 	nameToPlayerId,
 } from "../../lib/firebase";
 import { validateGameState } from "../../utils/schemaValidation";
-
-//import { ReactComponent as Logo } from "../assets/tlr-logo.svg";
+import { ReactComponent as Logo } from "../assets/between-logo.svg";
 
 type LandingStep =
 	| "name"
@@ -190,9 +189,8 @@ export function LandingPage({
 	return (
 		<div className="App flex items-center justify-center p-8">
 			<div className="max-w-md w-full flex flex-col gap-6">
-				<h1 className="text-[60px] font-bold text-center text-theme-text-accent">
-					{/* <Logo className="w-1/2 h-auto mx-auto" /> */}
-					The Between
+				<h1 className="flex justify-center w-full text-theme-text-accent">
+					<Logo className="w-1/2 h-auto mx-auto" />
 				</h1>
 
 				{error && (
