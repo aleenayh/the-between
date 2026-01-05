@@ -118,6 +118,7 @@ export const undeniablePlaybook: PlaybookBase = {
         "If the other Hunter does not grant redemption, or if you choose not to ask for it, ask the Keeper to narrate a scene in which we see you become a servant of the Mastermind, then retire this character. ",
       ],
       checkboxes: 12,
+      extraLines: 1,
     },
     {
       title: "Unquenchable Thirst",
