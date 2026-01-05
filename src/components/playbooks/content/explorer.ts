@@ -1,0 +1,147 @@
+import type { PlaybookBase } from "../types"
+
+export const explorerPlaybook: PlaybookBase = {
+  title: "The Explorer",
+  intro: [
+    "You were born into a world of fantastic wealth and privilege. You could have spent your days cosseted by luxury, with nothing more pressing than deciding what to wear to that evening’s dinner party. But you chose a different life; you chose to serve your queen. You leveraged your wealth and connections to explore the world, to chart unknown territory. And now you have a mountain range named after you—a fitting honor, considering you tower over other Britons. Your strength, your intellect, your cunning—none can match it. None except… the Mastermind. The Mastermind, who plots ceaselessly against Her Majesty, whose mind and resources dwarf your own. You have conquered every trial the gods have placed before you, but the Mastermind is something altogether different. And your new work, your work with Hargrave House, is connected to them in some way. You spend your days and nights exploring the true heart of darkness—the monsters that stalk the streets of London—but none are so monstrous as your opponent, the one who sits on the other side of the chessboard. Will Great Britain still be standing when the grand game is over? ",
+  ],
+  names: {
+    honorific: ["Lord", "Lady", "Sir", "Dame"],
+    firstName: [
+      "Angelica",
+      "Chanterelle",
+      "Candice",
+      "Philippa",
+      "Pandora",
+      "Florence",
+      "Fiona",
+      "Elsbeth",
+      "Nicolette",
+      "Gennifer",
+      "Malcolm",
+      "Mason",
+      "Alberticus",
+      "Georgie",
+      "Bully",
+      "Evander",
+      "Ian",
+      "Thomas",
+      "Simon",
+      "Percival",
+    ],
+    surnameFirstPart: [
+      "Campbell-",
+      "Tengle-",
+      "Twombly-",
+      "Franter-",
+      "Pernenbury-",
+      "Horex-",
+      "Wilton-",
+      "Benbrook-",
+      "Sneeg-",
+      "Lapin-",
+    ],
+    surnameSecondPart: [
+      "Reynolds",
+      "Davies",
+      "Carter",
+      "Quartermain",
+      "Evans",
+      "Robinson",
+      "Thompson",
+      "White",
+      "Edwards",
+      "Hughes",
+    ],
+  },
+  look: [
+    "salt & pepper hair",
+    "chocolate brown silk hat",
+    "gray Müller cut-down top hat",
+    "steely eyes",
+    "monocle",
+    "well-lined face",
+    "prominent facial scar",
+    "periwinkle Kingsman",
+    "olive green shawl",
+    "fox boa",
+    "Donegal tweed waistcoat",
+    "pale grey three-piece suit",
+    "dark blue frock coat",
+    "purple silk brocade dress",
+    "emerald gown with plunging neckline",
+    "gold pocket watch",
+    "signet ring",
+    "amethyst and pearl bracelet",
+    "Hessian boots",
+    "black leather lace-up shoes",
+    "violet satin shoes",
+  ],
+  vices: ["gin", "humiliation", "heroin", "casinos", "boxing"],
+  questions: [
+    "Did you use your loyalty to Her Majesty to justify your brutal actions? ",
+    "Did you engage in a secret sexual rendezvous with a commoner? ",
+    "Did you leverage your social status to gain the upper hand? ",
+    "Did you deliver a chilling, dead-eyed monologue about the horrors of the world? ",
+    "Did you have a face-to-face encounter with the Mastermind? ",
+  ],
+  abilities: {
+    vitality: 1,
+    composure: 1,
+    reason: 1,
+    presence: 0,
+    sensitivity: -1,
+  },
+  masksPastDescription:
+    "The Explorer’s Mask of the Past tells the story of a young man, called the Boy, whose village was occupied for a time by the Explorer and their expeditionary forces. Mark the first unmarked box. ",
+  masksOfPast: [
+    "Narrate a flashback to the time when the Explorer first arrived at your village. Was it a joyous moment? Was there something ominous about it? ",
+    "Narrate a flashback that shows your friendship with the Explorer. What kind of relationship was it? Parent and child? Teacher and pupil? Master and servant? ",
+    "Narrate a flashback to when your village suffered an atrocity at the hands of the Explorer. How did you help inflict this atrocity? ",
+    "Narrate a flashback showing how you faced a reckoning for the crimes you helped the Explorer commit against your village. ",
+    "Narrate a flashback to the recent past showing how the village still suffers the consequences of the Explorer’s occupation. ",
+    "Narrate a flashback showing your arrival in London.",
+    "Narrate a flashback to the time when you first met the Mastermind.",
+  ],
+  masksOfFuture: {
+    "The Guilded Door":
+      "Take the following Condition: Most-Beloved. Tell the other Hunters they can no longer choose The Gilded Door on their own playbook (this does not count as being marked for them). You can never clear Most-Beloved.",
+    "The Moss-Covered Gate":
+      "You receive a significant inheritance from a recently deceased relative. Who were they? What is your favorite memory of them? Unmark two checkboxes on The Royal Explorers Club. ",
+    "The Darkened Threshold":
+      "Narrate a scene in which you inflict violence on someone and the authorities look the other way. ",
+    "The Cosmic Passage": "Increase your Sensitivity by 1 (max 3) and reduce your Reason by 2.",
+    "The Blood-Soaked Portal":
+      "The Keeper narrates a scene in which the Boy physically destroys you; you stay alive long enough for the Mastermind to gloat over their victory. ",
+  },
+  startingMoves: ["The Grand Game", "The Royal Explorer's Club"],
+  moves: [
+    {
+      title: "The Grand Game",
+      text: [
+        "The Mastermind is your arch-nemesis, and you can see more clearly than most how they are manipulating events from behind the scenes. As such, you can always use a single Mastermind Clue for Answer a Question, in addition to any regular Clues uncovered for that Threat; the Mastermind Clue is not spent when you do this, but the context surrounding it may be changed at the Keeper’s discretion.  ",
+
+        "Despite the fact they are your greatest enemy, you fundamentally need the Mastermind—your life may have little meaning without the Grand Game. For you, the Vulnerable Move works in the normal way except you cannot clear a Condition. However, if you <strong>have an intimate moment with the Mastermind while you are engaged in your Vice</strong>, clear an appropriate Condition, and the Mastermind can ask you any question they wish; you must answer truthfully and completely.",
+      ],
+    },
+    {
+      title: "The Royal Explorer's Club",
+      text: [
+        "You are a member of The Royal Explorers Club (the R.E.C.), a private dinner club for people who, like you, have led expeditionary forces into parts unknown, or who are members of the upper class with an interest in the geographical sciences. Your status within the club allows you to call in favors with its membership in order to help Hargrave House. That status grows as you do battle with the forces of evil in London and regale the R.E.C. with your tales.",
+
+        "You begin the game with access to two checkboxes on this move. Mark a checkbox in order to call on the help of any one member.",
+
+        "Additionally, you can call upon the R.E.C. to help with Layer Four of the Mastermind Conspiracy. When you mark a box to call upon the help of an R.E.C. member during the Layer Four events, the Keeper will give you a distinct mechanical benefit associated with that help, depending on the circumstances (such as, but not limited to: lowering the Complexity of any Questions, increasing the number of Clues uncovered during investigations, awarding automatic Clues, giving advantage on certain die rolls, and so forth). This benefit is in place of the normal effects of calling upon that member of the R.E.C.",
+      ],
+    },
+  ],
+  advancements: [
+    "Increase an ability modifier by 1 (max 3)",
+    "Increase an ability modifier by 1 (max 3)",
+    "Increase an ability modifier by 1 (max 3)",
+    "Unlock two checkboxes on The Royal Explorers Club. ",
+    "Unlock two checkboxes on The Royal Explorers Club. ",
+    "Write a custom move for your character. ",
+    "Unmark all checkboxes on The Royal Explorers Club. ",
+  ],
+}
