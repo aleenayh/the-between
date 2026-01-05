@@ -1,5 +1,5 @@
 import { useGame } from "../../../context/GameContext"
-import { CheckableEditableLine, EditableLine } from "../../shared/EditableLine"
+import { CheckableEditableLine } from "../../shared/EditableLine"
 import type { Character } from "../types"
 
 export function PersonalQuarters({ character }: { character: Character }) {
@@ -39,7 +39,6 @@ export function PersonalQuarters({ character }: { character: Character }) {
 
   return (
     <div className="flex flex-col gap-2 w-full">
-      <h3 className="text-sm font-bold text-theme-text-accent text-center">Personal Quarters</h3>
       {Array.from({ length: personalQuarters.length + 1 }).map((_, index) => {
         const item = personalQuarters[index] ?? { text: "", marked: false }
         return (

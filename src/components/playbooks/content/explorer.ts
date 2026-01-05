@@ -114,16 +114,8 @@ export const explorerPlaybook: PlaybookBase = {
     "The Blood-Soaked Portal":
       "The Keeper narrates a scene in which the Boy physically destroys you; you stay alive long enough for the Mastermind to gloat over their victory. ",
   },
-  startingMoves: ["The Grand Game", "The Royal Explorer's Club"],
+  startingMoves: ["The Royal Explorer's Club","The Grand Game",],
   moves: [
-    {
-      title: "The Grand Game",
-      text: [
-        "The Mastermind is your arch-nemesis, and you can see more clearly than most how they are manipulating events from behind the scenes. As such, you can always use a single Mastermind Clue for Answer a Question, in addition to any regular Clues uncovered for that Threat; the Mastermind Clue is not spent when you do this, but the context surrounding it may be changed at the Keeper’s discretion.  ",
-
-        "Despite the fact they are your greatest enemy, you fundamentally need the Mastermind—your life may have little meaning without the Grand Game. For you, the Vulnerable Move works in the normal way except you cannot clear a Condition. However, if you <strong>have an intimate moment with the Mastermind while you are engaged in your Vice</strong>, clear an appropriate Condition, and the Mastermind can ask you any question they wish; you must answer truthfully and completely.",
-      ],
-    },
     {
       title: "The Royal Explorer's Club",
       text: [
@@ -132,6 +124,14 @@ export const explorerPlaybook: PlaybookBase = {
         "You begin the game with access to two checkboxes on this move. Mark a checkbox in order to call on the help of any one member.",
 
         "Additionally, you can call upon the R.E.C. to help with Layer Four of the Mastermind Conspiracy. When you mark a box to call upon the help of an R.E.C. member during the Layer Four events, the Keeper will give you a distinct mechanical benefit associated with that help, depending on the circumstances (such as, but not limited to: lowering the Complexity of any Questions, increasing the number of Clues uncovered during investigations, awarding automatic Clues, giving advantage on certain die rolls, and so forth). This benefit is in place of the normal effects of calling upon that member of the R.E.C.",
+      ],
+    },
+    {
+      title: "The Grand Game",
+      text: [
+        "The Mastermind is your arch-nemesis, and you can see more clearly than most how they are manipulating events from behind the scenes. As such, you can always use a single Mastermind Clue for Answer a Question, in addition to any regular Clues uncovered for that Threat; the Mastermind Clue is not spent when you do this, but the context surrounding it may be changed at the Keeper’s discretion.  ",
+
+        "Despite the fact they are your greatest enemy, you fundamentally need the Mastermind—your life may have little meaning without the Grand Game. For you, the Vulnerable Move works in the normal way except you cannot clear a Condition. However, if you <strong>have an intimate moment with the Mastermind while you are engaged in your Vice</strong>, clear an appropriate Condition, and the Mastermind can ask you any question they wish; you must answer truthfully and completely.",
       ],
     },
   ],

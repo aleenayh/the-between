@@ -136,6 +136,7 @@ export const vesselPlaybook: PlaybookBase = {
 				"<li>The magic has a problematic side effect.</li>",
 				"<strong>On a 12+,</strong> you can unmark The Cosmic Passage if it is marked. If you do so, increase your Reason by 2 but leave your Sensitivity the same. Ignore this result if your Sensitivity is 3.",
 			],
+			extraLines: 1,
 		},
 		{
 			title: "A Thinning of the Veil",
