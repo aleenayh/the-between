@@ -5,7 +5,7 @@ export const basementContent: RoomContent = {
   intro:
     "Sun barely breaching the lightwell to intrude upon the shadows and gloom. Coal piled under the chute. Boxes, crates, and burlap sacks stacked haphazardly.",
   prompts: [
-    "Paint the Scene: This space is cluttered with the belongings of long-dead Hunters who used to live in Hargrave House. One such Hunter amassed quite a collection of documents, artifacts, and evidence while investigating the mystery that ultimately consumed them. What did they leave behind?",
+    "<strong>Paint the Scene:</strong This space is cluttered with the belongings of long-dead Hunters who used to live in Hargrave House. One such Hunter amassed quite a collection of documents, artifacts, and evidence while investigating the mystery that ultimately consumed them. What did they leave behind?",
     "Lady Adrienne Shea moved through London high society for decades without anyone ever suspecting she was a Hunter. Which of her abandoned belongings suggest reports of her death have been greatly exaggerated?",
     "The British Museum has been sending letters to Hargrave House regularly, insisting on the return of a particular relic found here. What is it and why must it never leave the basement?",
     "Hargrave House associate Vaughan McEwan’s collection of rare and unusual music boxes is coated in a thick layer of dust, but one of the Hunters saw Vaughan come through Hargrave House just this month. What about that brief encounter suggests Vaughan knew their end was nigh?",
