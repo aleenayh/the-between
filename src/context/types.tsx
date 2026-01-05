@@ -44,6 +44,8 @@ const mastermindSchema = z.object({
 const roomSchema = z.object({
 	key: z.string(),
 	status: z.enum(["available", "unlocked", "active"]).catch("available"),
+	checks: z.array(z.number()).optional().catch(undefined),
+	extraLines: z.array(z.string()).optional().catch(undefined),
 });
 
 const residentSchema = z.object({
@@ -64,7 +66,7 @@ export const gameStateSchema = z.object({
 	supplicants: z.array(z.string()).optional().catch(undefined),
 	players: z.array(playerSchema).catch(catchWithWarning("players", [])),
 	timestamp: z.coerce.date().catch(catchWithWarning("timestamp", new Date())),
-	safety: safetySchema,
+	safety: safetySchema.optional().catch(undefined),
 	hargraveHouse: hargraveHouseSchema.catch(
 		catchWithWarning("hargraveHouse", { residents: [], rooms: [] }),
 	),

@@ -53,7 +53,7 @@ export function SafetyPane({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: 
 
 function LinesAndVeils() {
   const { gameState, updateGameState } = useGame()
-  const { lines, veils } = gameState.safety
+  const { lines, veils } = gameState.safety || { lines: [], veils: [] }
 
   const remove = (type: "line" | "veil", text: string) => {
     const newLines = lines?.filter((line) => line !== text)
@@ -155,7 +155,7 @@ function EditLineOrVeilForm({ type, index, text }: { type: "line" | "veil"; inde
       text: text,
     },
   })
-  const { lines, veils } = gameState.safety
+  const { lines, veils } = gameState.safety || { lines: [], veils: [] }
 
   const edit = (data: { text: string }) => {
     const newLines = type === "line" ? lines?.map((line, i) => (i === index ? data.text : line)) : lines
@@ -185,7 +185,7 @@ function EditLineOrVeilForm({ type, index, text }: { type: "line" | "veil"; inde
 
 function AddLineOrVeilForm() {
   const { gameState, updateGameState } = useGame()
-  const { lines, veils } = gameState.safety
+  const { lines, veils } = gameState.safety || { lines: [], veils: [] }
   const { register, handleSubmit, reset } = useForm<{
     text: string
     type: "line" | "veil"
