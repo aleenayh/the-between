@@ -543,17 +543,7 @@ function constructCustomCharacter(
 
 	const conditions: string[] = ["", "", ""];
 
-	const advancements: Record<number, boolean> = {
-		1: false,
-		2: false,
-		3: false,
-		4: false,
-		5: false,
-		6: false,
-		7: false,
-		8: false,
-		9: false,
-	};
+	const advancements = Array.from({ length: 7 }, () => 0);
 
 	const customTextFields = {
 		questionDefinitions: questions,
@@ -587,7 +577,7 @@ function constructCustomCharacter(
 		moves,
 		coreMoveState: { type: "custom" },
 		experience: 0,
-		personalQuarters: [],
+		personalQuarters: [{text: "", marked: false}],
 		questions: Array.from({ length: questions.length }, () => 0),
 		customTextFields,
 	};
