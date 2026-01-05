@@ -406,6 +406,24 @@ textarea {
   opacity: 0.6;
   cursor: not-allowed;
 }
+
+.softPing {
+  animation: softPing 2s ease-in-out infinite;
+  transition: box-shadow 0.1s ease-in-out;
+  box-shadow: 0 0 3px 0 var(--color-accent-primary);
+}
+
+@keyframes softPing {
+  0% {
+    box-shadow: 0 0 3px 0 var(--color-accent-primary);
+  }
+  50% {
+    box-shadow: 0 0 6px 0 var(--color-accent-primary);
+  }
+  100% {
+    box-shadow: 0 0 3px 0 var(--color-accent-primary);
+  }
+}
 /* ===== SCROLLBAR STYLES ===== */
 /* Hide scrollbars by default, show on hover/scroll, zero width overlay */
 

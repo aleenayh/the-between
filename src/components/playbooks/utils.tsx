@@ -68,3 +68,93 @@ export function convertToTitle(text: string): string {
   }
   return result
 }
+
+/**
+ * Parse text and render <check> tags with checkboxes
+ */
+export function parseWithCheckboxes(
+	text: string,
+	checks: number[],
+	startIndex: number,
+	editable: boolean,
+	onToggle: (index: number) => void,
+): { elements: React.ReactNode; nextAspectIndex: number } {
+	const parts: React.ReactNode[] = [];
+	let currentIndex = startIndex;
+	let lastEnd = 0;
+
+	// Match all <aspect>...</aspect> patterns
+	const regex = /<check>(.*?)<\/check>/g;
+	let match = regex.exec(text);
+
+	while (match !== null) {
+		// Add text before this aspect
+		if (match.index > lastEnd) {
+			const formattedStaticText = parseStaticText(
+				text.slice(lastEnd, match.index),
+			);
+			parts.push(formattedStaticText);
+		}
+
+		const aspectText = match[1];
+		const aspectIndex = currentIndex;
+		const isChecked = checks[aspectIndex] === 1;
+
+		parts.push(
+			<AspectSpan
+				key={`checkbox-${aspectIndex}`}
+				text={aspectText}
+				checked={isChecked}
+				editable={editable}
+				onToggle={() => onToggle(aspectIndex)}
+			/>,
+		);
+
+		currentIndex++;
+		lastEnd = match.index + match[0].length;
+		match = regex.exec(text);
+	}
+
+	// Add remaining text after last aspect
+	if (lastEnd < text.length) {
+		const formattedStaticText = parseStaticText(text.slice(lastEnd));
+		parts.push(formattedStaticText);
+	}
+
+	return { elements: parts, nextAspectIndex: currentIndex };
+}
+
+function AspectSpan({
+	text,
+	checked,
+	editable,
+	onToggle,
+}: {
+	text: string;
+	checked: boolean;
+	editable: boolean;
+	onToggle: () => void;
+}) {
+	return (
+		<span>
+			<button
+				type="button"
+				onClick={onToggle}
+				disabled={!editable}
+				className={`inline-block align-middle w-3 h-3 border rounded-sm text-[8px] leading-[0.6rem] text-center mr-0.5 ${
+					checked
+						? "bg-theme-accent-primary border-theme-accent-primary text-theme-text-accent"
+						: "border-theme-border-accent bg-transparent"
+				} ${editable ? "cursor-pointer hover:border-theme-accent-primary" : "cursor-default opacity-70"}`}
+				aria-label={checked ? "Uncheck aspect" : "Check aspect"}
+			>
+				{checked && "✓"}
+			</button>
+			<strong
+				className={`${checked ? "line-through opacity-60" : ""} text-theme-text-primary`}
+			>
+				{text}
+			</strong>
+		</span>
+	);
+}

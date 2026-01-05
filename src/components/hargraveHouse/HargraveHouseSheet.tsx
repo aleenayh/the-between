@@ -3,13 +3,16 @@ import { Dialog, Tooltip } from "radix-ui"
 import { useGame } from "../../context/GameContext"
 import { type GameState, PlayerRole } from "../../context/types"
 import { playbookKeys } from "../playbooks/types"
-import { parseStaticText } from "../playbooks/utils"
+import { parseStaticText, parseWithCheckboxes } from "../playbooks/utils"
 import { Divider } from "../shared/Divider"
 import { EditableLine } from "../shared/EditableLine"
+import { Section } from "../shared/Section"
 import { StyledTooltip } from "../shared/Tooltip"
 import { roomContent } from "./content/rooms"
 import type { RoomContent } from "./content/rooms/types"
 import { ReactComponent as HouseIcon } from "./house.svg"
+
+
 
 export function HargraveHouseSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void }) {
   return (
@@ -57,14 +60,17 @@ function Rooms() {
 }
 
 function UnlockedRooms() {
-  const { gameState } = useGame()
+  const { gameState, updateGameState, user: { role } } = useGame()
   const unlockedRooms = gameState.hargraveHouse.rooms.filter((room) => room.status === "unlocked")
 
-  const saveExtraLine = (index: number, value: string) => {
-    console.log("saveExtraLine", index, value)
-  }
-
   if (unlockedRooms.length === 0) return null
+
+  const removeRoom = (key: string) => {
+    updateGameState({
+      ...gameState,
+      hargraveHouse: { ...gameState.hargraveHouse, rooms: gameState.hargraveHouse.rooms.filter((r) => r.key !== key) }
+    })
+  }
 
   return (
     <div className="flex flex-col justify-start items-start text-left w-full">
@@ -72,16 +78,58 @@ function UnlockedRooms() {
       <ul>
         {Object.values(unlockedRooms).map((room) => {
           const { title, onUnlock } = roomContent[room.key as keyof typeof roomContent]
+          let {checks, extraLines} = room
+
+          let checkIndex = 0
+          if (!checks && (onUnlock.checks || onUnlock.inlineChecks)) {
+            const numberChecks = Math.max(onUnlock.checks ?? 0, onUnlock.inlineChecks ?? 0)
+            checks = Array.from({ length: numberChecks }, () => 0)
+          }
+
+          const saveExtraLine = (index: number, value: string) => {
+            const updatedExtraLines = [...(extraLines ?? []), value]
+            updatedExtraLines[index] = value
+            updateGameState({
+              ...gameState,
+              hargraveHouse: {
+                ...gameState.hargraveHouse,
+                rooms: gameState.hargraveHouse.rooms.map(r =>
+                  r.key === room.key
+                    ? { ...r, extraLines: updatedExtraLines }
+                    : r
+                )
+              }
+            })
+          }
+
+          const setRoomCheck = (index: number) => {
+            if (!checks) return
+            const updatedChecks = [...checks]
+              updatedChecks[index] = updatedChecks[index] === 1 ? 0 : 1
+              updateGameState({
+                ...gameState,
+                hargraveHouse: {
+                  ...gameState.hargraveHouse,
+                  rooms: gameState.hargraveHouse.rooms.map(r =>
+                    r.key === room.key
+                      ? { ...r, checks: updatedChecks }
+                      : r
+                  )
+                }
+              })
+          }
+
           return (
-            <div key={title}>
-              <h3 className="text-lg font-bold text-theme-text-accent">{title}</h3>
-              {onUnlock.text.map((text) => (
-                <p key={text} className="text-sm">
-                  {parseStaticText(text)}
-                </p>
-              ))}
+            <Section title={title} key={title} collapsible leftAlign minify>
+              {onUnlock.text.map((text) =>             {
+                const { elements, nextAspectIndex } = parseWithCheckboxes(text, checks ?? [], checkIndex, true, setRoomCheck)
+                checkIndex = nextAspectIndex
+                return (<p key={text} className="text-sm">
+                {elements}
+              </p>
+            )})}
               {onUnlock.checks && (
-                <div className="flex flex-col justify-start items-start">
+                <div className="flex gap-3 w-full justify-center items-start">
                   {Array.from({ length: onUnlock.checks }).map((_, index) => (
                     // biome-ignore lint/suspicious/noArrayIndexKey: order unimportant
                     <input type="checkbox" key={index} className="text-sm text-theme-text-accent" />
@@ -96,7 +144,7 @@ function UnlockedRooms() {
                         // biome-ignore lint/suspicious/noArrayIndexKey: order unimportant
                         index
                       }`}
-                      text={""}
+                      text={extraLines?.[index] ?? ""}
                       onSave={(index, value) => saveExtraLine(index, value)}
                       index={index}
                       editable={true}
@@ -104,7 +152,26 @@ function UnlockedRooms() {
                   ))}
                 </div>
               )}
-            </div>
+{role === PlayerRole.KEEPER &&
+                (<Tooltip.Root>
+                  <div className="w-1/3 mx-auto"><Tooltip.Trigger asChild>
+                    <button
+                      type="button"
+                      className="gridButton"
+                      onClick={() => removeRoom(room.key)}
+                    >
+                      Remove Room
+                    </button>
+                  </Tooltip.Trigger>
+                  <Tooltip.Content>
+                    <StyledTooltip>
+                      Remove the room from the game. Do this if the room's unlock benefit is exhausted and your players no longer need to see it.
+                    </StyledTooltip>
+                  </Tooltip.Content>
+                  </div>
+                </Tooltip.Root>)}
+
+            </Section>
           )
         })}
       </ul>
@@ -116,8 +183,6 @@ function AvailableRooms() {
   const allRooms = Object.entries(roomContent)
   const {
     gameState,
-    user: { role },
-    updateGameState,
   } = useGame()
   const availableRooms: Record<string, RoomContent> = {}
   for (const [key, value] of allRooms) {
@@ -125,58 +190,82 @@ function AvailableRooms() {
       availableRooms[key] = value
     }
   }
-
-  const unlockRoom = (key: string) => {
-    const newRooms = [...gameState.hargraveHouse.rooms, { key, status: "unlocked" as const }]
-    updateGameState({ hargraveHouse: { ...gameState.hargraveHouse, rooms: newRooms } })
-  }
   return (
     <div>
       <h2 className="text-xl font-bold text-theme-text-accent">Available Rooms</h2>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2 items-stretch justify-center">
-        {Object.entries(availableRooms).map(([key, room]) => {
-          const { title } = room
-          const { disabled, tooltipText } = checkSpecialRooms(room, gameState)
-          return (
-            <Dialog.Root key={key}>
-              <Tooltip.Root>
-                <Tooltip.Trigger asChild disabled={!disabled}>
-                  <Dialog.Trigger disabled={disabled} className="gridButton">
-                    {" "}
-                    {title}
-                  </Dialog.Trigger>
-                </Tooltip.Trigger>
-                <Tooltip.Content>
-                  <StyledTooltip>{tooltipText}</StyledTooltip>
-                </Tooltip.Content>
-
-                <Dialog.Portal>
-                  <Dialog.Overlay className="DialogOverlay" />
-                  <Dialog.Content className="DialogContent">
-                    <Dialog.Close className="DialogClose">X</Dialog.Close>
-                    <Dialog.Title className="DialogTitle">{title}</Dialog.Title>
-                    <Dialog.Description className="DialogDescription">{room.intro}</Dialog.Description>
-                    <div className="flex flex-col gap-2 text-sm">
-                      <ol>
-                        {room.prompts.map((prompt) => (
-                          <li key={prompt}>{prompt}</li>
-                        ))}
-                      </ol>
-                      {role === PlayerRole.KEEPER && (
-                        <button type="button" className="gridButton" onClick={() => unlockRoom(key)}>
-                          Unlock Room
-                        </button>
-                      )}
-                    </div>
-                  </Dialog.Content>
-                </Dialog.Portal>
-              </Tooltip.Root>
-            </Dialog.Root>
-          )
-        })}
+        {Object.entries(availableRooms).map(([key, room]) => 
+<AvailableRoom key={key} keyString={key} room={room} />
+        )}
       </div>
     </div>
+  )
+}
+
+function AvailableRoom({ keyString, room }: { keyString: string; room: RoomContent }) {
+  const {
+    gameState,
+    user: { role },
+    updateGameState,
+  } = useGame()
+  const { title } = room
+  const roomState = gameState.hargraveHouse.rooms.find((r) => r.key === keyString)
+
+  const unlockRoom = () => {
+    const newRooms = [...gameState.hargraveHouse.rooms, { key: keyString, status: "unlocked" as const }]
+    updateGameState({ hargraveHouse: { ...gameState.hargraveHouse, rooms: newRooms } })
+  }
+
+  const activateRoom = () => {
+    const newRooms = gameState.hargraveHouse.rooms.map((r) => r.key === keyString ? { ...r, status: r.status === "active" ? "available" as const : "active" as const } : r)
+    updateGameState({ hargraveHouse: { ...gameState.hargraveHouse, rooms: newRooms } })
+  }
+
+
+  const { disabled, tooltipText } = checkSpecialRooms(room, gameState)
+  const isDisabled = disabled || (!gameState.hargraveHouse.rooms.some((r) => r.key === keyString && r.status === "active") && role === PlayerRole.PLAYER)
+
+  return (
+    <Dialog.Root key={keyString}>
+      <Tooltip.Root>
+        <Tooltip.Trigger asChild disabled={!isDisabled}>
+          <Dialog.Trigger disabled={isDisabled} className=    {`gridButton ${roomState?.status === "active" ? "softPing" : ""}`}>
+            {" "}
+            {title}
+          </Dialog.Trigger>
+        </Tooltip.Trigger>
+        <Tooltip.Content>
+          <StyledTooltip>{tooltipText}</StyledTooltip>
+        </Tooltip.Content>
+
+        <Dialog.Portal>
+          <Dialog.Overlay className="DialogOverlay" />
+          <Dialog.Content className="DialogContent">
+            <Dialog.Close className="DialogClose">X</Dialog.Close>
+            <Dialog.Title className="DialogTitle">{title}</Dialog.Title>
+            {room.special && <div className="text-sm">{parseStaticText(room.special)}</div>}
+            {role === PlayerRole.KEEPER && 
+                            <button type="button" className="gridButton" onClick={activateRoom}>
+                            {roomState?.status === "active" ? "Deactivate Room (Hide from Hunters)" : "Activate Room (Display to Hunters)"}
+                          </button>}
+            <Dialog.Description className="DialogDescription">{parseStaticText(room.intro)}</Dialog.Description>
+            <div className="flex flex-col gap-2 text-sm">
+              <ol>
+                {room.prompts.map((prompt) => (
+                  <li key={prompt}>{parseStaticText                          (prompt)}</li>
+                ))}
+              </ol>
+              {role === PlayerRole.KEEPER && (
+                <button type="button" className="gridButton" onClick={unlockRoom}>
+                  Unlock Room
+                </button>
+              )}
+            </div>
+          </Dialog.Content>
+        </Dialog.Portal>
+      </Tooltip.Root>
+    </Dialog.Root>
   )
 }
 
