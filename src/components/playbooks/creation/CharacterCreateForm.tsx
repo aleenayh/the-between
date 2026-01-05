@@ -180,7 +180,10 @@ export function CharacterCreateForm({ playbookKey }: { playbookKey: Exclude<play
                   />
                   <h2 className="text-lg font-bold">{move.title}</h2>
                 </div>
-                <p className="text-sm">{parseStaticText(move.text.join("\n\n"))}</p>
+                <div className="flex flex-col gap-2">
+                                  {move.text.map((p) => (
+                    <p className="text-sm" key={p}>{parseStaticText(p)}</p>
+                  ))}</div>
               </div>
             ))}
           </div>
@@ -448,17 +451,7 @@ function constructCharacter(
 
   const conditions: string[] = ["", "", ""]
 
-  const advancements: Record<number, boolean> = {
-    1: false,
-    2: false,
-    3: false,
-    4: false,
-    5: false,
-    6: false,
-    7: false,
-    8: false,
-    9: false,
-  }
+  const advancements = Array.from({ length: 7 }, () => 0);
 
   //TODO
   const coreMoveState = { type: "custom" as const }
@@ -490,7 +483,7 @@ function constructCharacter(
     coreMoveState,
     experience: 0,
     questions: [0, 0, 0, 0, 0],
-    personalQuarters: [],
+    personalQuarters: [{text: "", marked: false}],
     customTextFields: {},
   }
 }

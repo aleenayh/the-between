@@ -98,7 +98,7 @@ export function AdvancementModal() {
                       <button
                         type="button"
                         onClick={() => handleChangeStep(option.id)}
-                        disabled={advancementProgress[option.id]}
+                        disabled={advancementProgress[option.id] === 1}
                         className={`flex items-center gap-2 ${advancementProgress[option.id] ? "text-theme-text-muted" : "text-theme-text-primary"}`}
                       >
                         {advancementProgress[option.id] ? <span>✓</span> : <span>○</span>}
@@ -232,10 +232,9 @@ function MoveSelector({
     if (advancementIndex === null) {
       return
     }
-    const newAdvancements = {
-      ...character.advancements,
-      [advancementIndex]: true,
-    }
+    const newAdvancements = [...character.advancements]
+    newAdvancements[advancementIndex] = 1
+
     const constructedMove = {
       title: newMove.title,
       text: newMove.text,
@@ -338,10 +337,8 @@ function MoveWriter({
     if (advancementIndex === null) {
       return
     }
-    const newAdvancements = {
-      ...character.advancements,
-      [advancementIndex]: true,
-    }
+    const newAdvancements = [...character.advancements]
+    newAdvancements[advancementIndex] = 1
     const priorMoves = existingMoves ? existingMoves : []
     updateGameState({
       players: gameState.players.map((player) =>
@@ -417,10 +414,8 @@ function UnmarkPQItems({
     if (advancementIndex === null) {
       return
     }
-    const newAdvancements = {
-      ...character.advancements,
-      [advancementIndex]: true,
-    }
+    const newAdvancements = [...character.advancements]
+    newAdvancements[advancementIndex] = 1
 
     updateGameState({
       players: gameState.players.map((player) =>
@@ -480,10 +475,8 @@ function AdjustStats({
     if (advancementIndex === null) {
       return
     }
-    const newAdvancements = {
-      ...character.advancements,
-      [advancementIndex]: true,
-    }
+    const newAdvancements = [...character.advancements]
+    newAdvancements[advancementIndex] = 1
     updateGameState({
       players: gameState.players.map((player) =>
         player.id === character.playerId
