@@ -2,6 +2,7 @@ import { useCallback } from "react"
 import { useGame } from "../../../context/GameContext"
 import { customFieldOrFallback, playbookBases } from "../content"
 import { type Character, type masksFutureKey, type playbookKey, playbookKeys } from "../types"
+import { parseStaticText } from "../utils"
 
 export function Masks({ character }: { character: Character }) {
   const {
@@ -92,7 +93,7 @@ export function Masks({ character }: { character: Character }) {
                 <label className="text-xs" htmlFor={mask}>
                   {editable && (
                     <span className={`${markedMasksOfPast[i] === 1 ? "text-theme-text-muted line-through" : ""}`}>
-                      {mask}
+                      {parseStaticText(mask)}
                     </span>
                   )}
                 </label>
@@ -129,7 +130,7 @@ export function Masks({ character }: { character: Character }) {
                 <strong className={`${marked || disabled ? "text-theme-text-muted line-through" : ""}`}>{key}</strong>
                 {editable ? ": " : " "}
                 {editable && (
-                  <span className={`${marked || disabled ? "text-theme-text-muted line-through" : ""}`}>{mask}</span>
+                  <span className={`${marked || disabled ? "text-theme-text-muted" : ""}`}>{parseStaticText(mask)}</span>
                 )}
               </label>
             </div>

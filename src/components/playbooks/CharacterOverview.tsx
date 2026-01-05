@@ -103,7 +103,7 @@ function CharacterCreationStarter({ onCollapse }: { onCollapse: () => void }) {
         </>
       ) : (
         <div className="flex flex-col gap-4 h-full">
-          <h1 className="text-2xl font-bold text-center text-theme-text-accent shrink-0">Choose an Hunter</h1>
+          <h1 className="text-2xl font-bold text-center text-theme-text-accent shrink-0">Choose a Hunter</h1>
           <div className="flex flex-col md:grid md:grid-cols-2 gap-2 flex-1 overflow-y-auto md:flex-none">
             {Object.values(playbookKeys).map((playbookKey) => {
               const base = playbookBases[playbookKey]

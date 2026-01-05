@@ -2,7 +2,7 @@ import { AnimatePresence, motion } from "framer-motion"
 import { useState } from "react"
 import { useGame } from "../../context/GameContext"
 import { resetGameToDefaults } from "../../lib/firebase"
-//import { ReactComponent as Logo } from "../assets/tlr-logo.svg";
+import { ReactComponent as Logo } from "../assets/between-logo.svg";
 import { Section } from "../shared/Section"
 import { ReactComponent as CogIcon } from "./cog.svg"
 import { GameInfo } from "./GameInfo"
@@ -33,9 +33,8 @@ export function SettingsPane({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen
             <button type="button" className="absolute top-0 right-0 w-8 h-8" onClick={() => setIsOpen(!isOpen)}>
               X
             </button>
-            <h1 className="text-[60px] font-bold text-center text-theme-text-accent">
-              {/* <Logo className="w-1/3 h-auto mx-auto mb-4" /> */}
-              The Between
+            <h1 className="flex justify-center w-full text-theme-text-accent">
+              <Logo className="w-1/3 h-auto mx-auto mb-4" />
             </h1>
 
             <h1 className="text-2xl font-bold text-theme-text-accent mb-10">Settings</h1>
@@ -128,7 +127,7 @@ function ThemeSelector() {
             defaultChecked={initialTheme === "hearts"}
             onChange={(e) => confirmTheme(e.target.value)}
           />
-          Bleeding Hearts
+          Bleeding Heart
         </label>
         <label htmlFor="dark">
           <input

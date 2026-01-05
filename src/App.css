@@ -23,6 +23,28 @@
 }
 
 @font-face {
+  font-family: "CinzelDecorative";
+  src: url("../public/fonts/CinzelDecorative-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "CinzelDecorativeBlack";
+  src: url("../public/fonts/CinzelDecorative-Black.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "CinzelDecorativeBold";
+  src: url("../public/fonts/CinzelDecorative-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
   font-family: "Questrial";
   src: url("../public/fonts/Questrial-Regular.ttf") format("truetype");
   font-weight: 400;
@@ -43,13 +65,13 @@
   --color-text-accent: #c29202;
 
   --color-border: #0101a9;
-  --color-border-accent: #013d79;
+  --color-border-accent: #0063c5;
   --color-accent-primary: #e8af30;
 
   --background-image: url("../public/images/fancy-wallpaper.svg");
   --background-size: 100px 100px;
   --header-font: "RumbleBrave", cursive;
-  --second-header-font: "JuanaBlack", cursive;
+  --second-header-font: "CinzelDecorative", cursive;
 }
 
 [data-theme="flagg"] {
@@ -69,7 +91,7 @@
   --background-image: url("../public/images/wave.svg");
   --background-size: 150px 150px;
   --header-font: "RumbleBrave", cursive;
-  --second-header-font: "JuanaBlack", cursive;
+  --second-header-font: "CinzelDecorative", cursive;
 }
 [data-theme="gesod"] {
   --color-bg-primary: #3f3422;
@@ -79,7 +101,7 @@
   --color-text-primary: #ffffff;
   --color-text-secondary: rgb(178, 161, 126);
   --color-text-muted: rgb(252, 194, 128);
-  --color-text-accent: #fbb104;
+  --color-text-accent: #9b6d00;
 
   --color-border: #a96b01;
   --color-border-accent: #ff8400;
@@ -88,7 +110,7 @@
   --background-image: url("../public/images/geometric.svg");
   --background-size: 60px 60px;
   --header-font: "RumbleBrave", cursive;
-  --second-header-font: "JuanaBlack", cursive;
+  --second-header-font: "CinzelDecorative", cursive;
 }
 [data-theme="wellington-hughes"] {
   --color-bg-primary: #310a31;
@@ -107,7 +129,7 @@
   --background-image: url("../public/images/circles.svg");
   --background-size: 200px 200px;
   --header-font: "RumbleBrave", cursive;
-  --second-header-font: "JuanaBlack", cursive;
+  --second-header-font: "CinzelDecorative", cursive;
 }
 [data-theme="titania"] {
   --color-bg-primary: #f5fcec;
@@ -126,7 +148,7 @@
   --background-image: url("../public/images/floral.svg");
   --background-size: 200px 200px;
   --header-font: "RumbleBrave", cursive;
-  --second-header-font: "JuanaBlack", cursive;
+  --second-header-font: "CinzelDecorative", cursive;
 }
 [data-theme="hearts"] {
   --color-bg-primary: #3f0101;
@@ -145,7 +167,7 @@
   --background-image: url("../public/images/roses.svg");
   --background-size: 160px 160px;
   --header-font: "RumbleBrave", cursive;
-  --second-header-font: "JuanaBlack", cursive;
+  --second-header-font: "CinzelDecorative", cursive;
 }
 
 [data-theme="dark"] {
@@ -164,8 +186,8 @@
   --color-accent-primary: #888888;
 
   --background-image: none;
-  --header-font: "JuanaBlack", cursive;
-  --second-header-font: "JuanaAlt", cursive;
+  --header-font: "CinzelDecorativeBlack", cursive;
+  --second-header-font: "Questrial", sans-serif;
 }
 [data-theme="light"] {
   --color-bg-primary: #f0f0f0;
@@ -182,8 +204,8 @@
 
   --color-accent-primary: #000000;
   --background-image: none;
-  --header-font: "JuanaBlack", cursive;
-  --second-header-font: "JuanaAlt", cursive;
+  --header-font: "CinzelDecorativeBlack", cursive;
+  --second-header-font: "Questrial", sans-serif;
 }
 /* Apply theme colors to html and body */
 html,
@@ -367,13 +389,14 @@ textarea {
   width: 100%;
   background-color: var(--color-bg-secondary);
   color: var(--color-text-accent);
-  font-family: "JuanaAlt", cursive;
   border: 1px solid var(--color-border);
   border-radius: 0.125rem;
   padding: 0.25rem 0.5rem;
   font-size: 1rem;
   line-height: 1.5;
-  font-variant: small-caps;
+  font-family: var(--second-header-font);
+  font-weight: 800;
+  text-wrap: balance;
 }
 .gridButton:hover {
   background-color: var(--color-bg-accent);
