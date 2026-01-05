@@ -21,12 +21,5 @@ export const diningContent: RoomContent = {
 		"<li>What destructive secret are you keeping?</li>",
 		"On a 7-9, answer a question in return and take an appropriate Condition. ",
 		"On a miss, you are dangerously exposed. Answer a question from the list (Keeper’s choice) truthfully and completely, and the Keeper will tell you how your answer makes you vulnerable to immediate threat.",
-		"<li>With whom (or what) does your true loyalty lie?</li>",
-		"<li>How can I gain your trust?</li>",
-		"<li>What destructive secret are you keeping?</li>",
-
-		"<li><strong>On a 7-9,</strong> answer a question in return and take an appropriate Condition. </li>",
-		"<li><strong>On a miss,</strong> you are dangerously exposed. Answer a question from the list (Keeper’s choice) truthfully and completely, and the Keeper will tell you how your answer makes you vulnerable to immediate threat. </li>",
-		
 	] },
 };
