@@ -1,0 +1,106 @@
+import { useCallback } from "react"
+import { useGame } from "../../../context/GameContext"
+import { customFieldOrFallback, playbookBases } from "../content"
+import { type Character, playbookKeys } from "../types"
+
+export function Questions({ character }: { character: Character }) {
+  const {
+    updateGameState,
+    gameState,
+    user: { id },
+  } = useGame()
+  const editable = id === character.playerId
+  const { questions } =
+    character.playbook === playbookKeys.custom
+      ? {
+          questions: customFieldOrFallback(character, "questionDefinitions").value as string[],
+        }
+      : playbookBases[character.playbook]
+  const markedQuestions = character.questions
+  const worshipper = character.conditions.includes("Worshipper")
+
+  const onToggle = useCallback(
+    (checked: boolean, index: number) => {
+      const newQuestions = [...character.questions]
+      newQuestions[index] = checked ? 1 : 0
+      updateGameState({
+        players: gameState.players.map((player) =>
+          player.id === character.playerId && player.character
+            ? {
+                ...player,
+                character: {
+                  ...player.character,
+                  questions: newQuestions,
+                },
+              }
+            : player,
+        ),
+      })
+    },
+    [updateGameState, gameState.players, character.playerId, character.questions],
+  )
+  if (!questions.length) return null
+
+  return (
+    <div className="w-full flex flex-col gap-2">
+      {editable && (
+        <div className="text-sm italic text-theme-text-secondary">
+          The first {worshipper ? "four" : "three"} are always marked. Choose two more to mark.
+        </div>
+      )}
+      <div className="flex items-center gap-2 text-left">
+        <input type="checkbox" checked={true} disabled={true} />
+        <label className="text-sm" htmlFor="did-the-Hunters-resolve-a-mystery">
+          <span className={`text-theme-text-primary font-bold`}>Did the Hunters answer a Question?</span>
+        </label>
+      </div>
+      <div className="flex items-center gap-2 text-left">
+        <input type="checkbox" checked={true} disabled={true} />
+        <label className="text-sm" htmlFor="did-you-roll-with-cinder">
+          <span className={`text-theme-text-primary font-bold`}>Did the Hunters resolve a Threat?</span>
+        </label>
+      </div>
+      <div className="flex items-center gap-2 text-left">
+        <input type="checkbox" checked={true} disabled={true} />
+        <label className="text-sm" htmlFor="did-you-roll-with-cinder">
+          <span className={`text-theme-text-primary font-bold`}>Did you experience an Echo in the Night?</span>
+        </label>
+      </div>
+      {worshipper && (
+        <div className="flex items-center gap-2 text-left">
+          <input type="checkbox" checked={true} disabled={true} />
+          <label className="text-sm" htmlFor="did-you-roll-with-cinder">
+            <span className={`text-theme-text-primary font-bold`}>
+              Did you continue to perfect your worship of the Undeniable?
+            </span>
+          </label>
+        </div>
+      )}
+
+      {questions.map((value, index) => {
+        const marked = markedQuestions[index] === 1
+        return (
+          <div
+            key={`question-${
+              // biome-ignore lint/suspicious/noArrayIndexKey: just boxes
+              index
+            }`}
+            className="flex items-center gap-2 text-left"
+          >
+            <input
+              type="checkbox"
+              checked={marked}
+              disabled={!editable}
+              onChange={(e) => onToggle(e.target.checked, index)}
+            />
+            <label className="text-sm" htmlFor={value}>
+              <span className={`${marked ? "text-theme-text-primary font-bold" : "text-theme-text-muted"}`}>
+                {value}
+              </span>
+            </label>
+          </div>
+        )
+      })}
+    </div>
+  )
+}

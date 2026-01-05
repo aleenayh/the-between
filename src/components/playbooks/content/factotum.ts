@@ -1,0 +1,151 @@
+import type { PlaybookBase } from "../types";
+
+export const factotumPlaybook: PlaybookBase = {
+	title: "The Factotum",
+	intro: [
+		"You had a life before you entered the service of your employer, but the details of that life are unimportant. All that matters now is the person you serve, and Hargrave House, where you will grow ancient and die—if you’re lucky. More likely your employer’s colleagues, these Hunters, will be the end of you, overturning things that should remain hidden and goading-on terrors that dwell in dark places. You’ll do your best to help them, of course, to keep them alive, because without <strong>them,</strong> what are you, really? ",
+	],
+	names: {
+		surName: [
+			"Churchworth",
+			"Crosby",
+			"Waldon",
+			"Moore",
+			"Langfisk",
+			"Burnwright",
+			"Moseley",
+			"Wainson",
+			"Willoughby",
+			"Grantson",
+			"Reeves",
+			"Thomas",
+			"Williams",
+			"Hornby",
+			"Pike",
+			"Salk",
+			"Taylor",
+			"Wilson",
+			"Hughes",
+			"Green",
+		],
+	},
+	look: [
+		"black “billycock” hat",
+		"straw bonnet with Navy blue ribbon",
+		"neatly parted hair",
+		"pewter hair clip in the shape of a butterfly",
+		"neatly-trimmed mustache",
+		"brass brooch in the shape of a labrador retriever",
+		"cameo necklace",
+		"moss-colored tweed waistcoat",
+		"maroon Kingsman",
+		"red toile scarf",
+		"simple wool scarf",
+		"blue Indian “cone” pattern shawl",
+		"black jacket and pinstripe trousers",
+		"black dress with magpie detail",
+		"a single piece of gold jewelry",
+		"black umbrella",
+		"walking stick with duck head handle",
+		"hip flask with “Rear Admiral Boots” cat decoration",
+		"black leather Wellington boots",
+		"dark maroon boots",
+	],
+	vices: [
+		"comedies",
+		"history books",
+		"fine cigars",
+		"brandy",
+		"betting shops",
+	],
+	questions: [
+		"Did you ensure your employer got credit for your triumphs?",
+		"Did you demonstrate obsequious behavior toward your employer in front of others?",
+		"Did you subtly express sexual desire for your employer in the way you dressed them or served them?",
+		"Did you engage in a petty reprisal of someone who angered your employer?",
+		"Did you have a scene showing your secret, private life in London?",
+	],
+	abilities: {
+		vitality: 0,
+		composure: 1,
+		reason: 1,
+		presence: 0,
+		sensitivity: 0,
+	},
+	masksOfPast: [
+		"Narrate a flashback to your young adulthood, before you were a servant, that shows your most significant professional triumph.",
+		"Narrate a flashback to your young adulthood, before you were a servant, that shows what a charmed life you lived.",
+		"Narrate a flashback to the event that eventually forced you into servitude. ",
+		"Narrate a flashback to when you were more of a family member to your employer than someone of their own flesh and blood. ",
+		"Narrate a flashback to when your employer behaved in a way that was utterly indifferent to your dignity. ",
+		"Narrate a flashback that shows how you had to engage in emotional labor in order to please or soothe your employer. ",
+		"Narrate a flashback to the first time you saved your employer’s life.",
+	],
+	masksOfFuture: {
+		"The Guilded Door":
+			"Take the following Condition: Most-Beloved. Tell the other Hunters they can no longer choose The Gilded Door on their own playbook (this does not count as being marked for them). You can never clear Most-Beloved.",
+		"The Moss-Covered Gate":
+			"Unmark the first two boxes on your Mask of the Past.",
+		"The Darkened Threshold":
+			"Narrate a scene in which you commit a terrible act of violence in order to help your employer or punish one of their enemies. ",
+		"The Cosmic Passage":
+			"Increase your Sensitivity by 1 (3 max) and reduce your Reason by 2.",
+		"The Blood-Soaked Portal":
+			"Narrate a scene in which you are physically destroyed. This character is now retired. ",
+	},
+	startingMoves: ["The Employer"],
+	moves: [
+		{
+			title: "The Employer",
+			text: [
+				"You are a long-time servant of one of the other Hunters. Decide which Hunter it is and discuss it with their player. That character is now your employer. The following rules apply:",
+				"<li>You and your employer can trigger the Vulnerable Move twice per phase, but only if at least one of those times is with each other—and no one else.</li>",
+				"<li>Rolls associated with any action done in direct defense of your employer are taken with advantage.</li>",
+				"<li>Whenever your employer is retired from play, you are also retired from play and become a Side Character attached to Hargrave House.</li>",
+			],
+		},
+		{
+			title: "My Person Friday",
+			text: [
+				"Once per session, you can appear in any scene, at any time, ready for action. If there is an object or tool that would be helpful in the scene, you have it on-hand; add it to your Personal Quarters.",
+			],
+		},
+		{
+			title: "Memory is the Servant",
+			text: [
+				"During the Dawn Phase immediately following a London Night Phase, you may tell the Keeper you are claiming a memento, which can be any object from a scene in the recently-concluded phase you would have reasonably been able to acquire. If you keep the memento, add it to your Personal Quarters. If you give the memento to another Hunter, mark XP and tell them to add it to their Personal Quarters.",
+			],
+		},
+		{
+			title: "The Ghost of Hargrave House",
+			text: [
+				"During the Dusk Phase, you can remove a marked item from another Hunter’s Personal Quarters and add it to your own, unmarked. When you return the item to its original owner in the middle of a scene you are sharing with them, describe how it is slightly altered. They add the item back to their Personal Quarters, unmarked. ",
+			],
+		},
+		{
+			title: "Day Work",
+			text: [
+				"You spend most days caring for Hargrave House—tidying-up, managing accounts, answering callers. Each Dusk Phase, choose one:",
+				"<li>You learn something interesting about an active Threat. Ask the Keeper any question you like; they will answer truthfully and completely, or in the form of a Clue, their choice. </li>",
+				"<li>You find something of use in the house. Say what it is and give it to another Hunter. They add it to their Personal Quarters. </li>",
+			],
+		},
+		{
+			title: "Many Faces, Many Masters",
+			text: [
+				"You can no longer be retired from play because of The Employer. Additionally, whenever you wish, you can unmark The Moss-Covered Gate if it is marked. You can do this once.",
+				"Thereafter, The Blood-Soaked Portal is replaced with the following:",
+				"<strong>The Fog-Shrouded Bridge:</strong> Narrate a scene showing how you leave your employer for dead, or otherwise abandon them at a critical moment. Then, you disappear; retire this character to safety or obscurity. ",
+			],
+		},
+	],
+	advancements: [
+		"Increase an ability modifier by 1 (max 3)",
+		"Increase an ability modifier by 1 (max 3)",
+		"Increase an ability modifier by 1 (max 3)",
+		"Choose an additional move from your playbook.",
+		"Choose an additional move from your playbook.",
+		"Write a custom move for your character.",
+		"Unmark everything in your Personal Quarters.",
+	],
+};
