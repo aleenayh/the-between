@@ -5,9 +5,11 @@ import { useGame } from "../../../context/GameContext"
 import { PlayerRole } from "../../../context/types"
 import { Section } from "../../shared/Section"
 import { playbookBases } from "../content"
+import { heraldPlaybookAdditions } from "../content/herald"
 import { type Abilities, type Character, type PlaybookBase, type playbookKey, playbookKeys } from "../types"
 import { convertToTitle, parseStaticText } from "../utils"
 import { PencilIconButton } from "./PencilIconButton"
+
 
 function getRandomValue(array: string[]): string {
   if (array.length === 0) {
@@ -18,6 +20,7 @@ function getRandomValue(array: string[]): string {
 }
 
 type CharacterCreateFormInputs = {
+  isHerald: boolean;
   moves: string[]
   name: string
   look1: string
@@ -31,7 +34,7 @@ type CharacterCreateFormInputs = {
   sensitivity: number
 }
 
-export function CharacterCreateForm({ playbookKey }: { playbookKey: Exclude<playbookKey, "custom"> }) {
+export function CharacterCreateForm({ playbookKey }: { playbookKey: Exclude<playbookKey, "custom" | "informals"> }) {
   const { updateGameState, user, gameState } = useGame()
   const base: PlaybookBase = playbookBases[playbookKey]
   const [step, setStep] = useState<"basics" | "moves">("basics")
@@ -44,6 +47,7 @@ export function CharacterCreateForm({ playbookKey }: { playbookKey: Exclude<play
         ...(base.moves.filter((move) => base.startingMoves.includes(move.title)).map((move) => move.title) ?? ""),
       ],
       name: "",
+      isHerald: false,
       look1: getRandomValue(base.look),
       look2: getRandomValue(base.look),
       look3: getRandomValue(base.look),
@@ -94,7 +98,9 @@ export function CharacterCreateForm({ playbookKey }: { playbookKey: Exclude<play
             },
           ]
 
-    updateGameState({ players: updatedPlayers })
+    const heraldUnlocked = formInputs.isHerald ? false : gameState.heraldUnlocked
+
+    updateGameState({ players: updatedPlayers, heraldUnlocked })
   }
 
   return (
@@ -102,6 +108,15 @@ export function CharacterCreateForm({ playbookKey }: { playbookKey: Exclude<play
       {step === "basics" && (
         <div>
           <h1 className="text-2xl font-bold text-center">{base.title}</h1>
+
+          {gameState.heraldUnlocked && playbookKey !== playbookKeys.orphan &&							<div><h1 className="font-bold text-center text-theme-text-accent text-lg">        
+								( And The Herald …? )
+							</h1>
+							<p className="text-left text-sm">This game has unlocked <i>The Herald</i>. The Herald is not a complete playbook, but rather a special sheet that, once unlocked by The Informals, can be added to another playbook during character creation. Some playbooks may not be a good fit with this sheet; discuss it with your Keeper if you’re unsure. 
+							</p>
+							<div className="flex justify-center items-center gap-2"><input type="checkbox" {...register("isHerald")} /><label htmlFor="isHerald" className=        "text-left text-lg text-theme-text-accent font-[RumbleBrave] letter-spacing-widest">Yes, I am the Herald</label></div>
+
+							</div>}
           <Section title="Your Story" collapsible>
             <div className="mt-0 flex flex-col justify-center w-full">
               <div
@@ -110,6 +125,7 @@ export function CharacterCreateForm({ playbookKey }: { playbookKey: Exclude<play
                 {base.intro.map((intro) => (
                   <p key={intro}>{parseStaticText(intro)}</p>
                 ))}{" "}
+                {watch("isHerald") && <p>{heraldPlaybookAdditions.intro?.map((intro) => parseStaticText(intro)).join(" ")}</p>}
               </div>
             </div>
           </Section>
@@ -431,12 +447,12 @@ function ControlledSelectOrEdit({
 }
 
 function constructCharacter(
-  playbookKey: Exclude<playbookKey, "custom">,
+  playbookKey: Exclude<playbookKey, "custom" | "informals">,
   base: PlaybookBase,
   formInputs: CharacterCreateFormInputs,
   playerId: string,
 ): Character {
-  const { name, look1, look2, look3, vitality, composure, reason, presence, sensitivity } = formInputs
+  const { name, look1, look2, look3, vitality, composure, reason, presence, sensitivity, isHerald } = formInputs
 
   const playbookMoves = base.moves.filter((move) => formInputs.moves.includes(move.title))
   const moves = playbookMoves.map((move) => ({
@@ -453,11 +469,9 @@ function constructCharacter(
 
   const advancements = Array.from({ length: 7 }, () => 0);
 
-  //TODO
-  const coreMoveState = { type: "custom" as const }
-
   return {
     playbook: playbookKey,
+    isHerald,
     playerId,
     name,
     look: `${look1.charAt(0).toUpperCase() + look1.slice(1)}, ${look2}, ${look3}`,
@@ -469,21 +483,23 @@ function constructCharacter(
       presence,
       sensitivity,
     },
-    masksOfPast: [0, 0, 0, 0, 0, 0, 0],
-    masksOfFuture: {
-      "The Guilded Door": false,
-      "The Moss-Covered Gate": false,
-      "The Darkened Threshold": false,
-      "The Cosmic Passage": false,
-      "The Blood-Soaked Portal": false,
-    },
+    masksOfPast: Array.from({ length: base.masksOfPast.length }, () => 0),
+    masksOfFuture: Array.from({ length: base.masksOfFuture.length }, () => 0),
     advancements,
     conditions,
-    moves,
-    coreMoveState,
+    moves: isHerald ? [...moves, ...constructMoves(heraldPlaybookAdditions.moves ?? [])] : moves,
     experience: 0,
     questions: [0, 0, 0, 0, 0],
     personalQuarters: [{text: "", marked: false}],
     customTextFields: {},
   }
+}
+
+const constructMoves = (moves:PlaybookBase["moves"]) => {
+  return moves.map((move) => ({
+    title: move.title,
+    text: move.text,
+    checks: Array.from({ length: move.checkboxes ?? 0 }, () => 0),
+    lines: Array.from({ length: move.extraLines ?? 0 }, () => ""),
+  }))
 }

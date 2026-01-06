@@ -63,13 +63,13 @@ export const gameStateSchema = z.object({
 	//no catchWithWarning for mysteries - empty array is valid, but dropped by firebase
 	mysteries: z.array(mysterySchema).catch([]),
 	mastermind: mastermindSchema.nullable().catch(null),
-	supplicants: z.array(z.string()).optional().catch(undefined),
 	players: z.array(playerSchema).catch(catchWithWarning("players", [])),
 	timestamp: z.coerce.date().catch(catchWithWarning("timestamp", new Date())),
 	safety: safetySchema.optional().catch(undefined),
 	hargraveHouse: hargraveHouseSchema.catch(
 		catchWithWarning("hargraveHouse", { residents: [], rooms: [] }),
 	),
+	heraldUnlocked: z.boolean().catch(false),
 });
 
 export type GameState = z.infer<typeof gameStateSchema>;

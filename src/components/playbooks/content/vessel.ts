@@ -101,18 +101,13 @@ export const vesselPlaybook: PlaybookBase = {
 		"Narrate a flashback to your young adulthood that shows part of your initiation into the coven. Name the coven. ",
 		"Narrate a flashback to an event that influenced you to leave the coven for good. ",
 	],
-	masksOfFuture: {
-		"The Guilded Door":
-			"Take the following Condition: Most-Beloved. Tell the other Hunters they can no longer choose The Gilded Door on their own playbook (this does not count as being marked for them). You can never clear Most-Beloved.",
-		"The Moss-Covered Gate":
-			"Tell the Keeper to put The Coven in play. The Keeper should immediately frame a scene showing that the Coven has arrived in London. ",
-		"The Darkened Threshold":
-			"Narrate a scene in which, possessed by a dark entity, you harm an innocent.",
-		"The Cosmic Passage":
-			"Increase your Sensitivity by 1 (max 3) and reduce your Reason by 2.",
-		"The Blood-Soaked Portal":
-			"Narrate a scene in which you are physically destroyed. This character is now retired. ",
-	},
+	masksOfFuture: [
+  "<strong>The Guilded Door</strong>: Take the following Condition: Most-Beloved. Tell the other Hunters they can no longer choose The Gilded Door on their own playbook (this does not count as being marked for them). You can never clear Most-Beloved.",
+  "<strong>The Moss-Covered Gate</strong>: Tell the Keeper to put The Coven in play. The Keeper should immediately frame a scene showing that the Coven has arrived in London. ",
+  "<strong>The Darkened Threshold</strong>: Narrate a scene in which, possessed by a dark entity, you harm an innocent.",
+  "<strong>The Cosmic Passage</strong>: Increase your Sensitivity by 1 (max 3) and reduce your Reason by 2.",
+  "<strong>The Blood-Soaked Portal</strong>: Narrate a scene in which you are physically destroyed. This character is now retired. ",
+],
 	startingMoves: ["Rites of Salt & Smoke"],
 	moves: [
 		{

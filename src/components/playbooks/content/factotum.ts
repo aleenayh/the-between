@@ -81,18 +81,13 @@ export const factotumPlaybook: PlaybookBase = {
 		"Narrate a flashback that shows how you had to engage in emotional labor in order to please or soothe your employer. ",
 		"Narrate a flashback to the first time you saved your employer’s life.",
 	],
-	masksOfFuture: {
-		"The Guilded Door":
-			"Take the following Condition: Most-Beloved. Tell the other Hunters they can no longer choose The Gilded Door on their own playbook (this does not count as being marked for them). You can never clear Most-Beloved.",
-		"The Moss-Covered Gate":
-			"Unmark the first two boxes on your Mask of the Past.",
-		"The Darkened Threshold":
-			"Narrate a scene in which you commit a terrible act of violence in order to help your employer or punish one of their enemies. ",
-		"The Cosmic Passage":
-			"Increase your Sensitivity by 1 (3 max) and reduce your Reason by 2.",
-		"The Blood-Soaked Portal":
-			"Narrate a scene in which you are physically destroyed. This character is now retired. ",
-	},
+	masksOfFuture: [	
+		"<strong>The Guilded Door</strong>: Take the following Condition: Most-Beloved. Tell the other Hunters they can no longer choose The Gilded Door on their own playbook (this does not count as being marked for them). You can never clear Most-Beloved.",
+		"<strong>The Moss-Covered Gate</strong>: Unmark the first two boxes on your Mask of the Past.",
+		"<strong>The Darkened Threshold</strong>: Narrate a scene in which you commit a terrible act of violence in order to help your employer or punish one of their enemies. ",
+		"<strong>The Cosmic Passage</strong>: Increase your Sensitivity by 1 (3 max) and reduce your Reason by 2.",
+		"<strong>The Blood-Soaked Portal</strong>: Narrate a scene in which you are physically destroyed. This character is now retired. ",
+	],
 	startingMoves: ["The Employer"],
 	moves: [
 		{
@@ -135,7 +130,7 @@ export const factotumPlaybook: PlaybookBase = {
 			text: [
 				"You can no longer be retired from play because of The Employer. Additionally, whenever you wish, you can unmark The Moss-Covered Gate if it is marked. You can do this once.",
 				"Thereafter, The Blood-Soaked Portal is replaced with the following:",
-				"<strong>The Fog-Shrouded Bridge:</strong> Narrate a scene showing how you leave your employer for dead, or otherwise abandon them at a critical moment. Then, you disappear; retire this character to safety or obscurity. ",
+				"<strong>The Fog-Shrouded Bridge</strong>: Narrate a scene showing how you leave your employer for dead, or otherwise abandon them at a critical moment. Then, you disappear; retire this character to safety or obscurity. ",
 			],
 		},
 	],

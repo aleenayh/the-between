@@ -97,15 +97,13 @@ export const undeniablePlaybook: PlaybookBase = {
     "Narrate a flashback that shows why you started to become jealous of the person you fell madly in love with. How did the masterwork change to reflect this simmering resentment?",
     "Narrate a flashback to when you finally destroyed the person you fell madly in love with. How did the masterwork change to reflect your wrath?",
   ],
-  masksOfFuture: {
-    "The Guilded Door":
-      "Take the following Condition: Most-Beloved. Tell the other Hunters they can no longer choose The Gilded Door on their own playbook (this does not count as being marked for them). You can never clear Most-Beloved.",
-    "The Moss-Covered Gate": "Narrate a scene in which you express private regret for the harm you have caused. ",
-    "The Darkened Threshold":
-      "Whenever you gaze upon the masterwork in an attempt to uncover something hidden in the world, roll with Sensitivity. <li><strong>On a 10+,</strong> the masterwork reveals a Clue or a Mastermind Clue, your choice.</li> <li><strong>On a 7-9,</strong> as above, but you also scar your Reflection.</li> ",
-    "The Cosmic Passage": "Narrate a scene during which people treat you like you’re nothing special. ",
-    "The Blood-Soaked Portal": "Narrate a scene in which you are physically destroyed. This character is now retired. ",
-  },
+  masksOfFuture: [
+    "<strong>The Guilded Door</strong>: Take the following Condition: Most-Beloved. Tell the other Hunters they can no longer choose The Gilded Door on their own playbook (this does not count as being marked for them). You can never clear Most-Beloved.",
+    "<strong>The Moss-Covered Gate</strong>: Narrate a scene in which you express private regret for the harm you have caused. ",
+    "<strong>The Darkened Threshold</strong>: Whenever you gaze upon the masterwork in an attempt to uncover something hidden in the world, roll with Sensitivity. <li><strong>On a 10+,</strong> the masterwork reveals a Clue or a Mastermind Clue, your choice.</li> <li><strong>On a 7-9,</strong> as above, but you also scar your Reflection.</li> ",
+    "<strong>The Cosmic Passage</strong>: Narrate a scene during which people treat you like you’re nothing special. ",
+    "<strong>The Blood-Soaked Portal</strong>: Narrate a scene in which you are physically destroyed. This character is now retired. ",
+  ],
   startingMoves: ["The Reflection"],
   moves: [
     {
@@ -166,6 +164,6 @@ export const undeniablePlaybook: PlaybookBase = {
     "Choose an additional move from your playbook.",
     "Choose an additional move from your playbook.",
     "Write a custom move for your character.",
-    "Unmark all the boxes on The Reflection (the masterwork itself is unchanged)..",
+    "Unmark all the boxes on The Reflection (the masterwork itself is unchanged).",
   ],
 }

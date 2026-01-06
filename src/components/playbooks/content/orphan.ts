@@ -78,14 +78,11 @@ export const orphanPlaybook: PlaybookBase = {
     "Narrate a flashback to the time someone lost all hope. Then, if you wish, describe how you quiet this part of you.",
     "Narrate a flashback to the moment someone was brutally murdered. Then, if you wish, describe how you quiet this part of you.",
   ],
-  masksOfFuture: {
-    "The Guilded Door": "",
-    "The Moss-Covered Gate": "",
-    "The Darkened Threshold":
-      "Narrate a scene in which you engage in self-destructive behavior because of the way society treats you.",
-    "The Cosmic Passage": " Increase your Sensitivity by 1 (max 3).",
-    "The Blood-Soaked Portal": "Narrate a scene in which you are physically destroyed. This character is now retired. ",
-  },
+  masksOfFuture: [
+    "<strong>The Darkened Threshold</strong>: Narrate a scene in which you engage in self-destructive behavior because of the way society treats you.",
+    "<strong>The Cosmic Passage</strong>: Increase your Sensitivity by 1 (max 3).",
+    "<strong>The Blood-Soaked Portal</strong>: Narrate a scene in which you are physically destroyed. This character is now retired. ",
+  ],
   startingMoves: ["The Family"],
   moves: [
     { title: "", text: [] },

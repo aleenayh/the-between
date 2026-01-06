@@ -20,4 +20,5 @@ export const defaultGameState: GameState = {
 		residents: [],
 		rooms: startingRooms,
 	},
+	heraldUnlocked: false,
 };

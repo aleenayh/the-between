@@ -97,14 +97,13 @@ export const motherPlaybook: PlaybookBase = {
     "Narrate a flashback to the time when the person you lost was slipping away from you.",
     "Narrate a flashback to the time when you finally said goodbye to the person you lost.",
   ],
-  masksOfFuture: {
-    "The Guilded Door":
-      "Take the following Condition: Most-Beloved. Tell the other Hunters they can no longer choose The Gilded Door on their own playbook (this does not count as being marked for them). You can never clear Most-Beloved.",
-    "The Moss-Covered Gate": "You must attempt to bring the Child to life. ",
-    "The Darkened Threshold": "Narrate a scene in which you destroy a professional rival.",
-    "The Cosmic Passage": "Increase your Sensitivity by 1 (max 3).",
-    "The Blood-Soaked Portal": "Narrate a scene in which you are physically destroyed. This character is now retired. ",
-  },
+  masksOfFuture: [    
+    "<strong>The Guilded Door</strong>: Take the following Condition: Most-Beloved. Tell the other Hunters they can no longer choose The Gilded Door on their own playbook (this does not count as being marked for them). You can never clear Most-Beloved.",
+    "<strong>The Moss-Covered Gate</strong>: You must attempt to bring the Child to life. ",
+    "<strong>The Darkened Threshold</strong>: Narrate a scene in which you destroy a professional rival.",
+    "<strong>The Cosmic Passage</strong>: Increase your Sensitivity by 1 (max 3).",
+    "<strong>The Blood-Soaked Portal</strong>: Narrate a scene in which you are physically destroyed. This character is now retired. ",
+  ],
   startingMoves: ["The Child"],
   moves: [
     {
