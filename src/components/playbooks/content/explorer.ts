@@ -103,17 +103,13 @@ export const explorerPlaybook: PlaybookBase = {
     "Narrate a flashback showing your arrival in London.",
     "Narrate a flashback to the time when you first met the Mastermind.",
   ],
-  masksOfFuture: {
-    "The Guilded Door":
-      "Take the following Condition: Most-Beloved. Tell the other Hunters they can no longer choose The Gilded Door on their own playbook (this does not count as being marked for them). You can never clear Most-Beloved.",
-    "The Moss-Covered Gate":
-      "You receive a significant inheritance from a recently deceased relative. Who were they? What is your favorite memory of them? Unmark two checkboxes on The Royal Explorers Club. ",
-    "The Darkened Threshold":
-      "Narrate a scene in which you inflict violence on someone and the authorities look the other way. ",
-    "The Cosmic Passage": "Increase your Sensitivity by 1 (max 3) and reduce your Reason by 2.",
-    "The Blood-Soaked Portal":
-      "The Keeper narrates a scene in which the Boy physically destroys you; you stay alive long enough for the Mastermind to gloat over their victory. ",
-  },
+  masksOfFuture: [
+    "<strong>The Guilded Door</strong>: Take the following Condition: Most-Beloved. Tell the other Hunters they can no longer choose The Gilded Door on their own playbook (this does not count as being marked for them). You can never clear Most-Beloved.",
+    "<strong>The Moss-Covered Gate</strong>: You receive a significant inheritance from a recently deceased relative. Who were they? What is your favorite memory of them? Unmark two checkboxes on The Royal Explorers Club. ",
+        "<strong>The Darkened Threshold</strong>: Narrate a scene in which you inflict violence on someone and the authorities look the other way. ",
+    "<strong>The Cosmic Passage</strong>: Increase your Sensitivity by 1 (max 3) and reduce your Reason by 2.",
+    "<strong>The Blood-Soaked Portal</strong>: The Keeper narrates a scene in which the Boy physically destroys you; you stay alive long enough for the Mastermind to gloat over their victory. ",
+  ],
   startingMoves: ["The Royal Explorer's Club","The Grand Game",],
   moves: [
     {

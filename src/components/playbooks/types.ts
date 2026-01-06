@@ -19,24 +19,6 @@ export const abilitiesKeys = {
   sensitivity: "sensitivity",
 } as const
 
-export const masksFutureKeys = {
-  "The Guilded Door": "The Guilded Door",
-  "The Moss-Covered Gate": "The Moss-Covered Gate",
-  "The Darkened Threshold": "The Darkened Threshold",
-  "The Cosmic Passage": "The Cosmic Passage",
-  "The Blood-Soaked Portal": "The Blood-Soaked Portal",
-} as const
-
-const masksFutureKeysTuple = [
-  "The Guilded Door",
-  "The Moss-Covered Gate",
-  "The Darkened Threshold",
-  "The Cosmic Passage",
-  "The Blood-Soaked Portal",
-] as const
-
-export type masksFutureKey = (typeof masksFutureKeys)[keyof typeof masksFutureKeys]
-
 export const playbookBaseSchema = z.object({
   title: z.string(),
   intro: z.array(z.string()),
@@ -47,7 +29,8 @@ export const playbookBaseSchema = z.object({
   abilities: abilitiesSchema,
   masksPastDescription: z.string().optional(),
   masksOfPast: z.array(z.string()),
-  masksOfFuture: z.record(z.enum(masksFutureKeysTuple), z.string()),
+  masksOfFutureDescription: z.string().optional(),
+  masksOfFuture: z.array(z.string()),
   startingMoves: z.array(z.string()),
   moves: z.array(
     z.object({
@@ -69,22 +52,6 @@ export type PlaybookMove = {
   extraLines?: number
 }
 
-export const candleSchema = z.object({
-  checks: z.number(),
-  aspect: z.string(),
-  complication: z.string().optional(),
-})
-
-export type Candle = z.infer<typeof candleSchema>
-
-export const coreMoveStateSchema = z.discriminatedUnion("type", [
-  z.object({
-    type: z.literal("custom"),
-  }),
-])
-
-export type CoreMoveState = z.infer<typeof coreMoveStateSchema>
-
 export const playbookKeys = {
   american: "american",
   explorer: "explorer",
@@ -93,10 +60,13 @@ export const playbookKeys = {
   orphan: "orphan",
   undeniable: "undeniable",
   vessel: "vessel",
+  informals: "informals",
+  unquiet: "unquiet",
+  facsimile: "facsimile",
   custom: "custom",
 } as const
 
-const playbookKeysTuple = [...Object.values(playbookKeys)] as const
+export const playbookKeysTuple = [...Object.values(playbookKeys).filter((key) => key !== playbookKeys.informals)] as const
 
 export type playbookKey = (typeof playbookKeys)[keyof typeof playbookKeys]
 
@@ -132,15 +102,7 @@ export const characterSchema = z.object({
   look: z.string().catch(catchWithWarning("character.look", "")),
   vice: z.string().catch(catchWithWarning("character.vice", "")),
   masksOfPast: z.array(z.number()).catch(catchWithWarning("character.masksOfPast", [0, 0, 0, 0, 0, 0, 0])),
-  masksOfFuture: z.record(z.enum(masksFutureKeysTuple), z.boolean()).catch(
-    catchWithWarning("character.masksOfFuture", {
-      "The Guilded Door": false,
-      "The Moss-Covered Gate": false,
-      "The Darkened Threshold": false,
-      "The Cosmic Passage": false,
-      "The Blood-Soaked Portal": false,
-    }),
-  ),
+  masksOfFuture:  z.array(z.number()).catch(catchWithWarning("character.masksOfFuture", [0, 0, 0, 0, 0])),
   conditions: z.array(z.string()).catch(catchWithWarning("character.conditions", ["", "", ""])),
   moves: z
     .array(
@@ -153,7 +115,6 @@ export const characterSchema = z.object({
     )
     //no warning - empty moves array is valid, but dropped by firebase
     .catch([]),
-  coreMoveState: coreMoveStateSchema,
   advancements: z.array(z.number()).catch(catchWithWarning("character.advancements", [0, 0, 0, 0, 0, 0, 0])),
   abilities: abilitiesSchema.catch(catchWithWarning("character.abilities", defaultAbilities)),
   personalQuarters: z
@@ -167,6 +128,7 @@ export const characterSchema = z.object({
   experience: z.number().catch(catchWithWarning("character.experience", 0)),
   questions: z.array(z.number()).catch(catchWithWarning("character.questions", [0, 0, 0, 0, 0])),
   customTextFields: customTextFieldsSchema.optional().catch({}),
+  isHerald: z.boolean().catch(catchWithWarning("character.isHerald", false)),
 })
 
 export type Character = z.infer<typeof characterSchema>

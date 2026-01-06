@@ -1,11 +1,14 @@
-import type { Character, CustomTextFields, masksFutureKey, PlaybookBase } from "../types"
-import { masksFutureKeys, playbookKeys } from "../types"
+import type { Character, CustomTextFields, PlaybookBase } from "../types"
+import { playbookKeys } from "../types"
 import { americanPlaybook } from "./american"
 import { explorerPlaybook } from "./explorer"
+import { facsimilePlaybook } from "./facsimile"
 import { factotumPlaybook } from "./factotum"
+//import { informalsPlaybook } from "./informals"
 import { motherPlaybook } from "./mother"
 import { orphanPlaybook } from "./orphan"
 import { undeniablePlaybook } from "./undeniable"
+import { unquietPlaybook } from "./unquiet"
 import { vesselPlaybook } from "./vessel"
 
 const blankPlaybook: PlaybookBase = {
@@ -23,14 +26,13 @@ const blankPlaybook: PlaybookBase = {
     sensitivity: 0,
   },
   masksOfPast: [],
-  masksOfFuture: {
-    "The Guilded Door":
-      "Take the following Condition: Most-Beloved. Tell the other Hunters they can no longer choose The Gilded Door on their own playbook (this does not count as being marked for them). You can never clear Most-Beloved.",
-    "The Moss-Covered Gate": "",
-    "The Darkened Threshold": "",
-    "The Cosmic Passage": "",
-    "The Blood-Soaked Portal": "Narrate a scene in which you are physically destroyed. This character is now retired. ",
-  },
+  masksOfFuture:   [
+    "<strong>The Guilded Door</strong>: Take the following Condition: Most-Beloved. Tell the other Hunters they can no longer choose The Gilded Door on their own playbook (this does not count as being marked for them). You can never clear Most-Beloved.",
+    "<strong>The Moss-Covered Gate</strong>: ",
+    "<strong>The Darkened Threshold</strong>: ",
+    "<strong>The Cosmic Passage</strong>: Increase your Sensitivity by 1 (max 3) and reduce your Reason by 2.",
+    "<strong>The Blood-Soaked Portal</strong>: Narrate a scene in which you are physically destroyed. This character is now retired. ",
+  ],
   startingMoves: [],
   moves: [],
   advancements: [
@@ -53,6 +55,9 @@ export const playbookBases: Record<(typeof playbookKeys)[keyof typeof playbookKe
   [playbookKeys.orphan]: orphanPlaybook,
   [playbookKeys.undeniable]: undeniablePlaybook,
   [playbookKeys.vessel]: vesselPlaybook,
+  [playbookKeys.informals]: blankPlaybook, //TODO
+  [playbookKeys.unquiet]: unquietPlaybook,
+  [playbookKeys.facsimile]: facsimilePlaybook,
 }
 
 export function customFieldOrFallback(
@@ -60,7 +65,7 @@ export function customFieldOrFallback(
   key: keyof CustomTextFields,
 ): {
   key: keyof CustomTextFields
-  value: string[] | Record<masksFutureKey, string> | Record<number, string>
+  value: string[]
 } {
   const rawText = character.customTextFields?.[key]
 
@@ -69,16 +74,9 @@ export function customFieldOrFallback(
   }
 
   switch (key) {
-    case "masksOfFutureDefinitions": {
-      //record <masksFutureKey, string>
-      const strippedOfKeys = rawText.map((text) => text.split(":")[1].trim())
-      const record = Object.fromEntries(
-        strippedOfKeys.map((text, index) => [Object.keys(masksFutureKeys)[index], text]),
-      )
-      return {
-        key: "masksOfFutureDefinitions",
-        value: record as Record<masksFutureKey, string>,
-      }
+    case "masksOfFutureDefinitions":     {
+      //string[]
+      return { key: "masksOfFutureDefinitions", value: rawText as string[] }
     }
     case "masksOfPastDefinitions":
       //string[]

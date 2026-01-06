@@ -22,7 +22,7 @@ export function Moves({ character }: { character: Character }) {
 	);
 }
 
-const specialMoveTitles = ["The Child", "The Royal Explorer's Club","Rites of Salt & Smoke", "The Reflection","The Family"]
+const specialMoveTitles = ["The Child", "The Royal Explorer's Club","Rites of Salt & Smoke", "The Reflection","The Family", "The Phantom", "Doll Parts"]
 
 function MoveDisplay({
 	character,
@@ -37,20 +37,17 @@ function MoveDisplay({
 		user: { id },
 	} = useGame();
 	const editable = id === character.playerId;
-	const stateMove = gameState.players
-		.find((p) => p.id === character.playerId && p.character)
-		?.character?.moves.find((m) => m.title === move.title);
 	const contentDef = playbookBases[character.playbook].moves.find(
 		(m) => m.title === move.title,
 	);
-	const content = stateMove?.text ? stateMove.text : contentDef?.text;
+	const content = move.text ? move.text : contentDef?.text;
 
 	// Count aspects in the content by joining and parsing
 	const fullText = content?.join("\n") ?? "";
-	const aspectCount = (fullText.match(/<aspect>/g) || []).length;
+	const aspectCount = (fullText.match(/<check>/g) || []).length;
 
 	// Checkboxes come after aspects in the checks array
-	const checkboxCount = stateMove?.checks?.length ?? 0;
+	const checkboxCount = move.checks?.length ?? 0;
 
 	const toggleCheck = useCallback(
 		(index: number) => {
@@ -87,9 +84,9 @@ function MoveDisplay({
 		[editable, move, updateGameState, gameState.players, id],
 	);
 
-	const syncLines = () => {
-		if (!editable || !localLines) return;
-		const newLines = [...localLines];
+	const updateLine = (index: number, line: string) => {
+		const newLines = [...move.lines ?? []];
+		newLines[index] = line;
 		updateGameState({
 			players: gameState.players.map((player) =>
 				player.id === id && player.character
@@ -105,14 +102,6 @@ function MoveDisplay({
 					: player,
 			),
 		});
-	};
-
-	const [localLines, setLocalLines] = useState(move.lines);
-	const updateLineLocal = (index: number, line: string) => {
-		if (!localLines) return;
-		const newLines = [...localLines];
-		newLines[index] = line;
-		setLocalLines(newLines);
 	};
 
 	const specialHandling = specialMoveTitles.includes(move.title)
@@ -135,7 +124,7 @@ function MoveDisplay({
           )
         })}
 
-      {/* Checkboxes row - rendered after aspects */}
+      {/* Checkboxes row  */}
       {checkboxCount > 0 && (
         <div className="w-full flex justify-center items-center gap-2">
           {Array.from({ length: checkboxCount }).map((_, idx) => {
@@ -165,21 +154,7 @@ function MoveDisplay({
       {move.lines &&
         move.lines.length > 0 &&
         move.lines.map((line, lineIndex) => {
-          return editable ? (
-            <input
-              type="text"
-              key={`${move.title}-line-${lineIndex}-${line}`}
-              value={localLines?.[lineIndex] ?? ""}
-              disabled={!editable}
-              onChange={(e) => updateLineLocal(lineIndex, e.target.value)}
-              onBlur={syncLines}
-              className="border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent flex-grow"
-            />
-          ) : (
-            <p key={`${move.title}-line-${lineIndex}-${line}`} className="text-left leading-relaxed">
-              ◆ {line}
-            </p>
-          )
+          return <EditableLine key={`${move.title}-line-${lineIndex}-${line}`} text={line} editable={editable} onSave={(index, value) => updateLine(index, value)} index={lineIndex} />
         })}
     </div>
   )
@@ -197,6 +172,10 @@ function SpecialMoveDisplay({ character, title }: { character: Character; title:
 			return <TheReflection character={character} />
 		case "The Family":
 			return <TheFamily character={character} />
+		case "The Phantom":
+			return <ThePhantom character={character} />
+			case "Doll Parts":
+			return <DollParts character={character} />
 	}
 	return <div>{title} Special Display not built yet!</div>
 }
@@ -349,7 +328,7 @@ idx}`} checked={moveState?.checks?.[idx] === 1} disabled={!editable} onChange={(
 
 function RitesOfSaltAndSmoke({ character }: { character: Character }) {
 	const moveState = character.moves.find((m) => m.title === "Rites of Salt & Smoke");
-	const selectedRitual = moveState?.lines?.[0] ?? "TODO"
+	const selectedRitual = moveState?.lines?.[0] ?? ""
 	const {gameState, updateGameState, user: { id }} = useGame();
 	const editable = id === character.playerId;
 
@@ -361,7 +340,7 @@ function RitesOfSaltAndSmoke({ character }: { character: Character }) {
 		<h3 className="text-sm font-bold text-theme-text-accent text-center">Rites of Salt & Smoke</h3>
 		<p>You are skilled at contacting dark entities in order to perform magical rituals. When you give offerings to the dark entities that are always lingering in your peripheral vision, roll with Sensitivity. <strong>On a 10+,</strong> the magic works without further cost: choose your effect. <strong>On a 7-9,</strong> the magic works imperfectly: choose your effect and a complication.</p>
 
-		{editable && (<div className="w-full flex flex-col gap-2">{selectedRitual === "TODO" && (
+		{editable && (<div className="w-full flex flex-col gap-2">{selectedRitual === "" && (
   <div>
     <strong>Choose what kinds of offerings these entities require:</strong>
     <ul>
@@ -372,7 +351,7 @@ function RitesOfSaltAndSmoke({ character }: { character: Character }) {
     </ul>{" "}
   </div>
 )}
-<EditableLine text={selectedRitual ==="TODO" ? "" : selectedRitual} editable={editable} onSave={(index, value) => selectRitual(index,value)} index={0}/> </div>)}
+<EditableLine text={selectedRitual} editable={editable} onSave={(index, value) => selectRitual(index,value)} index={0}/> </div>)}
 
 <p><strong>Effects</strong></p>
 <ul>
@@ -398,7 +377,7 @@ function RitesOfSaltAndSmoke({ character }: { character: Character }) {
 
 function TheReflection({ character }: { character: Character }) {
 const moveState = character.moves.find((m) => m.title === "The Reflection");
-const masterwork = moveState?.lines?.[0] ?? "TODO"
+const masterwork = moveState?.lines?.[0] ?? ""
 const {gameState, updateGameState, user: { id }} = useGame();
 const editable = id === character.playerId;
 
@@ -408,7 +387,7 @@ const selectMasterwork = (_: number, masterwork: string) => {
 
 const toggleCheck = (index: number) => {
 	if (!editable) return;
-	const newChecks = [...moveState?.checks ?? []];
+	const newChecks = [...moveState?.checks ?? Array.from({ length: 12 }, () => 0)];
 	newChecks[index] = newChecks[index] === 1 ? 0 : 1;
 	updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, moves: player.character.moves.map((m) => m.title === "The Reflection" ? { ...m, checks: newChecks } : m) } } : player) });
 }
@@ -417,7 +396,7 @@ return <div className="flex flex-col gap-2 text-left">
 	<h3 className="text-sm font-bold text-theme-text-accent text-center">The Reflection</h3>
 	<p>Somewhere in London, hidden from the world, is a masterwork created in your image or otherwise inspired by your beauty. It is guarded by a cult dedicated to your worship.</p>
 
-	{editable && (<div className="w-full flex flex-col gap-2">{masterwork === "TODO" && (
+	{editable && (<div className="w-full flex flex-col gap-2">{masterwork === "" && (
 <div>
 <strong>What is the masterwork?</strong>
 <ul>
@@ -429,11 +408,11 @@ A piece of music inspired by you. How do your worshippers ensure this music is a
 </ul>{" "}
 </div>
 )}
-<EditableLine text={masterwork ==="TODO" ? "" : masterwork} editable={editable} onSave={(index, value) => selectMasterwork(index,value)} index={0}/> </div>)}
+<EditableLine text={masterwork} editable={editable} onSave={(index, value) => selectMasterwork(index,value)} index={0}/> </div>)}
 
 <p>The masterwork will gradually degrade so you can remain young and beautiful, and will bear the scars that your evil acts would otherwise leave on your soul. Whenever you scar your Reflection, either as the result of a move or because the Keeper said to, mark a box below and describe how the masterwork has changed for the worse.   </p>
-{Array.from({ length: 12 }).map((_, idx) => <input type="checkbox" key={`Reflection-checkbox-${// biome-ignore lint/suspicious/noArrayIndexKey: order unimportant
-idx}`} checked={moveState?.checks?.[idx] === 1} disabled={!editable} onChange={()=> toggleCheck(idx)} />)}
+<div className="flex gap-2 justify-center flex-wrap">{Array.from({ length: 12 }).map((_, idx) => <input type="checkbox" key={`Reflection-checkbox-${// biome-ignore lint/suspicious/noArrayIndexKey: order unimportant
+idx}`} checked={moveState?.checks?.[idx] === 1} disabled={!editable} onChange={()=> toggleCheck(idx)} />)}</div>
 
 <p>When <strong>all the boxes are marked</strong>, you must frame an intimate scene with a fellow Hunter where you reveal the masterwork to them and explain some of the terrible things you have done that are reflected in it. Then, if you wish, throw yourself at their feet and beg them for redemption. They can grant it by taking you into a passionate embrace, then and there. If they do so, describe how you embrace a life of humility and grace, then retire this character.</p>
 
@@ -444,8 +423,8 @@ idx}`} checked={moveState?.checks?.[idx] === 1} disabled={!editable} onChange={(
 
 function TheFamily({ character }: { character: Character }) {
 	const moveState = character.moves.find((m) => m.title === "The Family");
-	const family = moveState?.lines?.[0] ?? "TODO"
-	const problem = moveState?.lines?.[1] ?? "TODO"
+	const family = moveState?.lines?.[0] ?? ""
+	const problem = moveState?.lines?.[1] ?? ""
 	const {gameState, updateGameState, user: { id }} = useGame();
 	const editable = id === character.playerId;
 
@@ -466,7 +445,7 @@ function TheFamily({ character }: { character: Character }) {
 		<h3 className="text-sm font-bold text-theme-text-accent text-center">The Reflection</h3>
 		<p>You help Hargrave House in order to earn your keep, but the people who live there can never be your family since they are even more broken than you are. There is another group of people in London you watch from afar in the hopes they will someday notice and accept you.</p>
 	
-		{editable && (<div className="w-full flex flex-col gap-2">{family === "TODO" && (
+		{editable && (<div className="w-full flex flex-col gap-2">{family === "" && (
 	<div>
 	<strong>There is another group of people in London you watch from afar in the hopes they will someday notice and accept you. Who are they?</strong>
 	<ul>
@@ -477,9 +456,9 @@ function TheFamily({ character }: { character: Character }) {
 	</ul>
 	</div>
 	)}
-	<EditableLine text={family ==="TODO" ? "" : family} editable={editable} onSave={(index, value) => writeLine(index,value)} index={0}/> </div>)}
+	<EditableLine text={family} editable={editable} onSave={(index, value) => writeLine(index,value)} index={0}/> </div>)}
 
-	{editable && (<div className="w-full flex flex-col gap-2">{problem === "TODO" && (
+	{editable && (<div className="w-full flex flex-col gap-2">{problem === "" && (
 	<div>
 	<strong>The group you hope to join is suffering from a problem. What is it?</strong>
 	<ul>
@@ -490,7 +469,7 @@ function TheFamily({ character }: { character: Character }) {
 	</ul>
 	</div>
 	)}
-	<EditableLine text={problem ==="TODO" ? "" : problem} editable={editable} onSave={(index, value) => writeLine(index,value)} index={0}/> </div>)}
+	<EditableLine text={problem} editable={editable} onSave={(index, value) => writeLine(index,value)} index={0}/> </div>)}
 	
 	<p>You will secretly help the group solve this problem and then, when the time is right, present yourself to them. From now on, when you would collect a Reward from resolving a Threat, instead mark a box below and describe how something from the recently resolved Threat can be used to help the group with their problem.
 	</p>
@@ -500,4 +479,60 @@ function TheFamily({ character }: { character: Character }) {
 	<p>When <strong>all three boxes are marked,</strong> roll with Presence; this roll is always made at disadvantage. <strong>On a 10+,</strong> they are thankful for your help and welcome you as one of their own. Narrate a short epilogue showing your life with your new family. This character is now retired. <strong>On a 7-9,</strong> they shun you and call you unkind names. Unmark a box from this move. <strong>On a miss,</strong> they are horrified, and turn on you. Mark The Blood-Soaked Portal. 
 	</p>
 	</div>
-	}
+}
+
+function ThePhantom({ character }: { character: Character }) {
+		const moveState = character.moves.find((m) => m.title === "The Phantom");
+		const medium = moveState?.lines?.[0] ?? ""
+		const {gameState, updateGameState, user: { id }} = useGame();
+		const editable = id === character.playerId;
+		const checks = moveState?.checks ?? Array.from({ length: 4 }, () => 0);
+		const selectMedium = (_: number, medium: string) => {
+			updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, moves: player.character.moves.map((m) => m.title === "The Phantom" ? { ...m, lines: [medium] } : m) } } : player) });
+		}
+		
+		const toggleCheck = (index: number) => {
+			if (!editable) return;
+			const newChecks = [...moveState?.checks ?? Array.from({ length: 12 }, () => 0)];
+			newChecks[index] = newChecks[index] === 1 ? 0 : 1;
+			updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, moves: player.character.moves.map((m) => m.title === "The Phantom" ? { ...m, checks: newChecks } : m) } } : player) });
+		}
+		
+		return <div className="flex flex-col gap-2 text-left">
+			<h3 className="text-sm font-bold text-theme-text-accent text-center">The Phantom</h3>
+			<p>You are anchored to Hargrave House. You may roam about the interior of the mansion, but if you manage to leave, you will return involuntarily at Dawn. While in the house, you may openly converse in a disembodied voice.</p>
+		
+			{editable && (<div className="w-full flex flex-col gap-2">{medium === "" && (
+		<div>
+		<strong>What medium do you communicate through?</strong>
+		<ul>
+		<li>Your reflection in a mirrored surface</li>	
+<li>Your portrait hanging on a wall</li>
+<li>A bust of your likeness</li>
+<li>A former possession on display </li>
+		<li>Something else</li>
+		</ul>{" "}
+		</div>
+		)}
+		<EditableLine text={medium} editable={editable} onSave={(index, value) => selectMedium(index,value)} index={0}/> </div>)}
+		
+		<p>Additionally, during a Hargrave House Night Phase, you are able to have regular scenes in the house, even though the other Hunters cannot; the gameplay cuts back and forth between the Room narrations and your scene, as if the Room narrations were an Unscene during a London Night Phase. You still participate in Room narrations.   </p>
+
+		<p>You can summon enough spectral energy to temporarily break free from your ghostly bonds or interact with the world in ways that are more physical in nature. Whenever instructed to do so, either by the Keeper or another move, mark the Energy track below. When the track is full, you must spend the next Day Phase recovering in the spirit realm. You can take no actions while in the spirit realm, nor can you interact with other characters. However, during other Hunters’ scenes, you should describe how your residual spectral energy is subtly affecting the environment. Additionally, you gain a Clue while in the spirit realm. Tell the Keeper what it is and to which active Threat it applies. The Clue cannot conclusively answer a Question by itself. Unmark all Energy at the end of the recovery Day Phase. </p>
+		<div className="flex gap-2 justify-center flex-wrap">{checks.map((check, idx) => <input type="checkbox" key={`Energy-checkbox-${// biome-ignore lint/suspicious/noArrayIndexKey: order unimportant
+		idx}`} checked={check === 1} disabled={!editable} onChange={()=> toggleCheck(idx)} />)}</div>
+		
+		</div>
+}
+
+function DollParts({character}: {character: Character}) {
+	const moveState = character.moves.find((m) => m.title === "Doll Parts")
+	if (!moveState) return null;
+	return <div className="flex flex-col gap-2 text-left">
+	<h3 className="text-sm font-bold text-theme-text-accent text-center">Doll Parts</h3>
+	<p>You do not start with any ability scores. Instead, at the start of each Day Phase, you equip three “Doll Parts”—attachments capable of enhancing your mechanical physiology. Each Doll Part operates with an ability, giving you +1 in that ability until you choose to switch the part for another. 
+	</p>
+	<p>Each Doll Part comes with a pair of Adaptors, secondary moves that help you to further customize your Doll Parts. During the Day Phase, whenever you reassign your Doll Parts, you may also reassign your Adaptors using Adaptor Keys. You can only access the Adaptors that are associated with Doll Parts you have equipped.</p>
+	<p>TODO ALEENA BUILD THE REST OF THIS</p>
+	</div>
+}

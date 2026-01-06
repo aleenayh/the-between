@@ -470,10 +470,7 @@ function RewardForm({
 	const { updateGameState, gameState } = useGame();
 
 	const onSubmit = (data: { supplicant: string }) => {
-		updateGameState({
-			supplicants: [...(gameState.supplicants ?? []), data.supplicant],
-		});
-		toast.success(`Supplicant chosen: ${data.supplicant}`);
+
 	};
 
 	const rewards = lookupMystery(mystery.title)?.rewards;

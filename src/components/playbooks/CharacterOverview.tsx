@@ -98,7 +98,7 @@ function CharacterCreationStarter({ onCollapse }: { onCollapse: () => void }) {
             ← Back to Hunters
           </button>
           <div className="flex-1 overflow-y-auto min-h-0">
-            {key === playbookKeys.custom ? <CustomCreateForm /> : <CharacterCreateForm playbookKey={key} />}
+            {key === playbookKeys.custom ? <CustomCreateForm /> : key === playbookKeys.informals ? <div>TODO</div> : <CharacterCreateForm playbookKey={key} />}
           </div>
         </>
       ) : (

@@ -4,10 +4,13 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useGame } from "../../../context/GameContext";
 import { PlayerRole } from "../../../context/types";
+import { heraldPlaybookAdditions } from "../content/herald";
 import { AbilityBoxes } from "../sharedComponents/AbilityBoxes";
 import type { Character } from "../types";
 
+
 type CharacterCreateFormInputs = {
+	isHerald: boolean;
 	name: string;
 	look: string;
 	vice: string;
@@ -39,6 +42,7 @@ export function CustomCreateForm() {
 	const { register, handleSubmit, watch, setValue } =
 		useForm<CharacterCreateFormInputs>({
 			defaultValues: {
+				isHerald: false,
 				name: "",
 				look: "",
 				vice: "",
@@ -51,7 +55,7 @@ export function CustomCreateForm() {
 				},
 				moves: [],
 				questions: ["", "", "", "", ""],
-				masksOfPast: ["", "", ""],
+				masksOfPast: ["", "", "","","","",""],
 				masksOfFuture: ["", "", "", "", ""],
 			},
 		});
@@ -202,6 +206,14 @@ export function CustomCreateForm() {
 									))}
 								</div>
 							</div>
+							{gameState.heraldUnlocked && 							<div><h2 className="font-bold text-center text-theme-text-accent text-lg">
+								The Herald
+							</h2>
+							<p>This game has unlocked <i>The Herald</i>. The Herald is not a standalone playbook, but rather a special sheet that, once unlocked by The Informals, can be added to another playbook during character creation. Playbooks not published by The Gauntlet may not be a good fit with the Herald; discuss it with your Keeper if you’re unsure. 
+							</p>
+							<input type="checkbox" {...register("isHerald")} /><label htmlFor="isHerald">I am the Herald</label>
+
+							</div>}
 						</motion.div>
 					)}
 
@@ -539,6 +551,7 @@ function constructCustomCharacter(
 		questions,
 		masksOfPast,
 		masksOfFuture,
+		isHerald,
 	} = formInputs;
 
 	const conditions: string[] = ["", "", ""];
@@ -552,6 +565,7 @@ function constructCustomCharacter(
 	};
 
 	return {
+		isHerald,
 		playbook: "custom",
 		playerId: userId,
 		name,
@@ -565,17 +579,10 @@ function constructCustomCharacter(
 			sensitivity,
 		},
 		masksOfPast: Array.from({ length: masksOfPast.length }, () => 0),
-		masksOfFuture: {
-			"The Guilded Door": false,
-			"The Moss-Covered Gate": false,
-			"The Darkened Threshold": false,
-			"The Cosmic Passage": false,
-			"The Blood-Soaked Portal": false,
-		},
+		masksOfFuture: Array.from({ length: masksOfFuture.length }, () => 0),
 		advancements,
 		conditions,
-		moves,
-		coreMoveState: { type: "custom" },
+		moves: isHerald ? [...moves, ...(heraldPlaybookAdditions.moves ?? [])] : moves,
 		experience: 0,
 		personalQuarters: [{text: "", marked: false}],
 		questions: Array.from({ length: questions.length }, () => 0),
