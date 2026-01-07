@@ -67,6 +67,7 @@
   --color-border: #0101a9;
   --color-border-accent: #0063c5;
   --color-accent-primary: #e8af30;
+  --color-blood: #8b0000;
 
   --background-image: url("../public/images/fancy-wallpaper.svg");
   --background-size: 100px 100px;
@@ -87,6 +88,7 @@
   --color-border: #0101a9;
   --color-border-accent: #0088ff;
   --color-accent-primary: #fe4800;
+  --color-blood: #cc0000;
 
   --background-image: url("../public/images/wave.svg");
   --background-size: 150px 150px;
@@ -106,6 +108,7 @@
   --color-border: #a96b01;
   --color-border-accent: #ff8400;
   --color-accent-primary: #633f00;
+  --color-blood: #a00000;
 
   --background-image: url("../public/images/geometric.svg");
   --background-size: 60px 60px;
@@ -125,6 +128,7 @@
   --color-border: #d0b6fb;
   --color-border-accent: #8d65c1;
   --color-accent-primary: #96aefc;
+  --color-blood: #8b0000;
 
   --background-image: url("../public/images/circles.svg");
   --background-size: 200px 200px;
@@ -144,6 +148,7 @@
   --color-border: #a7cab1;
   --color-border-accent: #88b7b5;
   --color-accent-primary: #f087fc;
+  --color-blood: #cc0000;
 
   --background-image: url("../public/images/floral.svg");
   --background-size: 200px 200px;
@@ -163,6 +168,7 @@
   --color-border: #fa83bc;
   --color-border-accent: #ca1942;
   --color-accent-primary: #fddede;
+  --color-blood: #5a0000;
 
   --background-image: url("../public/images/roses.svg");
   --background-size: 160px 160px;
@@ -184,6 +190,7 @@
   --color-border-accent: #64b500;
 
   --color-accent-primary: #888888;
+  --color-blood: #8b0000;
 
   --background-image: none;
   --header-font: "CinzelDecorativeBlack", cursive;
@@ -203,6 +210,7 @@
   --color-border-accent: #034fa5;
 
   --color-accent-primary: #000000;
+  --color-blood: #cc0000;
   --background-image: none;
   --header-font: "CinzelDecorativeBlack", cursive;
   --second-header-font: "Questrial", sans-serif;
@@ -646,4 +654,88 @@ textarea {
   100% {
     transform: translateY(0) scale(1);
   }
+}
+
+/* ===== INFORMALS STYLES ===== */
+.informalButton {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  border: 2px solid var(--color-bg-secondary);
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 15px;
+  line-height: 1.5;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease,
+    border-color 0.2s ease;
+}
+.informalButton:hover {
+  background-color: var(--color-bg-accent);
+  color: var(--color-text-accent);
+  border: 2px solid var(--color-border-accent);
+}
+.informalButton:focus {
+  outline: none;
+}
+
+.informalButtonDead {
+  position: relative;
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-primary);
+  border: 2px solid var(--color-bg-secondary);
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 15px;
+  line-height: 1.5;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease,
+    border-color 0.2s ease;
+  z-index: 0;
+}
+.informalButtonDead > * {
+  position: relative;
+  z-index: 2;
+}
+.informalButtonDead::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--color-blood);
+  mask-image: url("../public/images/spatter.svg");
+  -webkit-mask-image: url("../public/images/spatter.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-position: center;
+  mask-size: cover;
+  -webkit-mask-size: cover;
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 0;
+  mix-blend-mode: normal;
+}
+.informalButtonDead::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 6px;
+  background-color: var(--color-blood);
+  mask-image: url("../public/images/spatter.svg");
+  -webkit-mask-image: url("../public/images/spatter.svg");
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-position: center;
+  mask-size: cover;
+  -webkit-mask-size: cover;
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 0;
+  mix-blend-mode: multiply;
 }

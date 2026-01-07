@@ -1,16 +1,15 @@
 import { useGame } from "../../../context/GameContext";
-import type { Character } from "../types";
+import type { CharacterNotTroupe } from "../types";
 
-export function ExperienceTracker({ character }: { character: Character }) {
+export function ExperienceTracker({ character }: { character: CharacterNotTroupe }) {
 	const {
 		gameState,
 		updateGameState,
 		user: { id },
 	} = useGame();
+
 	const editable = id === character.playerId;
-	const experience =
-		gameState.players.find((player) => player.id === character.playerId)
-			?.character?.experience ?? 0;
+	const experience = character?.experience ?? 0;
 
 	return (
 		<div className="flex flex-col gap-2">

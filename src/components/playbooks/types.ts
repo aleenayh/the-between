@@ -131,4 +131,56 @@ export const characterSchema = z.object({
   isHerald: z.boolean().catch(catchWithWarning("character.isHerald", false)),
 })
 
-export type Character = z.infer<typeof characterSchema>
+export type CharacterNotTroupe = z.infer<typeof characterSchema>
+
+
+const miniCharacterSchema = z.object({
+  conditions: z.array(z.string()).catch(catchWithWarning("character.conditions", ["", ""])),
+  moves: z
+    .array(
+      z.object({
+        title: z.string(),
+        checks: z.array(z.number()).optional().catch([]),
+        lines: z.array(z.string()).optional().catch([]),
+      }),
+    )
+    //no warning - empty moves array is valid, but dropped by firebase
+    .catch([]),
+  personalQuarters: z
+    .array(
+      z.object({
+        text: z.string().catch(""),
+        marked: z.boolean().catch(false),
+      }),
+    )
+    .catch(catchWithWarning("character.personalQuarters", [])),
+    patron: z.string().catch(""),
+    duskFlashback: z.boolean().catch(false),
+    dawnNarration: z.boolean().catch(false),
+    personalQuartersUnavailable: z.boolean().catch(false),
+    isDead: z.boolean().catch(false),
+    isActive: z.boolean().catch(false),
+})
+
+export type MiniCharacter = z.infer<typeof miniCharacterSchema>
+
+enum InformalMembers {
+  elsie = "elsie",
+  kip = "kip",
+  silas = "silas",
+  velma = "velma",
+  pigEar = "pigEar",
+  brotherSamuel = "brotherSamuel",
+  barrel = "barrel",
+}
+
+export const troupeSchema = z.object({
+  playbook: z.literal("informals"),
+  playerId: z.string(),
+  members: z.record(z.enum(Object.keys(InformalMembers)), miniCharacterSchema),
+  masksOfFuture:  z.array(z.number()).catch(catchWithWarning("character.masksOfFuture", [0, 0, 0, 0, 0,0,0])),
+})
+
+export type Troupe = z.infer<typeof troupeSchema>
+
+export type Character = CharacterNotTroupe | Troupe

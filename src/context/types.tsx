@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { clueSchema, mysterySchema } from "../components/mystery/types";
-import { abilitiesKeys, characterSchema } from "../components/playbooks/types";
+import { abilitiesKeys, characterSchema, troupeSchema } from "../components/playbooks/types";
 import { catchWithWarning } from "../utils/schemaValidation";
 
 export enum PlayerRole {
@@ -28,7 +28,13 @@ const playerSchema = z.object({
 		.enum([PlayerRole.KEEPER, PlayerRole.PLAYER])
 		.catch(catchWithWarning("player.role", PlayerRole.PLAYER)),
 	//no warning - null character is valid but dropped by firebase
-	character: characterSchema.nullable().catch(null),
+	// Discriminated union on "playbook" field:
+	// - characterSchema: all playbooks except informals (individual characters)
+	// - troupeSchema: informals playbook (troupe with members array)
+	character: z.discriminatedUnion("playbook", [
+		characterSchema,
+		troupeSchema
+	]).nullable().catch(null),
 });
 
 const safetySchema = z.object({
@@ -70,6 +76,7 @@ export const gameStateSchema = z.object({
 		catchWithWarning("hargraveHouse", { residents: [], rooms: [] }),
 	),
 	heraldUnlocked: z.boolean().catch(false),
+	heraldOfferings: z.array(z.string()).optional().catch(undefined),
 });
 
 export type GameState = z.infer<typeof gameStateSchema>;

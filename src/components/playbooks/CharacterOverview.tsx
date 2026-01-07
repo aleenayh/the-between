@@ -7,9 +7,12 @@ import { CopyInvite } from "../settings/GameInfo"
 import { playbookBases } from "./content"
 import { CharacterCreateForm } from "./creation/CharacterCreateForm"
 import { CustomCreateForm } from "./creation/CustomCreateForm"
+import { InformalsExpanded} from "./informals/InformalsExpanded"
+import { InformalsStub } from "./informals/InformalsCreateStub"
 import { PlaybookExpanded } from "./PlaybookExpanded"
 import { PlaybookPane } from "./PlaybookPane"
 import { type Character, type playbookKey, playbookKeys } from "./types"
+
 
 export function CharacterOverview() {
   const {
@@ -66,7 +69,7 @@ export function CharacterOverview() {
         {user.role !== PlayerRole.KEEPER && (
           <div className="w-full md:w-[40%] min-w-0 min-h-0 overflow-hidden">
             {myCharacter ? (
-              <PlaybookExpanded character={myCharacter} />
+              <div className="h-full">{myCharacter.playbook === playbookKeys.informals ? <InformalsExpanded troupe={myCharacter} /> : <PlaybookExpanded character={myCharacter} />}</div>
             ) : (
               <CharacterCreationStarter onCollapse={() => setRoleToKeeper()} />
             )}
@@ -98,7 +101,7 @@ function CharacterCreationStarter({ onCollapse }: { onCollapse: () => void }) {
             ← Back to Hunters
           </button>
           <div className="flex-1 overflow-y-auto min-h-0">
-            {key === playbookKeys.custom ? <CustomCreateForm /> : key === playbookKeys.informals ? <div>TODO</div> : <CharacterCreateForm playbookKey={key} />}
+            {key === playbookKeys.custom ? <CustomCreateForm /> : key === playbookKeys.informals ? <InformalsStub /> : <CharacterCreateForm playbookKey={key} />}
           </div>
         </>
       ) : (

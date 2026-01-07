@@ -9,9 +9,10 @@ import { Masks } from "./sharedComponents/Masks";
 import { Moves } from "./sharedComponents/Moves";
 import { PersonalQuarters } from "./sharedComponents/PersonalQuarters";
 import { Questions } from "./sharedComponents/Questions";
-import type { Character } from "./types";
+import type {CharacterNotTroupe } from "./types";
 
-const tabsConfig = (character: Character) => [
+
+const tabsConfig = (character: CharacterNotTroupe) => [
 	{
 		label: "Moves",
 		component: <Moves character={character} />,
@@ -34,7 +35,7 @@ const tabsConfig = (character: Character) => [
 	},
 ];
 
-export function PlaybookExpanded({ character }: { character: Character }) {
+export function PlaybookExpanded({ character }: { character: CharacterNotTroupe }) {
 	const tabs = useMemo(() => {
 		return tabsConfig(character);
 	}, [character]);

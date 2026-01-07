@@ -1,8 +1,8 @@
 import { Section } from "../../shared/Section";
 import { playbookBases } from "../content";
-import { type Character, playbookKeys } from "../types";
+import { type CharacterNotTroupe, playbookKeys } from "../types";
 
-export function Extras({ character }: { character: Character }) {
+export function Extras({ character }: { character: CharacterNotTroupe }) {
 	const base = playbookBases[character.playbook];
 	return (
 		<div className="flex flex-col gap-2 text-left">

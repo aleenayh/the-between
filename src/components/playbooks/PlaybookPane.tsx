@@ -1,6 +1,7 @@
 import { DiceIndicator } from "../shared/DiceIndicator";
 import { PlayerPill } from "../shared/PlayerPill";
 import { Section } from "../shared/Section";
+import { InformalsPane } from "./informals/InformalsPane";
 import { AbilityBoxes } from "./sharedComponents/AbilityBoxes";
 import { Conditions } from "./sharedComponents/Conditions";
 import { ExperienceTracker } from "./sharedComponents/ExperienceTracker";
@@ -9,9 +10,12 @@ import { Masks } from "./sharedComponents/Masks";
 import { Moves } from "./sharedComponents/Moves";
 import { PersonalQuarters } from "./sharedComponents/PersonalQuarters";
 import { Questions } from "./sharedComponents/Questions";
-import type { Character } from "./types";
+import { playbookKeys, type Character } from "./types";
 
 export function PlaybookPane({ character }: { character: Character }) {
+	if (character.playbook === playbookKeys.informals) {
+		return <InformalsPane troupe={character} />
+	}
 	return (
 		<section
 			aria-label={`Hunter for ${character.name}`}

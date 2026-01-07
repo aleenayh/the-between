@@ -564,6 +564,13 @@ function constructCustomCharacter(
 		masksOfPastDefinitions: masksOfPast,
 	};
 
+	const heraldMoves = heraldPlaybookAdditions.moves?.map((move) => ({
+		title: move.title,
+		text: move.text,
+		checks: Array.from({ length: move.checkboxes ?? 0 }, () => 0),
+		lines: Array.from({ length: move.extraLines ?? 0 }, ()=>""),
+	})) ?? []
+
 	return {
 		isHerald,
 		playbook: "custom",
@@ -582,7 +589,7 @@ function constructCustomCharacter(
 		masksOfFuture: Array.from({ length: masksOfFuture.length }, () => 0),
 		advancements,
 		conditions,
-		moves: isHerald ? [...moves, ...(heraldPlaybookAdditions.moves ?? [])] : moves,
+		moves: isHerald ? [...moves, ...heraldMoves] : moves,
 		experience: 0,
 		personalQuarters: [{text: "", marked: false}],
 		questions: Array.from({ length: questions.length }, () => 0),

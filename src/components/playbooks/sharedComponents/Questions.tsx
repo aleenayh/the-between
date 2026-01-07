@@ -1,9 +1,8 @@
-import { useCallback } from "react"
 import { useGame } from "../../../context/GameContext"
 import { customFieldOrFallback, playbookBases } from "../content"
-import { type Character, playbookKeys } from "../types"
+import { type CharacterNotTroupe, playbookKeys } from "../types"
 
-export function Questions({ character }: { character: Character }) {
+export function Questions({ character }: { character: CharacterNotTroupe }) {
   const {
     updateGameState,
     gameState,
@@ -19,7 +18,7 @@ export function Questions({ character }: { character: Character }) {
   const markedQuestions = character.questions
   const worshipper = character.conditions.includes("Worshipper")
 
-  const onToggle = useCallback(
+  const onToggle = 
     (checked: boolean, index: number) => {
       const newQuestions = [...character.questions]
       newQuestions[index] = checked ? 1 : 0
@@ -36,9 +35,7 @@ export function Questions({ character }: { character: Character }) {
             : player,
         ),
       })
-    },
-    [updateGameState, gameState.players, character.playerId, character.questions],
-  )
+    }
   if (!questions.length) return null
 
   return (
