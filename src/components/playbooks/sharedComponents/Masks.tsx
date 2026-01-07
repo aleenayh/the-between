@@ -3,10 +3,10 @@ import { useGame } from "../../../context/GameContext"
 import type { GameState } from "../../../context/types"
 import { customFieldOrFallback, playbookBases } from "../content"
 import { heraldPlaybookAdditions } from "../content/herald"
-import { type Character, type playbookKey, playbookKeys } from "../types"
+import { type CharacterNotTroupe, type playbookKey, playbookKeys } from "../types"
 import { parseStaticText } from "../utils"
 
-export function Masks({ character }: { character: Character }) {
+export function Masks({ character }: { character: CharacterNotTroupe }) {
   const {
     updateGameState,
     gameState,

@@ -141,7 +141,7 @@ function AspectSpan({
 				type="button"
 				onClick={onToggle}
 				disabled={!editable}
-				className={`inline-block align-middle w-3 h-3 border rounded-sm text-[8px] leading-[0.6rem] text-center mr-0.5 ${
+				className={`inline-block align-middle w-3 h-3 border rounded-sm text-[8px] leading-[0.6rem] text-center mr-1 ${
 					checked
 						? "bg-theme-accent-primary border-theme-accent-primary text-theme-text-accent"
 						: "border-theme-border-accent bg-transparent"
@@ -153,7 +153,7 @@ function AspectSpan({
 			<strong
 				className={`${checked ? "line-through opacity-60" : ""} text-theme-text-primary`}
 			>
-				{text}
+				{parseStaticText(text)}
 			</strong>
 		</span>
 	);

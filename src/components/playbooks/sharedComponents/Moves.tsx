@@ -1,12 +1,13 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { useGame } from "../../../context/GameContext";
 import { ReactComponent as BabySVG } from "../../assets/baby.svg";
 import { EditableLine } from "../../shared/EditableLine";
 import { playbookBases } from "../content";
-import type { Character} from "../types";
+import type { CharacterNotTroupe } from "../types";
 import { parseStaticText } from "../utils";
+import { heraldPlaybookAdditions } from "../content/herald";
 
-export function Moves({ character }: { character: Character }) {
+export function Moves({ character }: { character: CharacterNotTroupe }) {
 	const otherMoves = character.moves ? character.moves : [];
 
 	return (
@@ -22,14 +23,14 @@ export function Moves({ character }: { character: Character }) {
 	);
 }
 
-const specialMoveTitles = ["The Child", "The Royal Explorer's Club","Rites of Salt & Smoke", "The Reflection","The Family", "The Phantom", "Doll Parts"]
+const specialMoveTitles = ["The Child", "The Royal Explorer's Club","Rites of Salt & Smoke", "The Reflection","The Family", "The Phantom", "Doll Parts", "The Offering"]
 
 function MoveDisplay({
 	character,
 	move,
 }: {
-	character: Character;
-	move: Character["moves"][number];
+	character: CharacterNotTroupe;
+	move: CharacterNotTroupe["moves"][number];
 }) {
 	const {
 		gameState,
@@ -49,8 +50,7 @@ function MoveDisplay({
 	// Checkboxes come after aspects in the checks array
 	const checkboxCount = move.checks?.length ?? 0;
 
-	const toggleCheck = useCallback(
-		(index: number) => {
+	const toggleCheck = (index: number) => {
 			if (!editable) return;
 
 			const currentChecks = move.checks ?? [];
@@ -69,7 +69,7 @@ function MoveDisplay({
 								character: player.character
 									? {
 											...player.character,
-											moves: player.character.moves.map((m) =>
+											moves: character.moves.map((m) =>
 												m.title === move.title
 													? { ...m, checks: newChecks }
 													: m,
@@ -80,9 +80,7 @@ function MoveDisplay({
 						: player,
 				),
 			});
-		},
-		[editable, move, updateGameState, gameState.players, id],
-	);
+	}
 
 	const updateLine = (index: number, line: string) => {
 		const newLines = [...move.lines ?? []];
@@ -94,7 +92,7 @@ function MoveDisplay({
 							...player,
 							character: {
 								...player.character,
-								moves: player.character.moves.map((m) =>
+								moves: character.moves.map((m) =>
 									m.title === move.title ? { ...m, lines: newLines } : m,
 								),
 							},
@@ -160,7 +158,7 @@ function MoveDisplay({
   )
 }
 
-function SpecialMoveDisplay({ character, title }: { character: Character; title: string }) {
+function SpecialMoveDisplay({ character, title }: { character: CharacterNotTroupe; title: string }) {
 	switch (title) {
 		case "The Child":
 			return <TheChild character={character} />
@@ -176,11 +174,13 @@ function SpecialMoveDisplay({ character, title }: { character: Character; title:
 			return <ThePhantom character={character} />
 			case "Doll Parts":
 			return <DollParts character={character} />
+		case "The Offering":
+			return <TheOffering character={character} />
 	}
 	return <div>{title} Special Display not built yet!</div>
 }
 
-function TheChild({ character }: { character: Character }) {
+function TheChild({ character }: { character: CharacterNotTroupe }) {
 	const moveState = character.moves.find((m) => m.title === "The Child");
 	const checks = moveState?.checks ?? Array.from({ length: 13 }, () => 0);
 	const {gameState, updateGameState, user: { id }} = useGame();
@@ -190,7 +190,7 @@ function TheChild({ character }: { character: Character }) {
 		if (!editable) return;
 		const newChecks = [...checks];
 		newChecks[index] = newChecks[index] === 1 ? 0 : 1;
-		updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, moves: player.character.moves.map((m) => m.title === "The Child" ? { ...m, checks: newChecks } : m) } } : player) });
+		updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, moves:character.moves.map((m) => m.title === "The Child" ? { ...m, checks: newChecks } : m) } } : player) });
 	}
 	return <div className="flex flex-col gap-2 text-left">
 		<h3 className="text-sm font-bold text-theme-text-accent text-center">The Child</h3>
@@ -238,7 +238,7 @@ function MotherCheckbox({className, checked, label, onChange, right}: {className
 	</div>
 }
 
-function TheREC({ character }: { character: Character }) {
+function TheREC({ character }: { character: CharacterNotTroupe }) {
 	const moveState = character.moves.find((m) => m.title === "The Royal Explorer's Club");
 	const allowedCheckboxes = moveState?.checks?.length ?? 0;
 	const {gameState, updateGameState, user: { id }} = useGame();
@@ -249,7 +249,7 @@ function TheREC({ character }: { character: Character }) {
 		if (!editable) return;
 		const newChecks = [...moveState?.checks ?? []];
 		newChecks[index] = newChecks[index] === 1 ? 0 : 1;
-		updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, moves: player.character.moves.map((m) => m.title === "The Royal Explorer's Club" ? { ...m, checks: newChecks } : m) } } : player) });
+		updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, moves: character.moves.map((m) => m.title === "The Royal Explorer's Club" ? { ...m, checks: newChecks } : m) } } : player) });
 	}
 
 	const buttonStyle="w-full bg-theme-bg-secondary text-theme-text-accent border border-theme-border-accent rounded-lg px-2 py-1 text-xs font-[Questrial], sans-serif font-variant-[small-caps]";
@@ -326,14 +326,14 @@ idx}`} checked={moveState?.checks?.[idx] === 1} disabled={!editable} onChange={(
 	</div>
 }
 
-function RitesOfSaltAndSmoke({ character }: { character: Character }) {
+function RitesOfSaltAndSmoke({ character }: { character: CharacterNotTroupe }) {
 	const moveState = character.moves.find((m) => m.title === "Rites of Salt & Smoke");
 	const selectedRitual = moveState?.lines?.[0] ?? ""
 	const {gameState, updateGameState, user: { id }} = useGame();
 	const editable = id === character.playerId;
 
 	const selectRitual = (_: number, ritual: string) => {
-		updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, moves: player.character.moves.map((m) => m.title === "Rites of Salt & Smoke" ? { ...m, lines: [ritual] } : m) } } : player) });
+		updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, moves: character.moves.map((m) => m.title === "Rites of Salt & Smoke" ? { ...m, lines: [ritual] } : m) } } : player) });
 	}
 
 	return <div className="flex flex-col gap-2 text-left">
@@ -375,21 +375,21 @@ function RitesOfSaltAndSmoke({ character }: { character: Character }) {
 </div>
 }
 
-function TheReflection({ character }: { character: Character }) {
+function TheReflection({ character }: { character: CharacterNotTroupe }) {
 const moveState = character.moves.find((m) => m.title === "The Reflection");
 const masterwork = moveState?.lines?.[0] ?? ""
 const {gameState, updateGameState, user: { id }} = useGame();
 const editable = id === character.playerId;
 
 const selectMasterwork = (_: number, masterwork: string) => {
-	updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, moves: player.character.moves.map((m) => m.title === "The Reflection" ? { ...m, lines: [masterwork] } : m) } } : player) });
+	updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, moves: character.moves.map((m) => m.title === "The Reflection" ? { ...m, lines: [masterwork] } : m) } } : player) });
 }
 
 const toggleCheck = (index: number) => {
 	if (!editable) return;
 	const newChecks = [...moveState?.checks ?? Array.from({ length: 12 }, () => 0)];
 	newChecks[index] = newChecks[index] === 1 ? 0 : 1;
-	updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, moves: player.character.moves.map((m) => m.title === "The Reflection" ? { ...m, checks: newChecks } : m) } } : player) });
+	updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, moves: character.moves.map((m) => m.title === "The Reflection" ? { ...m, checks: newChecks } : m) } } : player) });
 }
 
 return <div className="flex flex-col gap-2 text-left">
@@ -421,7 +421,7 @@ idx}`} checked={moveState?.checks?.[idx] === 1} disabled={!editable} onChange={(
 </div>
 }
 
-function TheFamily({ character }: { character: Character }) {
+function TheFamily({ character }: { character: CharacterNotTroupe }) {
 	const moveState = character.moves.find((m) => m.title === "The Family");
 	const family = moveState?.lines?.[0] ?? ""
 	const problem = moveState?.lines?.[1] ?? ""
@@ -431,14 +431,14 @@ function TheFamily({ character }: { character: Character }) {
 	const writeLine = (index: number, value: string) => {
 		const newLines = [...moveState?.lines ?? []];
 		newLines[index] = value;
-		updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, moves: player.character.moves.map((m) => m.title === "The Family" ? { ...m, lines: newLines } : m) } } : player) });
+		updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, moves: character.moves.map((m) => m.title === "The Family" ? { ...m, lines: newLines } : m) } } : player) });
 	}
 
 	const toggleCheck = (index: number) => {
 		if (!editable) return;
 		const newChecks = [...moveState?.checks ?? []];
 		newChecks[index] = newChecks[index] === 1 ? 0 : 1;
-		updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, moves: player.character.moves.map((m) => m.title === "The Family" ? { ...m, checks: newChecks } : m) } } : player) });
+		updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, moves: character.moves.map((m) => m.title === "The Family" ? { ...m, checks: newChecks } : m) } } : player) });
 	}
 
 	return <div className="flex flex-col gap-2 text-left">
@@ -481,21 +481,21 @@ function TheFamily({ character }: { character: Character }) {
 	</div>
 }
 
-function ThePhantom({ character }: { character: Character }) {
+function ThePhantom({ character }: { character: CharacterNotTroupe }) {
 		const moveState = character.moves.find((m) => m.title === "The Phantom");
 		const medium = moveState?.lines?.[0] ?? ""
 		const {gameState, updateGameState, user: { id }} = useGame();
 		const editable = id === character.playerId;
 		const checks = moveState?.checks ?? Array.from({ length: 4 }, () => 0);
 		const selectMedium = (_: number, medium: string) => {
-			updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, moves: player.character.moves.map((m) => m.title === "The Phantom" ? { ...m, lines: [medium] } : m) } } : player) });
+			updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, moves: character.moves.map((m) => m.title === "The Phantom" ? { ...m, lines: [medium] } : m) } } : player) });
 		}
 		
 		const toggleCheck = (index: number) => {
 			if (!editable) return;
 			const newChecks = [...moveState?.checks ?? Array.from({ length: 12 }, () => 0)];
 			newChecks[index] = newChecks[index] === 1 ? 0 : 1;
-			updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, moves: player.character.moves.map((m) => m.title === "The Phantom" ? { ...m, checks: newChecks } : m) } } : player) });
+			updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, moves: character.moves.map((m) => m.title === "The Phantom" ? { ...m, checks: newChecks } : m) } } : player) });
 		}
 		
 		return <div className="flex flex-col gap-2 text-left">
@@ -525,7 +525,7 @@ function ThePhantom({ character }: { character: Character }) {
 		</div>
 }
 
-function DollParts({character}: {character: Character}) {
+function DollParts({character}: {character: CharacterNotTroupe}) {
 	const moveState = character.moves.find((m) => m.title === "Doll Parts")
 	if (!moveState) return null;
 	return <div className="flex flex-col gap-2 text-left">
@@ -535,4 +535,78 @@ function DollParts({character}: {character: Character}) {
 	<p>Each Doll Part comes with a pair of Adaptors, secondary moves that help you to further customize your Doll Parts. During the Day Phase, whenever you reassign your Doll Parts, you may also reassign your Adaptors using Adaptor Keys. You can only access the Adaptors that are associated with Doll Parts you have equipped.</p>
 	<p>TODO ALEENA BUILD THE REST OF THIS</p>
 	</div>
+}
+
+function TheOffering({ character }: { character: CharacterNotTroupe }) {
+	const move = character.moves.find((m) => m.title === "The Offering");
+	const {
+		gameState,
+		updateGameState,
+		user: { id },
+	} = useGame();
+	const editable = id === character.playerId;
+	const contentDef = heraldPlaybookAdditions.moves?.find((m) => m.title === move?.title);
+	const content = contentDef?.text ?? [];
+	const heraldOfferings = gameState.heraldOfferings ?? [];
+
+	if (!move) return null;
+
+	const updateLine = (index: number, line: string) => {
+		const newLines = [...move.lines ?? []];
+		newLines[index] = line;
+		updateGameState({
+			players: gameState.players.map((player) =>
+				player.id === id && player.character
+					? {
+							...player,
+							character: {
+								...player.character,
+								moves: character.moves.map((m) =>
+									m.title === move.title ? { ...m, lines: newLines } : m,
+								),
+							},
+						}
+					: player,
+			),
+		});
+	};
+
+
+  return   <div className="flex flex-col justify-center gap-1">
+    <h3 className="text-sm font-bold text-theme-text-accent text-center">The Offering</h3>
+    {content &&
+      content.length > 0 &&
+      content.map((line, lineIndex) => {
+        const parsed = parseStaticText(line)
+
+        return (
+          <p
+            className="text-left leading-relaxed"
+            key={`The Offering-line-${
+              // biome-ignore lint/suspicious/noArrayIndexKey: blegh
+              lineIndex
+            }`}
+          >
+            {parsed}
+          </p>
+        )
+      })}
+
+    <div className="h-6" />
+    {Array.from({ length: 12 }).map((_, lineIndex) => {
+      return (
+        <EditableLine
+          key={`The Offering-line-${
+            // biome-ignore lint/suspicious/noArrayIndexKey: order unimportant
+            lineIndex
+          }`}
+          text={heraldOfferings[lineIndex] ?? ""}
+          editable={editable}
+          onSave={(index, value) => updateLine(index, value)}
+          index={lineIndex}
+        />
+      )
+    })}
+  </div>
+
 }

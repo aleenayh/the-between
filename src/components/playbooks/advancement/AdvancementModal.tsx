@@ -5,23 +5,16 @@ import { useForm } from "react-hook-form"
 import { useGame } from "../../../context/GameContext"
 import { playbookBases } from "../content"
 import { orderAbilities } from "../sharedComponents/AbilityBoxes"
-import { type Abilities, type Character, playbookKeys } from "../types"
+import { type Abilities, type CharacterNotTroupe, playbookKeys } from "../types"
 import { parseStaticText } from "../utils"
 
-export function AdvancementModal() {
-  const {
-    gameState,
-    user: { id },
-  } = useGame()
+export function AdvancementModal({ character }: { character: CharacterNotTroupe }) {
   const [step, setStep] = useState<
     "select-advancement" | "adjust-stats" | "select-move" | "write-custom-move" | "unmark-pq-items"
   >("select-advancement")
   const [open, onOpenChange] = useState(false)
   const [advancementIndex, setAdvancementIndex] = useState<number | null>(null)
-  const character = gameState.players.find((player) => player.id === id)?.character
-  if (!character) {
-    return null
-  }
+
   const handleOpenChange = (open: boolean) => {
     if (!open) {
       setStep("select-advancement")
@@ -214,13 +207,13 @@ function MoveSelector({
   closeModal,
   advancementIndex,
 }: {
-  character: Character
+  character: CharacterNotTroupe
   closeModal: () => void
   advancementIndex: number | null
 }) {
   const { gameState, updateGameState } = useGame()
   const base = playbookBases[character.playbook]
-  const existingMoves = gameState.players.find((player) => player.id === character.playerId)?.character?.moves ?? []
+  const existingMoves = character?.moves ?? []
   const moves = base.moves
   const [selectedMove, setSelectedMove] = useState<string | null>(null)
 
@@ -305,7 +298,7 @@ function MoveWriter({
   closeModal,
   advancementIndex,
 }: {
-  character: Character
+  character: CharacterNotTroupe
   closeModal: () => void
   advancementIndex: number | null
 }) {
@@ -404,7 +397,7 @@ function UnmarkPQItems({
   closeModal,
   advancementIndex,
 }: {
-  character: Character
+  character: CharacterNotTroupe
   closeModal: () => void
   advancementIndex: number | null
 }) {
@@ -454,7 +447,7 @@ function AdjustStats({
   closeModal,
   advancementIndex,
 }: {
-  character: Character
+  character: CharacterNotTroupe
   closeModal: () => void
   advancementIndex: number | null
 }) {

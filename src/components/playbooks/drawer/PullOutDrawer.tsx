@@ -3,8 +3,9 @@ import { useGame } from "../../../context/GameContext";
 import { CopyInvite } from "../../settings/GameInfo";
 import { Section } from "../../shared/Section";
 import { PlaybookPane } from "../PlaybookPane";
-import type { Character } from "../types";
+import { playbookKeys, type Character } from "../types";
 import { ReactComponent as GroupIcon } from "./group.svg";
+import { InformalsPane } from "../informals/InformalsPane";
 
 export function PullOutCharacterOverview({
 	isOpen,
@@ -56,11 +57,11 @@ export function PullOutCharacterOverview({
 								{otherCharacters.map((character) => (
 									<Section
 										key={character.playerId}
-										title={character.name}
+										title={character.playbook === playbookKeys.informals ? "The Informals" : character.name}
 										collapsible
 										minify
 									>
-										<PlaybookPane character={character} />
+										{character.playbook === playbookKeys.informals ? <InformalsPane troupe={character} /> : <PlaybookPane character={character} />}
 									</Section>
 								))}
 							</div>

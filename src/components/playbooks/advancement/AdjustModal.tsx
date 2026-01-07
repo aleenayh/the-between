@@ -2,18 +2,16 @@ import { Dialog } from "radix-ui";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useGame } from "../../../context/GameContext";
-import type { Abilities } from "../types";
+import type {CharacterNotTroupe, Abilities } from "../types";
 
-export function AdjustmentModal() {
+export function AdjustmentModal({ character }: { character: CharacterNotTroupe }) {
+
 	const [isOpen, setIsOpen] = useState(false);
 	const {
 		gameState,
 		updateGameState,
 		user: { id },
 	} = useGame();
-	const character = gameState.players.find(
-		(player) => player.id === id,
-	)?.character;
 	const { register, handleSubmit } = useForm({
 		defaultValues: {
 			name: character?.name ?? "",

@@ -2,9 +2,9 @@ import { useCallback, useState } from "react"
 import { useGame } from "../../../context/GameContext"
 import { PlayerRole } from "../../../context/types"
 import { EditableLine } from "../../shared/EditableLine"
-import { type Character, playbookKeys } from "../types"
+import { type CharacterNotTroupe, playbookKeys, type Troupe } from "../types"
 
-export function Conditions({ character }: { character: Character }) {
+export function Conditions({ character }: { character: CharacterNotTroupe }) {
   const {
     updateGameState,
     gameState,
@@ -57,6 +57,55 @@ export function Conditions({ character }: { character: Character }) {
         </div>
       )}
       {Array.from({ length: isOrphan ? 2 : 3 }).map((_, index) => {
+        const condition = character.conditions?.[index] ?? ""
+        return (
+          <EditableLine
+            key={`condition-${index}-${condition}}`}
+            text={condition}
+            onSave={(index, value) => handleSaveCondition(index, value)}
+            index={index}
+            editable={editable}
+          />
+        )
+      })}
+    </div>
+  )
+}
+
+export function InformalsConditions({ troupe, characterKey, editable }: { troupe: Troupe, characterKey: keyof typeof troupe.members, editable: boolean }) {
+  const {
+    updateGameState,
+    gameState,
+  } = useGame()
+  const [showEdit, setShowEdit] = useState<Record<number, boolean>>({
+    0: false,
+    1: false,
+  })
+  const character = troupe.members[characterKey]
+
+
+  const handleSaveCondition = (index: number, value: string) => {
+    const defaultConditions: string[] = ["", "", ""]
+    const newConditions = [...(character.conditions ?? defaultConditions)]
+    newConditions[index] = value
+    const newTroupe = troupe.members
+    newTroupe[characterKey] = { ...character, conditions: newConditions }
+    updateGameState({
+      players: gameState.players.map((player) =>
+        player.character?.playbook === playbookKeys.informals
+          ? {
+              ...player,
+              character: {...player.character, members: newTroupe }
+            }
+          : player,
+      ),
+    })
+    setShowEdit({ ...showEdit, [index]: false })
+  }
+
+  return (
+    <div className="flex flex-col gap-2 w-full">
+      {Array.from({ length: 2 }).map((_, index) => {
         const condition = character.conditions?.[index] ?? ""
         return (
           <EditableLine

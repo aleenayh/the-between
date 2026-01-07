@@ -1,6 +1,7 @@
 import { useGame } from "../../context/GameContext"
+import { InformalsSummaryKeeper } from "../playbooks/informals/InformalsSummaryKeeper"
 import { Conditions } from "../playbooks/sharedComponents/Conditions"
-import type { Character } from "../playbooks/types"
+import { playbookKeys, type Character } from "../playbooks/types"
 import { CopyInvite } from "../settings/GameInfo"
 import { PlayerPill } from "../shared/PlayerPill"
 
@@ -10,11 +11,13 @@ export function KeeperSummary() {
     .map((player) => player.character)
     .filter((character): character is Character => character !== null)
 
+  const informals = characters.filter((character) => character.playbook === playbookKeys.informals)
+
   return (
-    <div className="grid grid-cols-1  sm:grid-cols-2 gap-2 md:hidden overflow-y-auto">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:hidden overflow-y-auto">
       {characters.length > 0 ? (
-        <div>
-          {characters.map((character) => (
+        <div className="flex flex-col gap-2">
+          {characters.filter((character) => character.playbook !== playbookKeys.informals).map((character) => (
             <div
               key={character.playerId}
               className="border-2 border-theme-border-accent bg-theme-bg-primary rounded-lg p-4 relative"
@@ -24,6 +27,7 @@ export function KeeperSummary() {
               <Conditions character={character} />
             </div>
           ))}
+          {informals.map((informal)=> (<InformalsSummaryKeeper key={informal.playerId} informal={informal} />))}
         </div>
       ) : (
         <div className="h-full flex md:hidden justify-center items-center py-10">

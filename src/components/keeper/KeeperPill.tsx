@@ -15,7 +15,7 @@ export function KeeperPill() {
   }
 
   return (
-    <div className="w-1/6 align-self-end flex flex-col gap-2 text-sm">
+    <div className="w-full md:w-1/6 align-self-end flex flex-col gap-2 text-sm">
       <div className="rounded-lg p-2 bg-theme-bg-secondary border-2 border-theme-border-accent text-theme-text-primary text-sm">
         You are the Keeper.
       </div>

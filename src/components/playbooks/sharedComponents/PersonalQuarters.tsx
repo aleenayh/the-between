@@ -1,8 +1,8 @@
 import { useGame } from "../../../context/GameContext"
 import { CheckableEditableLine } from "../../shared/EditableLine"
-import type { Character } from "../types"
+import type { CharacterNotTroupe, } from "../types"
 
-export function PersonalQuarters({ character }: { character: Character }) {
+export function PersonalQuarters({ character }: { character: CharacterNotTroupe }) {
   const {
     updateGameState,
     gameState,
