@@ -1,8 +1,8 @@
+import { PlayerPill } from "../../shared/PlayerPill";
+import { Section } from "../../shared/Section";
+import { InformalsConditions } from "../sharedComponents/Conditions"
 import type { Troupe } from "../types";
 import { pretty } from "./InformalsExpanded";
-import { InformalsConditions } from "../sharedComponents/Conditions"
-import { Section } from "../../shared/Section";
-import { PlayerPill } from "../../shared/PlayerPill";
 
 
 export function InformalsSummaryKeeper({ informal }: { informal: Troupe }) {

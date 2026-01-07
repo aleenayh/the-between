@@ -39,7 +39,7 @@ export function CharacterCreateForm({ playbookKey }: { playbookKey: Exclude<play
   const base: PlaybookBase = playbookBases[playbookKey]
   const [step, setStep] = useState<"basics" | "moves">("basics")
 
-  const maxMoves = base.startingMoves.length + 1
+  const maxMoves = playbookKey === playbookKeys.unquiet || playbookKey === playbookKeys.explorer ? base.startingMoves.length : base.startingMoves.length + 1
 
   const { register, handleSubmit, setValue, watch } = useForm<CharacterCreateFormInputs>({
     defaultValues: {
@@ -180,7 +180,7 @@ export function CharacterCreateForm({ playbookKey }: { playbookKey: Exclude<play
           <h1 className="text-2xl font-bold text-center">{base.title}</h1>
           <p>
             You start with {base.startingMoves.map((move) => `"${move}"`).join(" & ")}.{" "}
-            {playbookKey === playbookKeys.explorer ? "" : "Select one additional move from below."}
+            {playbookKey === playbookKeys.explorer || playbookKey === playbookKeys.unquiet ? "" : "Select one additional move from below."}
           </p>
 
           <div className="flex flex-col gap-2 text-left">
@@ -188,7 +188,7 @@ export function CharacterCreateForm({ playbookKey }: { playbookKey: Exclude<play
               <div key={move.title} className="flex flex-col gap-2">
                 <div className="flex items-center gap-2">
                   <input
-                    type="radio"
+                    type="checkbox"
                     defaultChecked={base.startingMoves.includes(move.title)}
                     disabled={base.startingMoves.includes(move.title)}
                     value={move.title}

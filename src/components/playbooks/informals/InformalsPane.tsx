@@ -1,11 +1,11 @@
 import { DiceIndicator } from "../../shared/DiceIndicator";
-import { AbilityBoxes } from "../sharedComponents/AbilityBoxes";
-import { members } from "../content/informals";
 import { EditableLine } from "../../shared/EditableLine";
-import { parseStaticText, parseWithCheckboxes } from "../utils";
-import type { Troupe } from "../types";
 import { PlayerPill } from "../../shared/PlayerPill";
+import { members } from "../content/informals";
+import { AbilityBoxes } from "../sharedComponents/AbilityBoxes";
 import { InformalsConditions } from "../sharedComponents/Conditions";
+import type { Troupe } from "../types";
+import { parseStaticText, parseWithCheckboxes } from "../utils";
 import { adjustedForMask, pretty } from "./InformalsExpanded";
 
 export function InformalsPane({ troupe }: { troupe: Troupe }) {

@@ -1,7 +1,7 @@
 import { useGame } from "../../context/GameContext"
 import { InformalsSummaryKeeper } from "../playbooks/informals/InformalsSummaryKeeper"
 import { Conditions } from "../playbooks/sharedComponents/Conditions"
-import { playbookKeys, type Character } from "../playbooks/types"
+import { type Character, playbookKeys } from "../playbooks/types"
 import { CopyInvite } from "../settings/GameInfo"
 import { PlayerPill } from "../shared/PlayerPill"
 

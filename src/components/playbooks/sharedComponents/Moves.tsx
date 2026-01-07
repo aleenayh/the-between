@@ -3,9 +3,9 @@ import { useGame } from "../../../context/GameContext";
 import { ReactComponent as BabySVG } from "../../assets/baby.svg";
 import { EditableLine } from "../../shared/EditableLine";
 import { playbookBases } from "../content";
+import { heraldPlaybookAdditions } from "../content/herald";
 import type { CharacterNotTroupe } from "../types";
 import { parseStaticText } from "../utils";
-import { heraldPlaybookAdditions } from "../content/herald";
 
 export function Moves({ character }: { character: CharacterNotTroupe }) {
 	const otherMoves = character.moves ? character.moves : [];

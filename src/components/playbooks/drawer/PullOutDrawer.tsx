@@ -2,10 +2,10 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useGame } from "../../../context/GameContext";
 import { CopyInvite } from "../../settings/GameInfo";
 import { Section } from "../../shared/Section";
-import { PlaybookPane } from "../PlaybookPane";
-import { playbookKeys, type Character } from "../types";
-import { ReactComponent as GroupIcon } from "./group.svg";
 import { InformalsPane } from "../informals/InformalsPane";
+import { PlaybookPane } from "../PlaybookPane";
+import { type Character, playbookKeys } from "../types";
+import { ReactComponent as GroupIcon } from "./group.svg";
 
 export function PullOutCharacterOverview({
 	isOpen,

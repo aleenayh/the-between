@@ -1,16 +1,15 @@
+import { Dialog } from "radix-ui"
 import { useState } from "react"
+import toast from "react-hot-toast"
 import { useGame } from "../../../context/GameContext"
 import { DiceIndicator } from "../../shared/DiceIndicator"
-import { Section } from "../../shared/Section"
-import { AbilityBoxes } from "../sharedComponents/AbilityBoxes"
-import type { Abilities, Troupe } from "../types"
-import { informalsPlaybook, members } from "../content/informals"
-import { InformalsConditions } from "../sharedComponents/Conditions"
-import { parseStaticText, parseWithCheckboxes } from "../utils"
 import { EditableLine } from "../../shared/EditableLine"
-import { Dialog } from "radix-ui"
-import toast from "react-hot-toast"
-
+import { Section } from "../../shared/Section"
+import { informalsPlaybook, members } from "../content/informals"
+import { AbilityBoxes } from "../sharedComponents/AbilityBoxes"
+import { InformalsConditions } from "../sharedComponents/Conditions"
+import type { Abilities, Troupe } from "../types"
+import { parseStaticText, parseWithCheckboxes } from "../utils"
 
 export function InformalsExpanded({ troupe }: { troupe: Troupe }) {
   const stateMembers = troupe.members
@@ -320,45 +319,34 @@ function MasksModal({ troupe, closeModal }: { troupe: Troupe, closeModal: () => 
     })
   }
 
+  const maskWithCondition = nextMaskIndex === 1 || nextMaskIndex === 4
+  const informalsWithFullConditions = Object.keys(troupe.members).filter((member) => !troupe.members[member].isDead && troupe.members[member].conditions?.every((condition) => condition !== ""))
+
   const killInformal = (member: keyof typeof members) => {
-    const indexOfNext = masks.indexOf(0)
     let newCondition = null
     let unlockHerald = false
-    if (indexOfNext === 1) {
+    if (nextMaskIndex === 1) {
       newCondition = "Unnerved"
-    } else if (indexOfNext === 4)     {
+    } else if (nextMaskIndex === 4)     {
       newCondition = "Obsessed with Death"
-    } else if (indexOfNext === 6) {
+    } else if (nextMaskIndex === 6) {
       unlockHerald = true
     }
 
     const newTroupe = troupe.members
     if (newCondition) {
-      let hasError = false
       const stagedConditions: Record<keyof typeof members, string[]> = {}
       for (const memberKey in newTroupe) {
         if (memberKey === member || newTroupe[memberKey].isDead) continue
         const conditions = newTroupe[memberKey].conditions ?? ["", ""]
         const blankCondition = conditions.indexOf("")
         if (blankCondition === -1) {
-          if (!newTroupe[memberKey].personalQuartersUnavailable) {
-            toast.error(`${pretty(memberKey)} has no blank conditions to which to add ${newCondition}. Cross off their Personal Quarters to clear a condition, then return to mark this mask.`)
-            hasError = true
-            break
-          } else           {
             toast.error(
-              `${pretty(memberKey)} has no blank conditions to which to add ${newCondition} and has already crossed off their Personal Quarters. Their time has come. Kill ${pretty(memberKey)}.`,
+              `${pretty(memberKey)} has no blank conditions to which to add ${newCondition}. You will need to do this manually, and don another mask to clear the condition you remove.`,
             )
-            hasError = true
-            break
-          }
         }
         const newConditions = conditions.map((condition, index) => index === blankCondition ? newCondition : condition)
         stagedConditions[memberKey] = newConditions
-      }
-      if (hasError) {
-        return
-      } else {
         for (const memberKey in stagedConditions) {
           newTroupe[memberKey].conditions = stagedConditions[memberKey]
         }
@@ -366,7 +354,7 @@ function MasksModal({ troupe, closeModal }: { troupe: Troupe, closeModal: () => 
     }
     newTroupe[member].isDead = true
     newTroupe[member].isActive = false
-    const newMasks = masks.map((mask, index) => index === indexOfNext ? 1 : mask)
+    const newMasks = masks.map((mask, index) => index === nextMaskIndex ? 1 : mask)
 
     if (unlockHerald) {
       updateGameState({
@@ -399,8 +387,19 @@ function MasksModal({ troupe, closeModal }: { troupe: Troupe, closeModal: () => 
       <p className="text-left text-xs text-theme-text-primary italic whitespace-normal">{masksOfFutureDescription}</p>
 
       <p>    {parseStaticText(nextMaskDescription ?? "")}</p>
-
       <EditableLine editable={true} index={0} text={gameState.heraldOfferings?.[nextMaskIndex] ?? ""} onSave={(_index, value) => handleSaveTrophy(value)} />
+
+      {maskWithCondition && informalsWithFullConditions.length > 0 && <div className="text-left text-sm text-theme-text-primary whitespace-normal"><h2 className="text-lg font-bold text-center text-theme-text-accent shrink-0 whitespace-normal text-balance">Warning!</h2>
+        
+        <p>In marking this mask, every surviving Informal will take a new Condition. </p>
+        
+        {informalsWithFullConditions.length === 1 ? `${pretty(informalsWithFullConditions[0])} has no empty condition lines. If you do not choose to kill them with this mask, you will be forced to don another mask immediately to clear one of their current conditions.` : <p>You have {informalsWithFullConditions.length} Informals with both conditions currently filled: {informalsWithFullConditions.map((member) => pretty(member)).join(", ")}. After marking this mask, you must <strong>immediately mark another mask</strong> to clear a condition on any that survive.</p>}
+        </div>
+        }
+
+
+
+        
 
 {firstMask && <div className="flex flex-col gap-2"><p> Then, read the following aloud to the other players:</p>
 
