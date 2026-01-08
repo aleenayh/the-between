@@ -1,5 +1,6 @@
 import { z } from "zod"
 import { catchWithWarning } from "../../utils/schemaValidation"
+import { startingParts } from "./content/facsimile"
 
 export const abilitiesSchema = z.object({
   vitality: z.number(),
@@ -78,6 +79,26 @@ const defaultAbilities: Abilities = {
   sensitivity: 0,
 }
 
+const dollPartSchema = z.object({
+  name: z.string().catch(""),
+  ability: z.enum(Object.values(abilitiesKeys)).catch(abilitiesKeys.vitality),
+  adjustment: z.number().catch(1),
+  equipped: z.boolean().catch(false),
+  adaptors: z.array(z.object({
+    text: z.array(z.string()).catch([""]),
+    equipped: z.boolean().catch(false),
+  })).catch([]),
+})
+
+export type DollPart = z.infer<typeof dollPartSchema>
+
+const coreMoveStateSchema = z.object({
+  type: z.literal("facsimile"),
+  parts: z.array(dollPartSchema),
+  adaptorKeys: z.number().catch(1),
+})
+
+
 const customTextFieldsSchema = z.object({
   questionDefinitions: z
     .array(z.string())
@@ -129,6 +150,7 @@ export const characterSchema = z.object({
   questions: z.array(z.number()).catch(catchWithWarning("character.questions", [0, 0, 0, 0, 0])),
   customTextFields: customTextFieldsSchema.optional().catch({}),
   isHerald: z.boolean().catch(catchWithWarning("character.isHerald", false)),
+  coreMoveState: coreMoveStateSchema.optional  ().catch({type: "facsimile", parts: startingParts, adaptorKeys: 1})
 })
 
 export type CharacterNotTroupe = z.infer<typeof characterSchema>

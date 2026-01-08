@@ -121,6 +121,7 @@ export const explorerPlaybook: PlaybookBase = {
 
         "Additionally, you can call upon the R.E.C. to help with Layer Four of the Mastermind Conspiracy. When you mark a box to call upon the help of an R.E.C. member during the Layer Four events, the Keeper will give you a distinct mechanical benefit associated with that help, depending on the circumstances (such as, but not limited to: lowering the Complexity of any Questions, increasing the number of Clues uncovered during investigations, awarding automatic Clues, giving advantage on certain die rolls, and so forth). This benefit is in place of the normal effects of calling upon that member of the R.E.C.",
       ],
+      checkboxes: 2,
     },
     {
       title: "The Grand Game",

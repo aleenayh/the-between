@@ -1,4 +1,4 @@
-import type { PlaybookBase } from "../types";
+import type { DollPart, PlaybookBase } from "../types";
 
 export const facsimilePlaybook: PlaybookBase = {
     title: "The Facsimile",
@@ -61,9 +61,60 @@ export const facsimilePlaybook: PlaybookBase = {
       "Increase a Doll Part ability modifier by 1 (max 3)",
       "Increase a Doll Part ability modifier by 1 (max 3)",
       "Increase a Doll Part ability modifier by 1 (max 3)",
-      "Unlock and Adaptor Key.",
-      "Unlock and Adaptor Key.",
+      "Unlock an Adaptor Key.",
+      "Unlock an Adaptor Key.",
       "Write a custom Adaptor for one of your Doll Parts.",
       "Unmark everything in your Personal Quarters.",
     ],
   }
+
+export const startingParts: DollPart[] = [
+  {name: "COLOSSUS-GRADE ACTUATORS",
+    ability: "vitality",
+    adjustment:1,
+    equipped: false,
+    adaptors: [{ text: ["You are as strong as ten men, and can extend your telescopic limbs a meter."], equipped: false}, {text: ["You are capable of moving at fantastic speeds.  Once per session, you can appear in any scene at any time. "], equipped: false}],
+  },
+    {name: "GALVANIC CARDIOVERTER",
+    ability: "composure",
+    adjustment:1,
+    equipped: false,
+    adaptors: [{ text: ["You can remove your appendages and retain control of them remotely. When you do this, take the Condition The Missing (Body Part); you can recall the part safely by removing the Condition unless it has been compromised as a result of a complication."], equipped: false}, {text: ["You can funnel the electricity coursing through your body into simple handheld weapons; describe the weapon as you manifest it. If a weapon formed would be helpful in an action, take advantage on any rolls associated with that action."], equipped: false}],
+  },  {name: "CRICKET-QUICK COMPACT ANALYTICAL ENGINE",
+    ability: "reason",
+    adjustment:1,
+    equipped: false,
+    adaptors: [{text: ["Your ability to process information quickly is doubled. You receive 1 additional Clue on any Information Move made with Reason regardless of a miss; on a miss, in addition to any other Keeper reactions, take the Condition Spanner in the Works. This Adaptor cannot be used if you have this Condition. "], equipped: false}, { text:     [
+      "The engine has a consciousness of its own called the “Little Wisdom.” Once per session, when you receive a mental or emotional Condition, you may call upon the Wisdom to talk you through it. Ask another player to act as the voice of the Little Wisdom and between the two of you, share a brief scene of self-reflection discussing what carrying that Condition would mean for you. At the end of the scene, you may either clear the Condition and learn nothing of consequence, or keep the Condition and award the player 1 XP in gratitude for teaching you a lesson. ",
+    ] , equipped: false}],
+  },  {name: "QUICKSILVER-INFUSED LINGUAL APPARATUS",
+    ability: "presence",
+    adjustment:1,
+    equipped: false,
+    adaptors: [{ text: ["When you intentionally lie or misdirect a Side Character in order to gain their favor, tell the Keeper what the truth is and roll Presence. <strong>On a hit</strong>, mark 1 box on your Behavior track; the Side Character will perform one small duty for you, which may come in the form of finding you a Clue—you decide. <strong>On a 10+</strong>, mark 2. <strong>On a miss</strong>, describe how you malfunction or otherwise subtly reveal your mechanical nature; take the Condition The Liar’s Tell. This Adaptor cannot be used if you have this Condition. "], equipped: false}, { text: ["You can throw your voice and mimic any sound that you’ve heard in an attempt to create a diversion. Additionally, you can modulate your voice to create a disorienting sonic blast. "], equipped: false}],
+  },  {name: "SPECTROGRAPHIC OPTIC SENSORS",
+    ability: "sensitivity",
+    adjustment:1,
+    equipped: false,
+    adaptors: [{ text: ["Your sensors can perceive the invisible fields of energy that surround others. When you interrogate a Side Character for the first time, you may ask two of the following questions—the Keeper must answer truthfully, but not necessarily completely; the Keeper may also respond in the form of a Clue, at their discretion.",
+"<li>Are they telling me the truth?</li>",
+"<li>Are they hiding something from me on their person?</li>",
+"<li>Have they recently been in the presence of the supernatural?</li>",
+"<li>Are they frightened or amused by me?</li>",
+"<li>Do they wish to harm me?</li>",], equipped: false}, { text: ["Once per session, when you enter a Location for the first time, you can declare that there is a hidden door undetectable to the human eye. Roll with Sensitivity to determine what’s behind it. *On a hit, choose 1. *On a 10+, choose 2. *On a 12+, you also find a Mastermind Clue.",
+"<li>A Clue to an active Threat, ask the Keeper to describe it. </li>",
+"<li>A corpse clutching something valuable; describe it and add it to your Personal Quarters. </li>",
+"<li>An animal who inhabits the secret space; when you interrogate it for information about the Location, make the Information Move with advantage. </li>",
+"<li>A direct passageway to another Location. </li>",
+"<li>On a miss, the secret chamber will be empty, or worse—contains a Danger. </li>",
+], equipped: false}],
+  }
+]
+
+export const dollPartDescriptions: Record<string, string[]> = {
+  "COLOSSUS-GRADE ACTUATORS": ["These attachments were modeled after parts meant for much larger machines, and allow for feats of extraordinary physicality. This Doll Part operates with Vitality."],
+  "GALVANIC CARDIOVERTER": ["Your electric core keeps your body operational; this attachment allows for even more control over how that energy is conducted. This Doll Part operates with Composure."],
+  "CRICKET-QUICK COMPACT ANALYTICAL ENGINE": ["A prototypical computing device scaled to the size of a human brain; you took it when you fled the workshop. This Doll Part operates with Reason."],
+  "QUICKSILVER-INFUSED LINGUAL APPARATUS": ["A waxen prosthetic organ threaded with veins of charged mercury. This Doll Part operates with Presence."],
+  "SPECTROGRAPHIC OPTIC SENSORS": ["Designed by your Creator using experimental technology, these sapphire lenses provide insight into that which most others cannot see. This Doll Part operates with Sensitivity."],
+}

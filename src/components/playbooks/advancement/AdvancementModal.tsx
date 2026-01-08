@@ -2,16 +2,48 @@ import { AnimatePresence, motion } from "framer-motion"
 import { Dialog } from "radix-ui"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
+import toast from "react-hot-toast"
 import { useGame } from "../../../context/GameContext"
 import { playbookBases } from "../content"
 import { orderAbilities } from "../sharedComponents/AbilityBoxes"
-import { type Abilities, type CharacterNotTroupe, playbookKeys } from "../types"
+import type { Abilities, CharacterNotTroupe, playbookKey } from "../types"
 import { parseStaticText } from "../utils"
 
+type AdvancementSteps = "select-advancement" | "adjust-stats" | "select-move" | "write-custom-move" | "unmark-pq-items" | "unlock-rec" | "unmark-rec" | "doll-part" | "unlock-adaptor-key" | "custom-adaptor" | "unmark-hunterslife" | "unmark-reflection" | "unlock-energy"
+
+const stepToComponent = (step: AdvancementSteps, character: CharacterNotTroupe, closeModal: () => void, advancementIndex: number|null) => {
+  switch (step) {
+    case "select-advancement":
+      return null
+    case "adjust-stats":
+      return <AdjustStats character={character} closeModal={closeModal} advancementIndex={advancementIndex} />
+    case "select-move":
+      return <MoveSelector character={character} closeModal={closeModal} advancementIndex={advancementIndex} />
+    case "write-custom-move":
+      return <MoveWriter character={character} closeModal={closeModal} advancementIndex={advancementIndex} />
+    case "unmark-pq-items":
+      return <UnmarkPQItems character={character} closeModal={closeModal} advancementIndex={advancementIndex} />
+    case "unlock-rec":
+      return <AddChecksToMove character={character} closeModal={closeModal} advancementIndex={advancementIndex} numberOfChecks={2} titleOfMove="The Royal Explorer's Club" />
+    case "unmark-rec":
+      return <ClearChecksFromMove character={character} closeModal={closeModal} advancementIndex={advancementIndex} titleOfMove="The Royal Explorer's Club" />
+    case "doll-part":
+      return <DollPartAdvancement character={character} closeModal={closeModal} advancementIndex={advancementIndex} mode="upgrade"/>
+    case "unlock-adaptor-key":
+      return <DollPartAdvancement character={character} closeModal={closeModal} advancementIndex={advancementIndex} mode="add-key"/>
+    case "custom-adaptor":
+      return <DollPartAdvancement character={character} closeModal={closeModal} advancementIndex={advancementIndex} mode="custom"/>
+    case "unmark-hunterslife":
+      return <ClearChecksFromMove character={character} closeModal={closeModal} advancementIndex={advancementIndex} titleOfMove="A Hunter's life..." />
+    case "unmark-reflection":
+      return <ClearChecksFromMove character={character} closeModal={closeModal} advancementIndex={advancementIndex} titleOfMove="The Reflection" />
+    case "unlock-energy":
+      return <AddChecksToMove character={character} closeModal={closeModal} advancementIndex={advancementIndex} numberOfChecks={2} titleOfMove="The Phantom" />
+  }
+}
+
 export function AdvancementModal({ character }: { character: CharacterNotTroupe }) {
-  const [step, setStep] = useState<
-    "select-advancement" | "adjust-stats" | "select-move" | "write-custom-move" | "unmark-pq-items"
-  >("select-advancement")
+    const [step, setStep] = useState<AdvancementSteps>("select-advancement")
   const [open, onOpenChange] = useState(false)
   const [advancementIndex, setAdvancementIndex] = useState<number | null>(null)
 
@@ -32,27 +64,8 @@ export function AdvancementModal({ character }: { character: CharacterNotTroupe 
 
   const handleChangeStep = (advancementIndex: number) => {
     setAdvancementIndex(advancementIndex)
-    switch (advancementIndex) {
-      case 1:
-      case 2:
-      case 3:
-        setStep("adjust-stats")
-        break
-      case 5:
-      case 6:
-        if (character.playbook === playbookKeys.custom) {
-          setStep("write-custom-move")
-          break
-        }
-        setStep("select-move")
-        break
-      case 7:
-        setStep("write-custom-move")
-        break
-      default:
-        setStep("unmark-pq-items")
-        break
-    }
+    const step = mapStepToAdvancement(advancementIndex, character.playbook)
+    setStep(step)
   }
 
   return (
@@ -71,7 +84,7 @@ export function AdvancementModal({ character }: { character: CharacterNotTroupe 
               X
             </button>
           </Dialog.Close>
-          <Dialog.Title className="DialogTitle">Select an Advancement</Dialog.Title>
+          <Dialog.Title className=                        "DialogTitle text-xl">Advancement</Dialog.Title>
           <Dialog.Description className="hidden">Select an advancement for your Hunter.</Dialog.Description>
           <div className="flex flex-col gap-4 min-h-[50vh] overflow-y-auto">
             <AnimatePresence>
@@ -92,7 +105,7 @@ export function AdvancementModal({ character }: { character: CharacterNotTroupe 
                         type="button"
                         onClick={() => handleChangeStep(option.id)}
                         disabled={advancementProgress[option.id] === 1}
-                        className={`flex items-center gap-2 ${advancementProgress[option.id] ? "text-theme-text-muted" : "text-theme-text-primary"}`}
+                        className={`flex items-center justify-start text-left gap-2 ${advancementProgress[option.id] ? "text-theme-text-muted" : "text-theme-text-primary"}`}
                       >
                         {advancementProgress[option.id] ? <span>✓</span> : <span>○</span>}
                         {option.title}
@@ -101,60 +114,15 @@ export function AdvancementModal({ character }: { character: CharacterNotTroupe 
                   ))}
                 </motion.div>
               )}
-              {step === "select-move" && (
+              {step !== "select-advancement" && (
                 <motion.div
                   initial={{ opacity: 0, x: 10 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -10 }}
                   transition={{ duration: 0.2 }}
+                  key={step}
                 >
-                  <MoveSelector
-                    character={character}
-                    closeModal={() => handleOpenChange(false)}
-                    advancementIndex={advancementIndex}
-                  />
-                </motion.div>
-              )}
-              {step === "write-custom-move" && (
-                <motion.div
-                  initial={{ opacity: 0, x: 10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -10 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <MoveWriter
-                    character={character}
-                    closeModal={() => handleOpenChange(false)}
-                    advancementIndex={advancementIndex}
-                  />
-                </motion.div>
-              )}
-              {step === "unmark-pq-items" && (
-                <motion.div
-                  initial={{ opacity: 0, x: 10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -10 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <UnmarkPQItems
-                    character={character}
-                    closeModal={() => handleOpenChange(false)}
-                    advancementIndex={advancementIndex}
-                  />
-                </motion.div>
-              )}
-              {step === "adjust-stats" && (
-                <motion.div
-                  initial={{ opacity: 0, x: 10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -10 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <AdjustStats
-                    character={character}
-                    closeModal={() => handleOpenChange(false)}
-                    advancementIndex={advancementIndex}
-                  />
+                  {stepToComponent(step, character, () => handleOpenChange(false), advancementIndex)}
                 </motion.div>
               )}
             </AnimatePresence>
@@ -163,6 +131,68 @@ export function AdvancementModal({ character }: { character: CharacterNotTroupe 
       </Dialog.Portal>
     </Dialog.Root>
   )
+}
+
+function mapStepToAdvancement(advancementIndex: number, playbook: playbookKey): AdvancementSteps {
+  const base = playbookBases[playbook]
+  const advancement = base.advancements[advancementIndex]
+  //common advancements
+  if (advancement.includes("Increase an ability modifier by 1 (max 3)")) {
+    return "adjust-stats"
+  }
+  if (advancement.includes("Choose an additional move from your playbook.")) {
+    return "select-move"
+  }
+  if (advancement.includes("Write a custom move for your character.")) {
+    return "write-custom-move"
+  } 
+  if (advancement.includes("Unmark everything in your Personal Quarters.")) {
+    return "unmark-pq-items"
+  }
+
+  //explorer
+  if (advancement.includes("Unlock two checkboxes on The Royal Explorers Club.")) {
+    return "unlock-rec"
+  }
+  if (advancement.includes("Unmark all checkboxes on The Royal Explorers Club.")) {
+    return "unmark-rec"
+  }
+
+  //facsimile 
+  if (advancement.includes("Increase a Doll Part ability modifier by 1 (max 3)")) {
+    return "doll-part"
+  }
+  if (advancement.includes("Unlock an Adaptor Key.")) {
+    return "unlock-adaptor-key"
+  }
+  if (advancement.includes("Write a custom Adaptor for one of your Doll Parts.")) {
+    return "custom-adaptor"
+  }
+
+    //no custom for factotem
+    //herald and informals don't have advancements
+
+  //legacy
+  if (advancement.includes("Unmark all the boxes on “A Hunter’s life…”")) {
+    return "unmark-hunterslife"
+  }
+
+    //no custom for mother
+    //no custom for orpha
+
+  //undeniable
+    if (advancement.includes("Unmark all the boxes on The Reflection")) {
+      return "unmark-reflection"
+    }
+
+  //unquiet
+  if (advancement.includes("Unlock the next two marks on the Energy track.")) {
+    return "unlock-energy"
+  }
+
+  //no custom for vessel
+  console.error(`Attempted to select advancement ${advancement} for playbook ${playbook} but advancement was not found.`)
+  return "select-advancement"
 }
 
 function BackButton({
@@ -318,7 +348,7 @@ function MoveWriter({
   })
 
   const parseAspects = (lines: string[]): string[] => {
-    return lines.map((line) => line.replace(/<([^>]+)>/g, "<aspect>$1</aspect>"))
+    return lines.map((line) => line.replace(/<([^>]+)>/g, "<check>$1</check>"))
   }
   const onSubmit = (data: { title: string; text: string; numberChecks: number; numberLines: number }) => {
     const newMove = {
@@ -360,7 +390,7 @@ function MoveWriter({
       />
 
       <p>
-        Write a description of your move below. To include inline check boxes (like aspects), surround your text with
+        Write a description of your move below. To include inline check boxes, surround your text with
         &lt; &gt; symbols. For example:{" "}
         <span className="italic">once a day you may &lt;gain advantage on a combat-related roll&gt;</span>
       </p>
@@ -371,7 +401,7 @@ function MoveWriter({
 
       <p>
         Optionally, moves can include some number of unlabeled check boxes or editable blank lines. Define the number of
-        each below. If you need a labeled check box, instead add it to your description as an &lt;aspect&gt;.
+        each below. If you need a labeled check box, instead add it to your description as a &lt;check&gt;.
       </p>
       <div className="grid grid-cols-4 gap-2">
         <p>Checkboxes:</p>
@@ -511,4 +541,242 @@ function AdjustStats({
       <ConfirmChoice onClick={handleSubmit(onSubmit)} />
     </form>
   )
+}
+
+function AddChecksToMove({ character, closeModal, advancementIndex, numberOfChecks, titleOfMove }: { character: CharacterNotTroupe, closeModal: () => void, advancementIndex: number | null, numberOfChecks: number, titleOfMove: string }) {
+  const { gameState, updateGameState } = useGame()
+  const existingMoves = character.moves
+
+  const confirm = () => {
+
+    if (advancementIndex === null) {
+      return
+    }
+    const move = existingMoves.find((m) => m.title === titleOfMove)
+    if (!move) {
+      return
+    }
+    const newAdvancements = [...character.advancements]
+    newAdvancements[advancementIndex] = 1
+    const newChecks = [...(move.checks ?? []), ...Array.from({ length: numberOfChecks }, () => 0)]
+    updateGameState({
+      players: gameState.players.map((player) =>
+        player.id === character.playerId
+          ? {
+              ...player,
+              character: {
+                ...character,
+                moves: existingMoves.map((m) => m.title === titleOfMove ? { ...m, checks: newChecks } : m),
+                advancements: newAdvancements,
+              },
+            }
+          : player,
+      ),
+    })
+    closeModal()
+  }
+
+  return (
+    <div className="flex flex-col gap-2 justify-center items-center">
+      <h3>Add Checkboxes to {titleOfMove}</h3>
+      <p>This will add {numberOfChecks} unmarked checkboxes to {titleOfMove}.</p>
+      <ConfirmChoice onClick={confirm} />
+    </div>
+  )
+}
+
+function ClearChecksFromMove({ character, closeModal, advancementIndex, titleOfMove }: { character: CharacterNotTroupe, closeModal: () => void, advancementIndex: number|null, titleOfMove: string }) {
+  const { gameState, updateGameState } = useGame()
+  const existingMoves = character.moves
+  const move = existingMoves.find((m) => m.title === titleOfMove)
+  if (!move) {
+    toast.error("Something went wrong! You can try again, or manually unmark your move.")
+    return
+  }
+
+  const confirm = () => {
+    if (advancementIndex === null) {
+      return
+    }
+  const newAdvancements = [...character.advancements]
+  newAdvancements[advancementIndex] = 1
+  const newChecks = Array.from({ length: move.checks?.length ?? 0 }, () => 0)
+
+
+  updateGameState({
+    players: gameState.players.map((player) =>
+      player.id === character.playerId
+        ? {
+            ...player,
+            character: {
+              ...character,
+              moves: existingMoves.map((m) => m.title === titleOfMove ? { ...m, checks: newChecks } : m),
+              advancements: newAdvancements,
+            },
+          }
+        : player,
+    ),
+  })
+  closeModal()
+  }
+
+const existingChecks = move.checks?.filter((c) => c === 1).length
+
+return (
+  <div className="flex flex-col gap-2 justify-center items-center">
+    <h3>Clear Checks from {titleOfMove}</h3>
+    <p>This will clear {existingChecks} checks from {titleOfMove}.</p>
+    <ConfirmChoice onClick={confirm} />
+  </div>
+)
+}
+
+function DollPartAdvancement({ character, closeModal, advancementIndex, mode }: { character: CharacterNotTroupe, closeModal: () => void, advancementIndex: number | null, mode: "upgrade" | "add-key" | "custom" }) {
+  const { gameState, updateGameState } = useGame()
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      partName: "",
+      text: "",
+    },
+  })
+  const coreMove = character.coreMoveState
+  if (!coreMove || coreMove.type !== "facsimile") {
+    toast.error("Something went wrong! You can try again, or manually unmark your part.")
+    return
+  }
+
+
+  const confirmAddAdaptor = () => {
+    if (advancementIndex === null) {
+      return
+    }
+  const newAdvancements = [...character.advancements]
+  newAdvancements[advancementIndex] = 1
+  
+  updateGameState({
+    players: gameState.players.map((player) =>
+      player.id === character.playerId
+        ? {
+            ...player,
+            character: {
+              ...character,
+              coreMoveState: { ...coreMove, adaptorKeys: coreMove.adaptorKeys + 1 },
+              advancements: newAdvancements,
+            },
+          }
+        : player,
+    ),
+  })
+  closeModal()
+  }
+
+  const confirmCustomAdaptor = (data: { partName: string, text: string }) =>     {
+    if (advancementIndex === null) {
+      return
+    }
+    const { partName, text } = data
+    const newAdvancements = [...character.advancements]
+    newAdvancements[advancementIndex] = 1
+
+    const stringArray = text.split("\n").filter((line) => line.trim() !== "")
+
+    updateGameState({
+      players: gameState.players.map((player) =>
+        player.id === character.playerId
+          ? {
+              ...player,
+              character: {
+                ...character,
+                coreMoveState: {
+                  ...coreMove,
+                  parts: coreMove.parts.map((p) =>
+                    p.name === partName ? { ...p, adaptors: [...p.adaptors, { text: stringArray, equipped: false }] } : p,
+                  ),
+                },
+                advancements: newAdvancements,
+              },
+            }
+          : player,
+      ),
+    })
+    closeModal()
+  }
+
+  const confirmUpgradePart = (data: { partName: string }) =>   {
+    if (advancementIndex === null) {
+      return
+    }
+    const { partName } = data
+  const newAdvancements = [...character.advancements]
+  newAdvancements[advancementIndex] = 1
+  
+  updateGameState({
+    players: gameState.players.map((player) =>
+      player.id === character.playerId
+        ? {
+            ...player,
+            character: {
+              ...character,
+              coreMoveState: { ...coreMove, parts: coreMove.parts.map((p) => p.name === partName ? { ...p, adjustment: p.adjustment + 1 } : p) },
+              advancements: newAdvancements,
+            },
+          }
+        : player,
+    ),
+  })
+  closeModal()
+
+  }
+
+
+  if (mode === "upgrade") {
+    return (
+      <form onSubmit={handleSubmit(confirmUpgradePart)} className="flex flex-col gap-2 justify-center items-center">
+        <h3>Upgrade a Doll Part</h3>
+        <p>Choose a Doll Part to upgrade. The associated ability will be increased by 1 each time you equip it.</p>
+        <div className="flex flex-col justify-start items-start gap-2">{coreMove.parts.map((part) =>       {
+          const disabled = part.adjustment + 1 > 3
+        return (
+          <div key={part.name} className="flex justify-start items-baseline gap-2">
+            <input type="radio" id={part.name} value={part.name} {...register("partName")} disabled={disabled} />
+            <label htmlFor={part.name} className="flex flex-col gap-0">
+              <span className={disabled ? "text-theme-text-muted line-through" : "text-theme-text-primary"}>{part.name}</span>
+              <span className="text-sm text-theme-text-muted italic ml-4">({part.ability} {disabled ? " capped at 3" : `+${part.adjustment + 1}`})</span>
+            </label>
+          </div>
+        )
+      })}</div>
+        <ConfirmChoice onClick={handleSubmit(confirmUpgradePart)} />
+      </form>
+    )
+  }
+  if (mode === "add-key") {
+    return (
+      <div className="flex flex-col gap-2 justify-center items-center">
+        <h3>Add an Adaptor Key</h3>
+        <p>This will add an Adaptor Key, bringing your total available keys to {coreMove.adaptorKeys + 1}.</p>
+        <ConfirmChoice onClick={confirmAddAdaptor} />
+      </div>
+    )
+  }
+  if (mode === "custom") {
+    return (
+      <form onSubmit={handleSubmit(confirmUpgradePart)} className="flex flex-col gap-2 justify-center items-center">
+        <h3>Write a Custom Adaptor</h3>
+        <p>First choose a Doll Part to write the custom adaptor for, then write the adaptor text below.</p>
+        <div className="flex flex-col justify-start items-start gap-2">{coreMove.parts.map((part) => (
+          <div key={part.name} className="flex justify-start items-baseline gap-2">
+          <input type="radio" id={part.name} value={part.name} {...register("partName")} />
+          <label htmlFor={part.name} className="flex flex-col gap-0">
+            <span className={"text-theme-text-primary"}>{part.name}</span>
+            <span className="text-sm text-theme-text-muted italic ml-4">({part.ability})</span>
+          </label>
+        </div>
+        ))}</div>
+        <h4 className="text-sm text-theme-text-muted italic text-left w-full">Adaptor Text:</h4>
+        <textarea {...register("text")} className="w-full border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent flex-grow" />
+        <ConfirmChoice onClick={handleSubmit(confirmCustomAdaptor)} />
+      </form>
+    )
+  }
 }

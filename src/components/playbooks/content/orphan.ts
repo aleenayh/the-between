@@ -85,10 +85,6 @@ export const orphanPlaybook: PlaybookBase = {
   ],
   startingMoves: ["The Family"],
   moves: [
-    { title: "", text: [] },
-    { title: "", text: [] },
-    { title: "", text: [] },
-    { title: "", text: [] },
     {
       title: "The Family",
       text: [

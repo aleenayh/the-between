@@ -1,11 +1,14 @@
 import { useState } from "react";
+import { toast } from "react-hot-toast";
 import { useGame } from "../../../context/GameContext";
+import {ReactComponent as AdaptorKey } from "../../assets/adaptor.svg";
 import { ReactComponent as BabySVG } from "../../assets/baby.svg";
 import { EditableLine } from "../../shared/EditableLine";
 import { playbookBases } from "../content";
+import { dollPartDescriptions } from "../content/facsimile";
 import { heraldPlaybookAdditions } from "../content/herald";
 import type { CharacterNotTroupe } from "../types";
-import { parseStaticText } from "../utils";
+import { parseStaticText, parseWithCheckboxes } from "../utils";
 
 export function Moves({ character }: { character: CharacterNotTroupe }) {
 	const otherMoves = character.moves ? character.moves : [];
@@ -48,17 +51,14 @@ function MoveDisplay({
 	const aspectCount = (fullText.match(/<check>/g) || []).length;
 
 	// Checkboxes come after aspects in the checks array
-	const checkboxCount = move.checks?.length ?? 0;
+	const checkboxCount = Math.max(0, (move.checks?.length ?? 0 - aspectCount));
+	let checkIndex = 0;
 
 	const toggleCheck = (index: number) => {
 			if (!editable) return;
 
 			const currentChecks = move.checks ?? [];
 			const newChecks = [...currentChecks];
-			// Ensure array is long enough
-			while (newChecks.length <= index) {
-				newChecks.push(0);
-			}
 			newChecks[index] = newChecks[index] === 1 ? 0 : 1;
 
 			updateGameState({
@@ -113,11 +113,11 @@ function MoveDisplay({
       {content &&
         content.length > 0 &&
         content.map((line, lineIndex) => {
-          const parsed = parseStaticText(line)
-
+          const { elements, nextAspectIndex } = parseWithCheckboxes(line, move.checks ??           [], checkIndex, editable, (index) => toggleCheck(index))
+          checkIndex = nextAspectIndex
           return (
             <p className="text-left leading-relaxed" key={`${move.title}-line-${lineIndex}`}>
-              {parsed}
+              {elements}
             </p>
           )
         })}
@@ -126,7 +126,7 @@ function MoveDisplay({
       {checkboxCount > 0 && (
         <div className="w-full flex justify-center items-center gap-2">
           {Array.from({ length: checkboxCount }).map((_, idx) => {
-            const checkIndex = aspectCount + idx
+            const checkIndex = aspectCount + idx 
             const isChecked = (move.checks ?? [])[checkIndex] === 1
             return (
               <button
@@ -259,8 +259,9 @@ function TheREC({ character }: { character: CharacterNotTroupe }) {
 		      <p>You are a member of The Royal Explorers Club (the R.E.C.), a private dinner club for people who, like you, have led expeditionary forces into parts unknown, or who are members of the upper class with an interest in the geographical sciences. Your status within the club allows you to call in favors with its membership in order to help Hargrave House. That status grows as you do battle with the forces of evil in London and regale the R.E.C. with your tales.</p>
 
 <p>Mark a checkbox in order to call on the help of any one member.</p>
-{Array.from({ length: allowedCheckboxes }).map((_, idx) => <input type="checkbox" key={`REC-checkbox-${// biome-ignore lint/suspicious/noArrayIndexKey: order unimportant
-idx}`} checked={moveState?.checks?.[idx] === 1} disabled={!editable} onChange={() => toggleCheck(idx)} />)}
+
+<div className="flex justify-center items-center gap-2">{Array.from({ length: allowedCheckboxes }).map((_, idx) => <input type="checkbox" key={`REC-checkbox-${// biome-ignore lint/suspicious/noArrayIndexKey: order unimportant
+idx}`} checked={moveState?.checks?.[idx] === 1} disabled={!editable} onChange={() => toggleCheck(idx)} />)}</div>
 
 <p>Additionally, you can call upon the R.E.C. to help with Layer Four of the Mastermind Conspiracy. When you mark a box to call upon the help of an R.E.C. member during the Layer Four events, the Keeper will give you a distinct mechanical benefit associated with that help, depending on the circumstances (such as, but not limited to: lowering the Complexity of any Questions, increasing the number of Clues uncovered during investigations, awarding automatic Clues, giving advantage on certain die rolls, and so forth). This benefit is in place of the normal effects of calling upon that member of the R.E.C.</p>
 
@@ -442,7 +443,7 @@ function TheFamily({ character }: { character: CharacterNotTroupe }) {
 	}
 
 	return <div className="flex flex-col gap-2 text-left">
-		<h3 className="text-sm font-bold text-theme-text-accent text-center">The Reflection</h3>
+		<h3 className="text-sm font-bold text-theme-text-accent text-center">The Family</h3>
 		<p>You help Hargrave House in order to earn your keep, but the people who live there can never be your family since they are even more broken than you are. There is another group of people in London you watch from afar in the hopes they will someday notice and accept you.</p>
 	
 		{editable && (<div className="w-full flex flex-col gap-2">{family === "" && (
@@ -473,8 +474,8 @@ function TheFamily({ character }: { character: CharacterNotTroupe }) {
 	
 	<p>You will secretly help the group solve this problem and then, when the time is right, present yourself to them. From now on, when you would collect a Reward from resolving a Threat, instead mark a box below and describe how something from the recently resolved Threat can be used to help the group with their problem.
 	</p>
-	{Array.from({ length: 3 }).map((_, idx) => <input type="checkbox" key={`Family-checkbox-${// biome-ignore lint/suspicious/noArrayIndexKey: order unimportant
-	idx}`} checked={moveState?.checks?.[idx] === 1} disabled={!editable} onChange={() => toggleCheck(idx)} />)}
+	<div className="flex gap-2 justify-center items-center">{Array.from({ length: 3 }).map((_, idx) => <input type="checkbox" key={`Family-checkbox-${// biome-ignore lint/suspicious/noArrayIndexKey: order unimportant
+	idx}`} checked={moveState?.checks?.[idx] === 1} disabled={!editable} onChange={() => toggleCheck(idx)} />)}</div>
 	
 	<p>When <strong>all three boxes are marked,</strong> roll with Presence; this roll is always made at disadvantage. <strong>On a 10+,</strong> they are thankful for your help and welcome you as one of their own. Narrate a short epilogue showing your life with your new family. This character is now retired. <strong>On a 7-9,</strong> they shun you and call you unkind names. Unmark a box from this move. <strong>On a miss,</strong> they are horrified, and turn on you. Mark The Blood-Soaked Portal. 
 	</p>
@@ -526,15 +527,104 @@ function ThePhantom({ character }: { character: CharacterNotTroupe }) {
 }
 
 function DollParts({character}: {character: CharacterNotTroupe}) {
-	const moveState = character.moves.find((m) => m.title === "Doll Parts")
-	if (!moveState) return null;
+	const moveState = character.coreMoveState 
+	const {gameState, updateGameState, user: { id }} = useGame();
+	const editable = id === character.playerId;
+	if (!moveState || moveState.type !== "facsimile") return null;
+
+	const {parts, adaptorKeys} = moveState;
+
+	const equipDollPart = (partName: string) => {
+		const part = parts.find((part) => part.name === partName);
+		if (!part) return;
+		const allPartsEquipped = parts.filter(part => part.equipped).length;
+		const equipped = !part.equipped;
+		if (equipped && allPartsEquipped >= 3) {
+			toast.error("You cannot equip more than 3 parts at a time. Unequip one first.");
+			return;
+		}
+		if (!equipped) {
+			part.adaptors.forEach((adaptor) => {adaptor.equipped = false});
+		}
+		const newAbilities = { ...character.abilities, [part.ability]: (equipped ? part.adjustment : 0) };
+		const newParts = parts.map((part) => part.name === partName ? { ...part, equipped } : part);
+		updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, abilities: newAbilities, coreMoveState: { ...moveState, parts: newParts } } } : player) });
+	}
+
+	const equipAdaptor = (partName: string, index: number) => {
+		const numberEquippedAdaptors = parts.flatMap(  part => part.adaptors.filter(adaptor => adaptor.equipped)).length;
+		const adaptor = parts.find((part) => part.name === partName)?.adaptors[index];
+		if ((numberEquippedAdaptors >= adaptorKeys) && !adaptor?.equipped) {
+			toast.error("You have already used all your Adaptor Keys. Unassign one first.");
+			return;
+		}
+		const newParts = parts.map((part) => part.name === partName ? { ...part, adaptors: part.adaptors.map((adaptor, idx) => idx === index ? { ...adaptor, equipped: !adaptor.equipped } : adaptor) } : part);
+		updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, coreMoveState: { ...moveState, parts: newParts } } } : player) });
+	}
+
+
 	return <div className="flex flex-col gap-2 text-left">
 	<h3 className="text-sm font-bold text-theme-text-accent text-center">Doll Parts</h3>
 	<p>You do not start with any ability scores. Instead, at the start of each Day Phase, you equip three “Doll Parts”—attachments capable of enhancing your mechanical physiology. Each Doll Part operates with an ability, giving you +1 in that ability until you choose to switch the part for another. 
 	</p>
 	<p>Each Doll Part comes with a pair of Adaptors, secondary moves that help you to further customize your Doll Parts. During the Day Phase, whenever you reassign your Doll Parts, you may also reassign your Adaptors using Adaptor Keys. You can only access the Adaptors that are associated with Doll Parts you have equipped.</p>
-	<p>TODO ALEENA BUILD THE REST OF THIS</p>
+	<h4 className="text-sm font-bold text-theme-text-accent text-center flex gap-2 justify-center items-center">Adaptor Keys: {Array.from({ length: adaptorKeys }, (idx) => <AdaptorKey key={`adaptor-key-${idx}`} className="w-6 h-6" />)}</h4>
+
+	{parts.map((part, idx) => { 
+		const descriptions = dollPartDescriptions[part.name]; 
+		if (!editable && !part.equipped) return null;
+		return (
+		<div key={`part-${// biome-ignore lint/suspicious/noArrayIndexKey: unimportant
+idx}`} className="flex flex-col gap-2 text-left border border-theme-border-accent rounded-lg p-2">
+			<div className="flex justify-center items-center gap-6">
+			<h4 className="text-sm font-bold text-theme-text-accent text-center flex-1 whitespace-nowrap">{part.name}</h4>
+			{editable && (
+  <button
+    type="button"
+    className="rounded-lg w-fit bg-theme-bg-secondary text-theme-text-accent border border-theme-border hover:bg-theme-bg-accent hover:border-theme-border-accent px-2 py-1"
+    onClick={() => equipDollPart(part.name)}
+    disabled={!editable}
+  >
+    {part.equipped ? "Unequip" : "Equip"}
+  </button>
+)}</div>
+
+			{descriptions.map((description) => <p key={`description-${// biome-ignore lint/suspicious/noArrayIndexKey: unimportant
+idx}`} className="text-left leading-relaxed">{parseStaticText(description)}</p>)}
+
+{part.equipped && 
+ <div>{editable ? (
+	<div>
+		<h4>Available Adaptors</h4>
+		<div className="flex flex-col gap-2">
+			{part.adaptors.map((adaptor, adaptorIdx) => 
+				<div key={`adaptor-${// biome-ignore lint/suspicious/noArrayIndexKey: unimportant
+adaptorIdx}`} className="border border-theme-border bg-theme-bg-secondary rounded-lg p-2 text-left text-xs leading-relaxed inline-flex gap-2 items-center justify-start">
+	 <AdaptorButton onClick={()=> equipAdaptor(part.name, adaptorIdx)} disabled={!editable} checked={adaptor.equipped} />
+		<div className="flex flex-col gap-2">{adaptor.text.map((text) => <p key={text}>{parseStaticText(text)}</p>)}</div>
+		</div>)}
+		</div>
+		</div>
+	) : (<div>{part.adaptors.map((adaptor) => {
+			if (adaptor.equipped) {
+				return <div key={`adaptor-equipped-${adaptor}`} className="border border-theme-border bg-theme-bg-secondary rounded-lg p-2 text-left text-xs leading-relaxed inline-flex gap-2 items-center justify-start">
+	<AdaptorButton onClick={()=> {}} disabled={!editable} checked={adaptor.equipped} />
+		<div className="flex flex-col gap-2">{adaptor.text.map((text) => <p key={text}>{parseStaticText(text)}</p>)}</div>
+		</div>
+			}
+			return null;
+		})}
+		</div>)}
+		</div>
+	}
+		</div>
+		)
+	})}
 	</div>
+}
+
+function AdaptorButton({onClick, disabled, checked}: {onClick: () => void, disabled: boolean, checked: boolean}) {
+	return <button type="button" onClick={onClick} disabled={disabled} className={`${checked ? "text-theme-text-accent hover:text-theme-text-muted" : "text-theme-text-muted hover:text-theme-text-accent"}`}><AdaptorKey className="w-6 h-6" /></button>
 }
 
 function TheOffering({ character }: { character: CharacterNotTroupe }) {
