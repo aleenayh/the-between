@@ -136,18 +136,18 @@
   --second-header-font: "CinzelDecorative", cursive;
 }
 [data-theme="titania"] {
-  --color-bg-primary: #f5fcec;
-  --color-bg-secondary: #cb88ca;
-  --color-bg-accent: #f4ecd6;
+  --color-bg-primary: #f0fbf0;
+  --color-bg-secondary: #e1b4e1;
+  --color-bg-accent: #dffcc8;
 
   --color-text-primary: #290120;
-  --color-text-secondary: #55013d;
-  --color-text-muted: #690166;
-  --color-text-accent: #580153;
+  --color-text-secondary: #920169;
+  --color-text-muted: #a731a3;
+  --color-text-accent: #5f3475;
 
   --color-border: #a7cab1;
   --color-border-accent: #88b7b5;
-  --color-accent-primary: #f087fc;
+  --color-accent-primary: #ea5afa;
   --color-blood: #cc0000;
 
   --background-image: url("../public/images/floral.svg");
@@ -390,6 +390,9 @@ textarea {
   line-height: 1.5;
   cursor: text;
   transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+input[type="text"]::placeholder {
+  color: var(--color-text-muted);
 }
 
 /* ===== GRID BUTTON ======== */

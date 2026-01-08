@@ -22,7 +22,7 @@ export function MysterySheet({
 		<div className="flex flex-col justify-start items-start h-full w-full pointer-events-none">
 			<button
 				type="button"
-				aria-label="Open mystery sheet"
+				aria-label="Open threat sheet"
 				className="w-10 h-10 text-theme-accent-primary bg-theme-bg-secondary rounded-none rounded-br-lg rounded-tr-lg p-2 hover:bg-theme-bg-accent hover:text-theme-text-accent transition-colors pointer-events-auto"
 				onClick={() => setIsOpen(!isOpen)}
 			>
@@ -45,7 +45,7 @@ export function MysterySheet({
 							X
 						</button>
 						<h1 className="text-2xl font-bold text-theme-text-accent mb-10">
-							Mysteries
+							Threats
 						</h1>
 						<div className="flex flex-col gap-10">
 							{mysteries && mysteries.length > 0 ? (
@@ -53,7 +53,7 @@ export function MysterySheet({
 									<Countdown mystery={mystery} key={mystery.title} />
 								))
 							) : (
-								<div>No active mysteries</div>
+								<div>No active threats</div>
 							)}
 						</div>
 						{role === PlayerRole.KEEPER && <AddMystery />}

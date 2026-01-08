@@ -1,10 +1,11 @@
-import { useId, useState } from "react"
+import { useId, useRef, useState } from "react"
 import { type UseFormRegister, type UseFormSetValue, type UseFormWatch, useForm } from "react-hook-form"
 import { toast } from "react-hot-toast"
 import { useGame } from "../../../context/GameContext"
 import { PlayerRole } from "../../../context/types"
 import { Section } from "../../shared/Section"
 import { playbookBases } from "../content"
+import { startingParts } from "../content/facsimile"
 import { heraldPlaybookAdditions } from "../content/herald"
 import { type Abilities, type Character, type PlaybookBase, type playbookKey, playbookKeys } from "../types"
 import { convertToTitle, parseStaticText } from "../utils"
@@ -34,12 +35,26 @@ type CharacterCreateFormInputs = {
   sensitivity: number
 }
 
+const extraMovesPerPlaybook: Record<playbookKey, number> = {
+  [playbookKeys.facsimile]: 0,
+  [playbookKeys.unquiet]: 0,
+  [playbookKeys.explorer]: 0,
+  [playbookKeys.american]: 1,
+  [playbookKeys.factotum]: 1,
+  [playbookKeys.mother]: 1,
+  [playbookKeys.orphan]: 1,
+  [playbookKeys.undeniable]: 1,
+  [playbookKeys.vessel]: 1,
+  [playbookKeys.informals]: 0,
+  [playbookKeys.custom]: 0,
+}
+
 export function CharacterCreateForm({ playbookKey }: { playbookKey: Exclude<playbookKey, "custom" | "informals"> }) {
   const { updateGameState, user, gameState } = useGame()
   const base: PlaybookBase = playbookBases[playbookKey]
   const [step, setStep] = useState<"basics" | "moves">("basics")
 
-  const maxMoves = playbookKey === playbookKeys.unquiet || playbookKey === playbookKeys.explorer ? base.startingMoves.length : base.startingMoves.length + 1
+  const maxMoves = base.startingMoves.length + extraMovesPerPlaybook[playbookKey]
 
   const { register, handleSubmit, setValue, watch } = useForm<CharacterCreateFormInputs>({
     defaultValues: {
@@ -142,28 +157,30 @@ export function CharacterCreateForm({ playbookKey }: { playbookKey: Exclude<play
             <SelectOrEdit name="vice" options={base.vices} register={register} />
           </Section>
 
-          <Section title="Add 1 to Any Ability">
-            <div className="flex justify-center w-full">
-              <div className="grid grid-cols-5 gap-1">
-                {(Object.entries(base.abilities) as [keyof Abilities, number][]).map(([stat, value]) => (
-                  <div key={stat} className="flex flex-col-reverse md:flex-col gap-1">
-                    <label htmlFor={stat} className="flex flex-col gap-1">
-                      <span className="text-xs md:text-sm text-theme-text-muted whitespace-nowrap overflow-hidden text-ellipsis">
-                        {stat}
-                      </span>
-                    </label>
-                    <input
-                      id={stat}
-                      type="number"
-                      defaultValue={value}
-                      {...register(stat, { valueAsNumber: true })}
-                      className="border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent flex-grow"
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </Section>
+                          {playbookKey !== playbookKeys.facsimile && (
+                  <Section title="Add 1 to Any Ability">
+                    <div className="flex justify-center w-full">
+                      <div className="grid grid-cols-5 gap-1">
+                        {(Object.entries(base.abilities) as [keyof Abilities, number][]).map(([stat, value]) => (
+                          <div key={stat} className="flex flex-col-reverse md:flex-col gap-1">
+                            <label htmlFor={stat} className="flex flex-col gap-1">
+                              <span className="text-xs md:text-sm text-theme-text-muted whitespace-nowrap overflow-hidden text-ellipsis">
+                                {stat}
+                              </span>
+                            </label>
+                            <input
+                              id={stat}
+                              type="number"
+                              defaultValue={value}
+                              {...register(stat, { valueAsNumber: true })}
+                              className="border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent flex-grow"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </Section>
+                )}
 
           <button
             type="button"
@@ -180,7 +197,7 @@ export function CharacterCreateForm({ playbookKey }: { playbookKey: Exclude<play
           <h1 className="text-2xl font-bold text-center">{base.title}</h1>
           <p>
             You start with {base.startingMoves.map((move) => `"${move}"`).join(" & ")}.{" "}
-            {playbookKey === playbookKeys.explorer || playbookKey === playbookKeys.unquiet ? "" : "Select one additional move from below."}
+            {maxMoves > base.startingMoves.length ? `Select ${maxMoves - base.startingMoves.length} additional move from below.` : ""}
           </p>
 
           <div className="flex flex-col gap-2 text-left">
@@ -243,6 +260,8 @@ function NameSelector({
     .join(" ")
   setValue("name", constructedName)
 
+  const containerRef = useRef<HTMLDivElement>(null)
+
   const onBlur = () => {
     const values = watch()
     const constructedName = Object.values(values)
@@ -251,15 +270,26 @@ function NameSelector({
     setValue("name", constructedName)
   }
 
+  const handleContainerBlur = (e: React.FocusEvent<HTMLDivElement>) => {
+    // Check if the new focus target is outside the container
+    if (containerRef.current && !containerRef.current.contains(e.relatedTarget as Node)) {
+      onBlur()
+    }
+  }
+
   return (
-    <form onBlur={onBlur} className="flex flex-col gap-2 md:grid md:grid-cols-2">
+    <div
+      ref={containerRef}
+      onBlurCapture={handleContainerBlur}
+      className="flex flex-col gap-2 md:grid md:grid-cols-2"
+    >
       {Object.keys(names).map((key) => (
         <div key={key} className="flex flex-col gap-2">
           <h3 className="text-sm text-theme-text-primary italic">{convertToTitle(key)}</h3>
           <ControlledSelectOrEdit options={names[key]} name={key} onBlur={onBlur} register={register} />
         </div>
       ))}
-    </form>
+    </div>
   )
 }
 
@@ -465,7 +495,10 @@ function constructCharacter(
     },
   }))
 
-  const conditions: string[] = ["", "", ""]
+  const startingCondition = playbookKey === playbookKeys.facsimile ? "Being Human" : ""
+  const conditions: string[] = [startingCondition, "", ""]
+
+  const coreMoveState = playbookKey === playbookKeys.facsimile ? {type: "facsimile" as const, parts: startingParts, adaptorKeys: 1} : undefined
 
   const advancements = Array.from({ length: 7 }, () => 0);
 
@@ -492,6 +525,7 @@ function constructCharacter(
     questions: [0, 0, 0, 0, 0],
     personalQuarters: [{text: "", marked: false}],
     customTextFields: {},
+    coreMoveState,
   }
 }
 

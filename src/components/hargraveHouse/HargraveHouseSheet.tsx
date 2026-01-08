@@ -13,7 +13,6 @@ import type { RoomContent } from "./content/rooms/types"
 import { ReactComponent as HouseIcon } from "./house.svg"
 
 
-
 export function HargraveHouseSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void }) {
   return (
     <div className="flex flex-col justify-start items-start h-full w-full pointer-events-none">

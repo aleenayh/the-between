@@ -27,7 +27,7 @@ export function AddMystery() {
           type="button"
           className="bg-theme-bg-accent text-theme-text-accent px-4 py-2 rounded-lg opacity-80 hover:opacity-100"
         >
-          Add Mystery
+          Add Threat
         </button>
       </Dialog.Trigger>
       <Dialog.Portal>
@@ -41,8 +41,8 @@ export function AddMystery() {
               X
             </button>
           </Dialog.Close>
-          <Dialog.Title className="DialogTitle">Add Mystery</Dialog.Title>
-          <Dialog.Description className="hidden">Add a new mystery to the game.</Dialog.Description>
+            <Dialog.Title className="DialogTitle">Add Threat</Dialog.Title>
+          <Dialog.Description className="hidden">Add a new threat to the game.</Dialog.Description>
 
           {selectedTab !== "choose" && (
             <button
@@ -50,7 +50,7 @@ export function AddMystery() {
               onClick={() => setSelectedTab("choose")}
               className="self-start text-sm text-theme-text-muted hover:text-theme-text-primary mb-2 shrink-0"
             >
-              ← Back to all mysteries
+              ← Back to all threats
             </button>
           )}
 

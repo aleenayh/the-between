@@ -43,6 +43,8 @@ export function PlaybookExpanded({ character }: { character: CharacterNotTroupe 
 		tabs[1].label as keyof typeof tabs,
 	);
 
+	console.log("DEBUG: CHARACTER STATE:", JSON.stringify(character, null, 2))
+
 	return (
 		<div className="border-2 border-theme-border-accent bg-theme-bg-primary rounded-lg p-4 h-full flex flex-col gap-2 overflow-hidden relative">
 			<DiceIndicator playerId={character.playerId} />

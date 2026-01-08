@@ -7,7 +7,7 @@ export function parseStaticText(text: string): React.ReactNode {
   let lastEnd = 0
 
   // Combined regex to match all tag types in order of appearance
-  const tagRegex = /<(h2|li|strong)>(.*?)<\/\1>/g
+  const tagRegex = /<(h2|li|strong|i)>(.*?)<\/\1>/g
   let match = tagRegex.exec(text)
 
   while (match !== null) {
@@ -33,6 +33,9 @@ export function parseStaticText(text: string): React.ReactNode {
       case "strong":
         parts.push(<strong key={match.index}>{content}</strong>)
         break
+	case "i":
+		parts.push(<i key={match.index}>{content}</i>)
+		break
     }
 
     lastEnd = match.index + fullMatch.length
