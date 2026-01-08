@@ -305,10 +305,16 @@ function checkSpecialRooms(room: RoomContent, gameState: GameState) {
 }
 
 function Residents() {
+  const { gameState } = useGame()
+  const residents = gameState.hargraveHouse.residents
   return (
     <div>
       <h2 className="text-xl font-bold text-theme-text-accent">Residents</h2>
-      <p>TODO!</p>
+      {residents.length === 0 ? <p>Hargrave House has no additional residents yet. When it does, they will appear here.</p> : <ul>
+        {residents.map((resident) => (
+          <li key={resident.name}>{resident.name}</li>
+        ))}
+      </ul>}
     </div>
   )
 }

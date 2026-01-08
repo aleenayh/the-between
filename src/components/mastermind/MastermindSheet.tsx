@@ -205,13 +205,13 @@ function MastermindForm({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void })
       <div className="w-full flex gap-2 items-center justify-center">
         <button
           type="submit"
-          className="bg-theme-bg-accent text-theme-text-accent px-4 py-2 rounded-lg opacity-80 hover:opacity-100 hover:bg-theme-bg-accent-hover hover:text-theme-text-accent-hover"
+          className="bg-theme-bg-secondary text-theme-text-primary px-4 py-2 rounded-lg opacity-80 hover:opacity-100 border-2 hover:bg-theme-bg-accent hover:border border-2-theme-border border-2-accent hover:text-theme-text-accent"
         >
           Confirm
         </button>
         <button
           type="button"
-          className="bg-theme-bg-accent text-theme-text-accent px-4 py-2 rounded-lg opacity-80 hover:opacity-100 hover:bg-theme-bg-accent-hover hover:text-theme-text-accent-hover"
+          className="bg-theme-bg-secondary text-theme-text-primary px-4 py-2 rounded-lg opacity-80 hover:opacity-100 border-2 hover:bg-theme-bg-accent hover:border border-2-theme-border border-2-accent hover:text-theme-text-accent"
           onClick={() => {
             updateGameState({ mastermind: null })
           }}
@@ -347,7 +347,7 @@ function ClueSection({ role }: { role: PlayerRole }) {
         <input type="text" placeholder="Add custom clue..." className="flex-grow" {...register("customClue")} />
         <button
           type="submit"
-          className="bg-theme-bg-accent text-theme-text-accent px-4 py-2 rounded-lg opacity-80 hover:opacity-100 hover:bg-theme-bg-accent-hover hover:text-theme-text-accent-hover"
+          className="bg-theme-bg-secondary text-theme-text-primary px-4 py-2 rounded-lg opacity-80 hover:opacity-100 border-2 hover:bg-theme-bg-accent hover:border border-2-theme-border border-2-accent hover:text-theme-text-accent"
         >
           Add
         </button>

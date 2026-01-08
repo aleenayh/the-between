@@ -14,10 +14,14 @@ export const questionSchema = z.object({
 export type Question = z.infer<typeof questionSchema>;
 
 export enum MysteryTheme {
-	Dandelion = "dandelion",
 	Rose = "rose",
-	Sword = "sword",
-	Swallow = "swallow",
+	Feather = "feather",
+	Goblet = "goblet",
+	Mask = "mask",
+	Moon = "moon",
+	Tarot = "tarot",
+	Scratch = "scratch",
+	Knife = "knife",
 }
 
 export const clueSchema = z.object({
@@ -29,13 +33,14 @@ export const clueSchema = z.object({
 
 export const mysterySchema = z.object({
 	title: z.string().catch(catchWithWarning("mystery.title", "Mystery")),
+	intro: z.array(z.string()).catch(catchWithWarning("mystery.intro", [])),
 	questions: z
 		.array(questionSchema)
 		.optional()
 		.catch(catchWithWarning("mystery.questions", [])),
 	theme: z
 		.nativeEnum(MysteryTheme)
-		.catch(catchWithWarning("mystery.theme", MysteryTheme.Dandelion)),
+		.catch(catchWithWarning("mystery.theme", MysteryTheme.Rose)),
 	countdownTotal: z.coerce
 		.number()
 		.catch(catchWithWarning("mystery.countdownTotal", 3)),
