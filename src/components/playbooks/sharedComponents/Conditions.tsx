@@ -48,7 +48,7 @@ export function Conditions({ character }: { character: CharacterNotTroupe }) {
     <div className="flex flex-col gap-2 w-full">
       {isOrphan && (
         <div className="inline-flex justify-between items-center gap-2">
-          <span className="text-sm text-theme-text-secondary">◆</span>
+          <span className="text-sm text-theme-text-muted">◆</span>
           <div className="flex-grow w-[60%] flex gap-2 items-center ">
             <span className="flex-grow w-[60%] text-md text-theme-text-primary flex justify-start text-left">
               A Disappointment and a Horror

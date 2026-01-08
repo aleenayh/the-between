@@ -28,7 +28,7 @@ export function PullOutCharacterOverview({
 			<button
 				type="button"
 				aria-label="Open character overview"
-				className="block md:hidden w-10 h-10 text-theme-accent-primary bg-theme-bg-secondary rounded-none rounded-br-lg p-2 hover:bg-theme-bg-accent hover:text-theme-text-accent transition-colors pointer-events-auto rounded-tr-lg"
+				className="block md:hidden drawerButton"
 				onClick={() => setIsOpen(!isOpen)}
 			>
 				<GroupIcon className="w-full h-full" />

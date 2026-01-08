@@ -60,7 +60,6 @@
   --color-bg-accent: #010166;
 
   --color-text-primary: #d3f1ff;
-  --color-text-secondary: #93abc1;
   --color-text-muted: #b6c9c9;
   --color-text-accent: #c29202;
 
@@ -76,18 +75,17 @@
 }
 
 [data-theme="flagg"] {
-  --color-bg-primary: #1be7ff;
-  --color-bg-secondary: #46c0f8;
-  --color-bg-accent: #a8e1fb;
+  --color-bg-primary: #ffffff;
+  --color-bg-secondary: #b8dcfc;
+  --color-bg-accent: #cd5468;
 
-  --color-text-primary: #002852;
-  --color-text-secondary: rgb(24, 101, 163);
-  --color-text-muted: rgb(67, 134, 134);
-  --color-text-accent: #fe4800;
+  --color-text-primary: #0b024f;
+  --color-text-muted: #4f566f;
+  --color-text-accent: #450101;
 
-  --color-border: #0101a9;
+  --color-border: #0101e6;
   --color-border-accent: #0088ff;
-  --color-accent-primary: #fe4800;
+  --color-accent-primary: #c8102e;
   --color-blood: #cc0000;
 
   --background-image: url("../public/images/wave.svg");
@@ -96,18 +94,17 @@
   --second-header-font: "CinzelDecorative", cursive;
 }
 [data-theme="gesod"] {
-  --color-bg-primary: #3f3422;
-  --color-bg-secondary: #aa6d4a;
-  --color-bg-accent: #fca13f;
+  --color-bg-primary: #4d3c23;
+  --color-bg-secondary: #7a5c4a;
+  --color-bg-accent: #dac27b;
 
   --color-text-primary: #ffffff;
-  --color-text-secondary: rgb(178, 161, 126);
-  --color-text-muted: rgb(252, 194, 128);
-  --color-text-accent: #9b6d00;
+  --color-text-muted: #cfbbb0;
+  --color-text-accent: #f96b19;
 
-  --color-border: #a96b01;
-  --color-border-accent: #ff8400;
-  --color-accent-primary: #633f00;
+  --color-border: #b8752e;
+  --color-border-accent: #b87f2e;
+  --color-accent-primary: #fca001;
   --color-blood: #a00000;
 
   --background-image: url("../public/images/geometric.svg");
@@ -121,7 +118,6 @@
   --color-bg-accent: #262d8f;
 
   --color-text-primary: #f4ecd6;
-  --color-text-secondary: #a7c6ca;
   --color-text-muted: #88b7b5;
   --color-text-accent: #fce299;
 
@@ -141,13 +137,12 @@
   --color-bg-accent: #dffcc8;
 
   --color-text-primary: #290120;
-  --color-text-secondary: #920169;
   --color-text-muted: #a731a3;
   --color-text-accent: #5f3475;
 
   --color-border: #a7cab1;
   --color-border-accent: #88b7b5;
-  --color-accent-primary: #ea5afa;
+  --color-accent-primary: #014d40;
   --color-blood: #cc0000;
 
   --background-image: url("../public/images/floral.svg");
@@ -161,11 +156,10 @@
   --color-bg-accent: #a70101;
 
   --color-text-primary: #fcc2c2;
-  --color-text-secondary: #aea1a1;
-  --color-text-muted: #626161;
-  --color-text-accent: #fa7d7d;
+  --color-text-muted: #8d8c8c;
+  --color-text-accent: #fc8383;
 
-  --color-border: #fa83bc;
+  --color-border: #9e0358;
   --color-border-accent: #ca1942;
   --color-accent-primary: #fddede;
   --color-blood: #5a0000;
@@ -178,12 +172,11 @@
 
 [data-theme="dark"] {
   --color-bg-primary: #0a0a0a;
-  --color-bg-secondary: #141414;
-  --color-bg-accent: #2a2a2a;
+  --color-bg-secondary: #2c2f29;
+  --color-bg-accent: #1c311c;
 
   --color-text-primary: #e8e8e8;
-  --color-text-secondary: #bbb9b9;
-  --color-text-muted: #8da7a4;
+  --color-text-muted: #abbfbc;
   --color-text-accent: #64b500;
 
   --color-border: #396601;
@@ -197,12 +190,11 @@
   --second-header-font: "Questrial", sans-serif;
 }
 [data-theme="light"] {
-  --color-bg-primary: #f0f0f0;
-  --color-bg-secondary: #e0e0e0;
+  --color-bg-primary: #f9fbfb;
+  --color-bg-secondary: #dfe9f1;
   --color-bg-accent: #d0d0d0;
 
   --color-text-primary: #0a0a0a;
-  --color-text-secondary: #141414;
   --color-text-muted: #3b4879;
   --color-text-accent: #111891;
 
@@ -391,8 +383,17 @@ textarea {
   cursor: text;
   transition: background-color 0.15s ease, border-color 0.15s ease;
 }
-input[type="text"]::placeholder {
+input[type="text"]::placeholder,
+input[type="textarea"]::placeholder {
   color: var(--color-text-muted);
+}
+input[type="text"]:focus,
+input[type="text"]:hover,
+input[type="textarea"]:focus,
+input[type="textarea"]:hover {
+  outline: none;
+  border-color: var(--color-accent-primary);
+  background-color: var(--color-bg-primary);
 }
 
 /* ===== GRID BUTTON ======== */
@@ -416,6 +417,27 @@ input[type="text"]::placeholder {
 .gridButton:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+/* ===== DRAWER BUTTONS ===== */
+.drawerButton {
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text-accent);
+  border-radius: 0 0.5rem 0.5rem 0;
+  border: 1px solid var(--color-border);
+  padding: 0.5rem;
+  border-left: none;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+  pointer-events: auto;
+  cursor: pointer;
+}
+.drawerButton:hover {
+  background-color: var(--color-bg-accent);
+  border: 1px solid var(--color-border-accent);
+  border-left: none;
+  color: var(--color-text-secondary);
 }
 
 .softPing {

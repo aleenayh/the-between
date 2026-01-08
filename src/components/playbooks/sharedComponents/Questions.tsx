@@ -41,7 +41,7 @@ export function Questions({ character }: { character: CharacterNotTroupe }) {
   return (
     <div className="w-full flex flex-col gap-2">
       {editable && (
-        <div className="text-sm italic text-theme-text-secondary">
+        <div className="text-sm italic text-theme-text-muted">
           The first {worshipper ? "four" : "three"} are always marked. Choose two more to mark.
         </div>
       )}

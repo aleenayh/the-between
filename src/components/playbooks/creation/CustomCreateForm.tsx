@@ -4,6 +4,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useGame } from "../../../context/GameContext";
 import { PlayerRole } from "../../../context/types";
+import { CloseButton } from "../../shared/CloseButton";
+import { Divider } from "../../shared/Divider";
 import { heraldPlaybookAdditions } from "../content/herald";
 import { AbilityBoxes } from "../sharedComponents/AbilityBoxes";
 import type { Character } from "../types";
@@ -275,12 +277,7 @@ export function CustomCreateForm() {
 									<Dialog.Overlay className="DialogOverlay" />
 									<Dialog.Content className="DialogContent">
 										<Dialog.Close asChild>
-											<button
-												type="button"
-												className="absolute top-2 right-2 aspect-square w-8 h-8 bg-theme-bg-accent text-theme-text-primary rounded-full flex justify-center items-center"
-											>
-												X
-											</button>
+											<CloseButton/>
 										</Dialog.Close>
 										<Dialog.Title className="DialogTitle">
 											Add Move
@@ -471,7 +468,7 @@ export function CustomCreateForm() {
 									})
 									.join("\n\n")}
 							</p>
-							<div className="h-px bg-theme-bg-accent w-full" />
+							<Divider/>
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-left">
 								<div className="flex flex-col gap-2">
 									<h2>Questions:</h2>{" "}
@@ -480,7 +477,7 @@ export function CustomCreateForm() {
 									})}
 								</div>
 							</div>
-							<div className="h-px bg-theme-bg-accent w-full" />
+							<Divider/>
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-left ">
 								<div>
 									<h2>Masks of Past:</h2>{" "}

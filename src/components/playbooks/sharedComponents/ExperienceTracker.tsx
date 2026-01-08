@@ -13,7 +13,7 @@ export function ExperienceTracker({ character }: { character: CharacterNotTroupe
 
 	return (
 		<div className="flex flex-col gap-2">
-			<div className="flex justify-center gap-2 text-lg text-theme-text-primary items-center flex-wrap">
+			<div className="flex justify-center gap-2 text-lg text-theme-text-primary items-baseline flex-wrap">
 				<h3 className="text-sm font-bold text-theme-text-accent">
 					Experience:
 				</h3>

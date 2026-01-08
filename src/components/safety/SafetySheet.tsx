@@ -1,23 +1,35 @@
 import { AnimatePresence, motion } from "framer-motion"
-import { Dialog } from "radix-ui"
+import { Dialog, Tooltip } from "radix-ui"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "react-hot-toast"
 import { useGame } from "../../context/GameContext"
+import { CloseButton } from "../shared/CloseButton"
 import { Divider } from "../shared/Divider"
+import { StyledTooltip } from "../shared/Tooltip"
 import { ReactComponent as HeartShieldIcon } from "./heartshield.svg"
 
 export function SafetyPane({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void }) {
   return (
     <div className="flex flex-col justify-start items-start h-full w-full pointer-events-none">
-      <button
+      <Tooltip.Root>
+        <Tooltip.Trigger asChild>
+        <button
         type="button"
         aria-label="Open settings"
-        className="w-10 h-10 text-theme-accent-primary bg-theme-bg-secondary rounded-none rounded-br-lg rounded-tr-lg p-2 hover:bg-theme-bg-accent hover:text-theme-text-accent transition-colors pointer-events-auto"
+        className="drawerButton"
         onClick={() => setIsOpen(!isOpen)}
       >
         <HeartShieldIcon className="w-full h-full" />
       </button>
+        </Tooltip.Trigger>
+          <Tooltip.Portal>
+          <Tooltip.Content className="z-30">
+          <StyledTooltip>Safety tools.</StyledTooltip>
+        </Tooltip.Content>
+        </Tooltip.Portal>
+      </Tooltip.Root>
+
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -52,20 +64,8 @@ export function SafetyPane({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: 
 }
 
 function LinesAndVeils() {
-  const { gameState, updateGameState } = useGame()
+  const { gameState } = useGame()
   const { lines, veils } = gameState.safety || { lines: [], veils: [] }
-
-  const remove = (type: "line" | "veil", text: string) => {
-    const newLines = lines?.filter((line) => line !== text)
-    const newVeils = veils?.filter((veil) => veil !== text)
-    updateGameState({
-      safety: {
-        lines: newLines,
-        veils: newVeils,
-      },
-    })
-    toast.success(`${type === "line" ? "Line" : "Veil"} removed: ${text}`)
-  }
 
   return (
     <div className="w-full px-8  flex flex-col gap-2 md:grid md:grid-cols-2 md:gap-6 md:justify-between text-left">
@@ -95,51 +95,36 @@ function LinesAndVeils() {
           <Dialog.Overlay className="DialogOverlay" />
           <Dialog.Content className="DialogContent">
             <Dialog.Close asChild>
-              <button
-                type="button"
-                className="absolute top-2 right-2 aspect-square w-8 h-8 bg-theme-bg-accent text-theme-text-primary rounded-full flex justify-center items-center"
-              >
-                X
-              </button>
+              <CloseButton/>
             </Dialog.Close>
             <Dialog.Title className="DialogTitle">Adjust or Remove Lines and Veils</Dialog.Title>
-            <Dialog.Description className="DialogDescription">Adjust or remove lines and veils.</Dialog.Description>
+            <Dialog.Description className="DialogDescription hidden">Adjust or remove lines and veils.</Dialog.Description>
             <div className="flex flex-col gap-2 w-full">
               <ul className="text-sm gap-2">
                 <h3 className="text-md font-bold text-theme-text-accent">Lines</h3>
+                <div className="flex flex-col gap-2">
                 {lines ? (
                   lines.map((line, index) => (
                     <li key={line} className="flex items-center gap-2">
                       <EditLineOrVeilForm type="line" index={index} text={line} />{" "}
-                      <button
-                        type="button"
-       className="w-full bg-theme-bg-secondary text-theme-text-primary px-4 py-2 rounded-lg opacity-80 hover:opacity-100 border-2 hover:bg-theme-bg-accent hover:border border-2-theme-border border-2-accent hover:text-theme-text-accent"
-                        onClick={() => remove("line", line)}
-                      >
-                        X
-                      </button>
                     </li>
                   ))
                 ) : (
                   <li>No lines have been added yet.</li>
                 )}
+                </div>
                 <h3 className="pt-2 text-md font-bold text-theme-text-accent">Veils</h3>
+                <div className="flex flex-col gap-2">
                 {veils ? (
                   veils.map((veil, index) => (
                     <li key={veil} className="flex items-center gap-2">
                       <EditLineOrVeilForm type="veil" index={index} text={veil} />{" "}
-                      <button
-                        type="button"
-       className="w-full bg-theme-bg-secondary text-theme-text-primary px-4 py-2 rounded-lg opacity-80 hover:opacity-100 border-2 hover:bg-theme-bg-accent hover:border border-2-theme-border border-2-accent hover:text-theme-text-accent"
-                        onClick={() => remove("veil", veil)}
-                      >
-                        X
-                      </button>
                     </li>
                   ))
                 ) : (
                   <li>No veils have been added yet.</li>
                 )}
+                </div>
               </ul>
             </div>
           </Dialog.Content>
@@ -171,15 +156,34 @@ function EditLineOrVeilForm({ type, index, text }: { type: "line" | "veil"; inde
     reset()
   }
 
+  const remove = (type: "line" | "veil", text: string) => {
+    const newLines = lines?.filter((line) => line !== text)
+    const newVeils = veils?.filter((veil) => veil !== text)
+    updateGameState({
+      safety: {
+        lines: newLines,
+        veils: newVeils,
+      },
+    })
+    toast.success(`${type === "line" ? "Line" : "Veil"} removed: ${text}`)
+  }
+
   return (
     <form onSubmit={handleSubmit(edit)} className="w-full flex gap-2">
       <input type="text" defaultValue={text} {...register("text")} className="w-full" />
       <button
         type="submit"
-       className="w-full bg-theme-bg-secondary text-theme-text-primary px-4 py-2 rounded-lg opacity-80 hover:opacity-100 border-2 hover:bg-theme-bg-accent hover:border border-2-theme-border border-2-accent hover:text-theme-text-accent"
+        className="w-fit bg-theme-bg-primary text-theme-text-primary px-4 py-2 rounded-lg opacity-80 hover:opacity-100 border border-theme-border hover:bg-theme-bg-accent hover:border border-2-theme-border border-2-accent hover:text-theme-text-accent"
       >
         ✓
       </button>
+      <button
+                        type="button"
+                        className="w-fit bg-theme-bg-primary text-theme-text-primary px-4 py-2 rounded-lg opacity-80 hover:opacity-100 border border-theme-border hover:bg-theme-bg-accent hover:border border-2-theme-border border-2-accent hover:text-theme-text-accent"
+                        onClick={() => remove(type, text)}
+                      >
+                        X
+                      </button>
     </form>
   )
 }

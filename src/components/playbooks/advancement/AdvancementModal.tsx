@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import { useGame } from "../../../context/GameContext"
+import { CloseButton } from "../../shared/CloseButton"
 import { playbookBases } from "../content"
 import { orderAbilities } from "../sharedComponents/AbilityBoxes"
 import type { Abilities, CharacterNotTroupe, playbookKey } from "../types"
@@ -77,12 +78,7 @@ export function AdvancementModal({ character }: { character: CharacterNotTroupe 
         <Dialog.Overlay className="DialogOverlay" />
         <Dialog.Content className="DialogContent">
           <Dialog.Close asChild>
-            <button
-              type="button"
-              className="absolute top-2 right-2 aspect-square w-8 h-8 bg-theme-bg-accent text-theme-text-primary rounded-full flex justify-center items-center"
-            >
-              X
-            </button>
+            <CloseButton/>
           </Dialog.Close>
           <Dialog.Title className=                        "DialogTitle text-xl">Advancement</Dialog.Title>
           <Dialog.Description className="hidden">Select an advancement for your Hunter.</Dialog.Description>
@@ -224,7 +220,7 @@ function ConfirmChoice({ onClick }: { onClick: () => void }) {
       <button
         type="button"
         onClick={onClick}
-        className="bg-theme-bg-secondary text-theme-text-primary px-4 py-2 rounded-lg opacity-80 hover:opacity-100 border-2 hover:bg-theme-bg-accent hover:border border-2-theme-border border-2-accent hover:text-theme-text-accent"
+        className="bg-theme-bg-primary text-theme-text-primary px-4 py-2 rounded-lg opacity-80 hover:opacity-100 border-2 hover:bg-theme-bg-accent hover:border border-2-theme-border border-2-accent hover:text-theme-text-accent"
       >
         Confirm
       </button>
@@ -299,12 +295,12 @@ function MoveSelector({
           return null
         }
         return (
-          <div key={move.title} className="flex flex-col w-full justify-center gap-2">
+          <div key={move.title} className="border border-theme-border rounded-lg p-2 flex flex-col w-full justify-center gap-2">
             <button
               onClick={() => setSelectedMove(move.title)}
               type="button"
               disabled={existingMoves.some((m) => m.title === move.title)}
-              className={`mx-auto text-center ${selectedMove === move.title ? "bg-theme-bg-accent text-theme-text-primary" : "bg-theme-bg-secondary text-theme-text-secondary"}`}
+              className={`mx-auto text-center ${selectedMove === move.title ? "text-theme-text-accent font-bold" : "text-theme-text-muted"}`}
             >
               {move.title}
             </button>

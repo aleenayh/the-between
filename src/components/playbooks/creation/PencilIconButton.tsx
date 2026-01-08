@@ -9,7 +9,7 @@ export function PencilIconButton({
 		<button
 			type="button"
 			onClick={() => setIsEditing(!isEditing)}
-			className="p-1 hover:bg-gray-100 rounded"
+			className="p-1 hover:bg-theme-bg-accent hover:text-theme-text-accent rounded-lg"
 			aria-label={isEditing ? "Done editing" : "Edit value"}
 		>
 			{isEditing ? (

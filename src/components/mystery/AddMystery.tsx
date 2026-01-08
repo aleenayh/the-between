@@ -2,6 +2,8 @@ import { Dialog } from "radix-ui"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { useGame } from "../../context/GameContext"
+import { CloseButton } from "../shared/CloseButton"
+import { Divider } from "../shared/Divider"
 import { CountdownItem } from "./Countdown"
 import { type Mystery, MysteryTheme, type Question } from "./types"
 
@@ -30,12 +32,7 @@ export function AddMystery() {
         <Dialog.Overlay className="DialogOverlay" style={{ zIndex: 20 }} />
         <Dialog.Content className="DialogContent" style={{ zIndex: 30 }}>
           <Dialog.Close asChild>
-            <button
-              type="button"
-              className="absolute top-2 right-2 aspect-square w-8 h-8 bg-theme-bg-accent text-theme-text-primary rounded-full flex justify-center items-center"
-            >
-              X
-            </button>
+            <CloseButton/>
           </Dialog.Close>
             <Dialog.Title className="DialogTitle">Add Threat</Dialog.Title>
           <Dialog.Description className="hidden">Add a new threat to the game.</Dialog.Description>
@@ -218,10 +215,6 @@ function CustomMysteryForm({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void
       </div>
     </form>
   )
-}
-
-function Divider() {
-  return <div className="w-full bg-theme-bg-accent h-px" />
 }
 
 function Preview({ type, total }: { type: MysteryTheme; total: number }) {

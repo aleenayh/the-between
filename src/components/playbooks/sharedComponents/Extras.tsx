@@ -10,11 +10,11 @@ export function Extras({ character }: { character: CharacterNotTroupe }) {
 				<h3 className="text-sm font-bold text-theme-text-accent">Vice:</h3>
 				<p className="text-sm text-theme-text-primary">{character.vice}</p>
 				<h3 className="text-sm font-bold text-theme-text-accent">Look:</h3>
-				<p className="text-xs text-theme-text-secondary">{character.look}</p>
+				<p className="text-xs text-theme-text-muted">{character.look}</p>
 			</div>
 			{character.playbook !== playbookKeys.custom && (
 				<Section title="Story" collapsible={true}>
-					<div className="flex flex-col gap-2 text-sm text-theme-text-secondary">
+					<div className="flex flex-col gap-2 text-sm text-theme-text-muted">
 						{base.intro.map((intro) => (
 							<p key={intro}>{intro}</p>
 						))}

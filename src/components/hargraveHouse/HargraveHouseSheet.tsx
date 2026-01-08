@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion"
-import { Dialog, Tooltip } from "radix-ui"
+import { Dialog, Tooltip,} from "radix-ui"
 import { useGame } from "../../context/GameContext"
 import { type GameState, PlayerRole } from "../../context/types"
 import { playbookKeys } from "../playbooks/types"
@@ -7,7 +7,7 @@ import { parseStaticText, parseWithCheckboxes } from "../playbooks/utils"
 import { Divider } from "../shared/Divider"
 import { EditableLine } from "../shared/EditableLine"
 import { Section } from "../shared/Section"
-import { StyledTooltip } from "../shared/Tooltip"
+import { StyledTooltip, } from "../shared/Tooltip"
 import { roomContent } from "./content/rooms"
 import type { RoomContent } from "./content/rooms/types"
 import { ReactComponent as HouseIcon } from "./house.svg"
@@ -16,14 +16,23 @@ import { ReactComponent as HouseIcon } from "./house.svg"
 export function HargraveHouseSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void }) {
   return (
     <div className="flex flex-col justify-start items-start h-full w-full pointer-events-none">
+      <Tooltip.Root>
+      <Tooltip.Trigger asChild>
       <button
         type="button"
         aria-label="Open settings"
-        className="w-10 h-10 text-theme-accent-primary bg-theme-bg-secondary rounded-none rounded-br-lg rounded-tr-lg p-2 hover:bg-theme-bg-accent hover:text-theme-text-accent transition-colors pointer-events-auto"
+        className="drawerButton"
         onClick={() => setIsOpen(!isOpen)}
       >
         <HouseIcon className="w-full h-full" />
       </button>
+      </Tooltip.Trigger>
+      <Tooltip.Content className="z-30">
+        <StyledTooltip>
+          View Hargrave House rooms and residents.
+        </StyledTooltip>
+      </Tooltip.Content>
+      </Tooltip.Root>
       <AnimatePresence>
         {isOpen && (
           <motion.div

@@ -38,18 +38,18 @@ export function GameInfo() {
 			<button
 				type="button"
 				onClick={backToLanding}
-				className="text-theme-text-accent underline hover:text-theme-text-secondary transition-colors"
+				className="text-theme-text-accent underline hover:text-theme-text-muted transition-colors"
 			>
 				Join a different game
 			</button>
-			<p className="text-theme-text-secondary text-sm inline text-left">
+			<p className="text-theme-text-muted text-sm inline text-left">
 				Games are considered active if they have been used during the last 3
 				months. Inactive games are periodically removed. If you want to take a
 				longer break,{" "}
 				<button
 					type="button"
 					onClick={clickDownload}
-					className="text-theme-text-accent underline hover:text-theme-text-secondary transition-colors"
+					className="text-theme-text-accent underline hover:text-theme-text-muted transition-colors"
 				>
 					download your game file
 				</button>{" "}

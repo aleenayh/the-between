@@ -1,12 +1,14 @@
 import { AnimatePresence, motion } from "framer-motion"
-import { Dialog } from "radix-ui"
+import { Dialog, Tooltip } from "radix-ui"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "react-hot-toast"
 import { useGame } from "../../context/GameContext"
 import { PlayerRole } from "../../context/types"
 import { parseStaticText } from "../playbooks/utils"
+import { CloseButton } from "../shared/CloseButton"
 import { Section } from "../shared/Section"
+import { StyledTooltip } from "../shared/Tooltip"
 import { ReactComponent as MastermindIcon } from "./chess.svg"
 import { Masterminds } from "./content/index"
 
@@ -25,14 +27,22 @@ export function MastermindSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsO
   return (
     <div className="flex flex-col justify-start items-start h-full w-full pointer-events-none">
       {(mastermind || role === PlayerRole.KEEPER) && (
-        <button
+        <Tooltip.Root>
+          <Tooltip.Trigger asChild>
+          <button
           type="button"
           aria-label="Open mystery sheet"
-          className="w-10 h-10 text-theme-accent-primary bg-theme-bg-secondary rounded-none rounded-br-lg rounded-tr-lg p-2 hover:bg-theme-bg-accent hover:text-theme-text-accent transition-colors pointer-events-auto"
+          className="drawerButton"
           onClick={() => setIsOpen(!isOpen)}
         >
           <MastermindIcon className="w-full h-full" />
         </button>
+          </Tooltip.Trigger>
+          <Tooltip.Content className="z-30">
+            <StyledTooltip>View Mastermind Conspiracy.</StyledTooltip>
+          </Tooltip.Content>
+        </Tooltip.Root>
+
       )}
       <AnimatePresence>
         {isOpen && (
@@ -61,7 +71,7 @@ export function MastermindSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsO
                   {role === PlayerRole.KEEPER && (
                     <div className="flex flex-col gap-2 mt-8 border border-theme-border-accent rounded-lg p-4">
                       <h2 className="text-xl font-bold text-theme-text-accent">Keeper Materials</h2>
-                      <p className="text-sm text-theme-text-secondary italic">Not visible to Hunters.</p>
+                      <p className="text-sm text-theme-text-muted italic">Not visible to Hunters.</p>
                       <Section title="Layers" collapsible={true}>
                         {layers.map((l) => (
                           <Section title={l.title} collapsible={true} minify={true} key={l.title}>
@@ -95,23 +105,18 @@ export function MastermindSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsO
                       </Section>
                       <Dialog.Root open={modalOpen} onOpenChange={setModalOpen}>
                         <Dialog.Trigger className="bg-theme-bg-accent text-theme-text-accent px-4 py-2 rounded-lg opacity-80 hover:opacity-100">
-                          Change Dominion
+                          Change Mastermind
                         </Dialog.Trigger>
                         <Dialog.Portal>
                           <Dialog.Overlay className="DialogOverlay" />
                           <Dialog.Content className="DialogContent">
                             <Dialog.Close asChild>
-                              <button
-                                type="button"
-                                className="absolute top-2 right-2 aspect-square w-8 h-8 bg-theme-bg-accent text-theme-text-primary rounded-full flex justify-center items-center"
-                              >
-                                X
-                              </button>
+                              <CloseButton/>
                             </Dialog.Close>
-                            <Dialog.Title className="DialogTitle">Change Dominion</Dialog.Title>
+                            <Dialog.Title className="DialogTitle">Change Mastermind</Dialog.Title>
                             <Dialog.Description className="DialogDescription">
-                              There can only be one active dominion at a time. Selecting a new dominion will replace the
-                              current one, including active clues. You can also remove the dominion without selecting a
+                              There can only be one active mastermind at a time. Selecting a new mastermind will replace the
+                              current one, including active clues. You can also remove the mastermind without selecting a
                               new one.
                             </Dialog.Description>
                             <MastermindForm setIsOpen={setModalOpen} />
@@ -134,7 +139,7 @@ export function MastermindSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsO
                   X
                 </button>
                 <h1 className="text-2xl font-bold text-theme-text-accent mb-10">{title}</h1>
-                <div className="text-lg text-theme-text-secondary text-center my-10">
+                <div className="text-lg text-theme-text-muted text-center my-10">
                   No active mastermind. You can add one below.
                 </div>
                 {role === PlayerRole.KEEPER && (
@@ -146,12 +151,7 @@ export function MastermindSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsO
                       <Dialog.Overlay className="DialogOverlay" />
                       <Dialog.Content className="DialogContent">
                         <Dialog.Close asChild>
-                          <button
-                            type="button"
-                            className="absolute top-2 right-2 aspect-square w-8 h-8 bg-theme-bg-accent text-theme-text-primary rounded-full flex justify-center items-center"
-                          >
-                            X
-                          </button>
+                          <CloseButton />
                         </Dialog.Close>
                         <Dialog.Title className="DialogTitle">Change Mastermind</Dialog.Title>
                         <Dialog.Description className="DialogDescription">
@@ -300,7 +300,7 @@ function ClueSection({ role }: { role: PlayerRole }) {
   return (
     <Section title="Clues" collapsible={true} minify={true}>
       <h3 className="text-sm text-theme-text-primary text-center">Earned Clues</h3>
-      <div className="flex gap-2 text-sm text-theme-text-secondary text-left justify-center items-center">
+      <div className="flex gap-2 text-sm text-theme-text-muted text-left justify-center items-center">
         <div>Earned: {earnedClues?.length}</div> <div>|</div>
         <div> Explained: {earnedClues?.filter((clue) => clue.explained).length}</div>
         <div>|</div> <div> Remaining: {earnedClues?.filter((clue) => !clue.explained).length}</div>
@@ -331,7 +331,7 @@ function ClueSection({ role }: { role: PlayerRole }) {
               />
               <button
                 type="button"
-                className="text-xs text-theme-text-secondary bg-theme-bg-primary rounded-full px-0 aspect-square hover:bg-theme-bg-accent hover:text-theme-text-accent hover:border hover:border-theme-border-accent"
+                className="text-xs text-theme-text-muted bg-theme-bg-primary rounded-full px-0 aspect-square hover:bg-theme-bg-accent hover:text-theme-text-accent hover:border hover:border-theme-border-accent"
                 onClick={() => removeClue(clue.text)}
               >
                 X
