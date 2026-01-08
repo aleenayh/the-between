@@ -1,19 +1,29 @@
 import { AnimatePresence, motion } from "framer-motion"
+import { Tooltip } from "radix-ui";
 import { useState } from "react"
 import { ReactComponent as Logo } from "../assets/between-logo.svg";
+import { StyledTooltip } from "../shared/Tooltip";
 import { ReactComponent as BookIcon } from "./book.svg"
 
 export function ReferenceSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void }) {
   return (
     <div className="flex flex-col justify-start items-start h-full w-full pointer-events-none">
-      <button
+      <Tooltip.Root>  
+        <Tooltip.Trigger asChild>
+        <button
         type="button"
         aria-label="Open reference sheet"
-        className="w-10 h-10 text-theme-accent-primary bg-theme-bg-secondary rounded-none rounded-br-lg p-2 hover:bg-theme-bg-accent hover:text-theme-text-accent transition-colors pointer-events-auto"
+        className="drawerButton"
         onClick={() => setIsOpen(!isOpen)}
       >
         <BookIcon className="w-full h-full" />
       </button>
+        </Tooltip.Trigger>
+        <Tooltip.Content className="z-30">
+          <StyledTooltip>Game rule reference sheet.</StyledTooltip>
+        </Tooltip.Content>
+      </Tooltip.Root>
+
       <AnimatePresence>
         {isOpen && (
           <motion.div

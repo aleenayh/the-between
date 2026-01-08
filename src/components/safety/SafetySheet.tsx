@@ -1,24 +1,35 @@
 import { AnimatePresence, motion } from "framer-motion"
-import { Dialog } from "radix-ui"
+import { Dialog, Tooltip } from "radix-ui"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "react-hot-toast"
 import { useGame } from "../../context/GameContext"
 import { CloseButton } from "../shared/CloseButton"
 import { Divider } from "../shared/Divider"
+import { StyledTooltip } from "../shared/Tooltip"
 import { ReactComponent as HeartShieldIcon } from "./heartshield.svg"
 
 export function SafetyPane({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void }) {
   return (
     <div className="flex flex-col justify-start items-start h-full w-full pointer-events-none">
-      <button
+      <Tooltip.Root>
+        <Tooltip.Trigger asChild>
+        <button
         type="button"
         aria-label="Open settings"
-        className="w-10 h-10 text-theme-accent-primary bg-theme-bg-secondary rounded-none rounded-br-lg rounded-tr-lg p-2 hover:bg-theme-bg-accent hover:text-theme-text-accent transition-colors pointer-events-auto"
+        className="drawerButton"
         onClick={() => setIsOpen(!isOpen)}
       >
         <HeartShieldIcon className="w-full h-full" />
       </button>
+        </Tooltip.Trigger>
+          <Tooltip.Portal>
+          <Tooltip.Content className="z-30">
+          <StyledTooltip>Safety tools.</StyledTooltip>
+        </Tooltip.Content>
+        </Tooltip.Portal>
+      </Tooltip.Root>
+
       <AnimatePresence>
         {isOpen && (
           <motion.div

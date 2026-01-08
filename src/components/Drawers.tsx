@@ -18,7 +18,7 @@ export function Drawers() {
 	const [mastermindOpen, setMastermindOpen] = useState(false);
 	const [safetyOpen, setSafetyOpen] = useState(false);
 	return (
-		<nav className="absolute top-0 left-0 w-full h-auto flex flex-col justify-start items-start pointer-events-none">
+		<div className="absolute top-0 left-0 w-full h-auto flex flex-col justify-start items-start pointer-events-none">
 			<ReferenceSheet isOpen={refOpen} setIsOpen={setRefOpen} />
 			<MysterySheet isOpen={mysteryOpen} setIsOpen={setMysteryOpen} />
 			<MastermindSheet isOpen={mastermindOpen} setIsOpen={setMastermindOpen} />
@@ -33,6 +33,6 @@ export function Drawers() {
 			<NotesPane isOpen={notesOpen} setIsOpen={setNotesOpen} />
 			<SafetyPane isOpen={safetyOpen} setIsOpen={setSafetyOpen} />
 			<SettingsPane isOpen={settingsOpen} setIsOpen={setSettingsOpen} />
-		</nav>
+		</div>
 	);
 }

@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion"
-import { Dialog } from "radix-ui"
+import { Dialog, Tooltip } from "radix-ui"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "react-hot-toast"
@@ -8,6 +8,7 @@ import { PlayerRole } from "../../context/types"
 import { parseStaticText } from "../playbooks/utils"
 import { CloseButton } from "../shared/CloseButton"
 import { Section } from "../shared/Section"
+import { StyledTooltip } from "../shared/Tooltip"
 import { ReactComponent as MastermindIcon } from "./chess.svg"
 import { Masterminds } from "./content/index"
 
@@ -26,14 +27,22 @@ export function MastermindSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsO
   return (
     <div className="flex flex-col justify-start items-start h-full w-full pointer-events-none">
       {(mastermind || role === PlayerRole.KEEPER) && (
-        <button
+        <Tooltip.Root>
+          <Tooltip.Trigger asChild>
+          <button
           type="button"
           aria-label="Open mystery sheet"
-          className="w-10 h-10 text-theme-accent-primary bg-theme-bg-secondary rounded-none rounded-br-lg rounded-tr-lg p-2 hover:bg-theme-bg-accent hover:text-theme-text-accent transition-colors pointer-events-auto"
+          className="drawerButton"
           onClick={() => setIsOpen(!isOpen)}
         >
           <MastermindIcon className="w-full h-full" />
         </button>
+          </Tooltip.Trigger>
+          <Tooltip.Content className="z-30">
+            <StyledTooltip>View Mastermind Conspiracy.</StyledTooltip>
+          </Tooltip.Content>
+        </Tooltip.Root>
+
       )}
       <AnimatePresence>
         {isOpen && (

@@ -208,7 +208,7 @@ export function AbilityBox({ ability, value }: AbilityBoxProps) {
             <button
               type="button"
               onClick={handleRoll}
-              className="mx-auto bg-theme-bg-secondary border border-theme-border text-theme-text-primary rounded-md p-2 hover:bg-theme-bg-accent hover:text-theme-text-accent"
+              className="mx-auto bg-theme-bg-primary border border-theme-border text-theme-text-primary rounded-md p-2 hover:bg-theme-bg-accent hover:text-theme-text-accent"
             >
               Roll
             </button>
