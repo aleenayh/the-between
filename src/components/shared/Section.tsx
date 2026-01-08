@@ -54,8 +54,8 @@ export function ControlledSection({
             collapsible && setIsCollapsed(!isCollapsed)
           }}
         >
-          {collapsible && !leftAlign &&<span className="text-xs text-theme-text-secondary">{isCollapsed ? "▶ " : "▼ "}</span>}{" "}
-          {title} {collapsible && <span className="text-xs text-theme-text-secondary">{isCollapsed ? " ◀" : "▼"}</span>}
+          {collapsible && !leftAlign &&<span className="text-xs text-theme-text-muted">{isCollapsed ? "▶ " : "▼ "}</span>}{" "}
+          {title} {collapsible && <span className="text-xs text-theme-text-muted">{isCollapsed ? " ◀" : "▼"}</span>}
         </button>
       </h3>
       <div

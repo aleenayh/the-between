@@ -1,5 +1,6 @@
 import { Dialog } from "radix-ui";
 import { useGame } from "../../../context/GameContext";
+import { CloseButton } from "../../shared/CloseButton";
 
 export function RetireCharacterModal() {
 	const {
@@ -25,12 +26,7 @@ export function RetireCharacterModal() {
 				<Dialog.Overlay className="DialogOverlay" />
 				<Dialog.Content className="DialogContent">
 					<Dialog.Close asChild>
-						<button
-							type="button"
-							className="absolute top-2 right-2 aspect-square w-8 h-8 bg-theme-bg-accent text-theme-text-primary rounded-full flex justify-center items-center"
-						>
-							X
-						</button>
+<CloseButton/>
 					</Dialog.Close>
 					<Dialog.Title className="DialogTitle">Retire Character</Dialog.Title>
 					<div className="flex flex-col gap-4 overflow-y-auto max-h-[500px]">

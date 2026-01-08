@@ -255,7 +255,7 @@ export function LandingPage({
 				)}
 
 				{step === "creating" && (
-					<div className="text-center text-theme-text-secondary">
+					<div className="text-center text-theme-text-muted">
 						<p className="animate-pulse">Creating your game...</p>
 					</div>
 				)}
@@ -275,7 +275,7 @@ function NameStep({
 }) {
 	return (
 		<div className="flex flex-col gap-4">
-			<p className="text-center text-theme-text-secondary">
+			<p className="text-center text-theme-text-muted">
 				What shall we call you?
 			</p>
 			<input
@@ -313,7 +313,7 @@ function ChooseStep({
 }) {
 	return (
 		<div className="flex flex-col gap-4">
-			<p className="text-center text-theme-text-secondary">
+			<p className="text-center text-theme-text-muted">
 				Welcome, <span className="text-theme-text-accent">{playerName}</span>
 			</p>
 			<p className="text-center text-theme-text-muted text-sm">
@@ -354,7 +354,7 @@ function ChooseStep({
 			<button
 				type="button"
 				onClick={onBack}
-				className="text-theme-text-muted hover:text-theme-text-secondary text-sm transition-colors"
+				className="text-theme-text-muted hover:text-theme-text-muted text-sm transition-colors"
 			>
 				← Change name
 			</button>
@@ -373,7 +373,7 @@ function JoinFromQueryParams({
 }) {
 	return (
 		<div className="flex flex-col gap-4">
-			<p className="text-center text-theme-text-secondary">
+			<p className="text-center text-theme-text-muted">
 				Would you like to join game {hash}?
 			</p>
 			<button
@@ -386,7 +386,7 @@ function JoinFromQueryParams({
 			<button
 				type="button"
 				onClick={onBack}
-				className="text-theme-text-muted hover:text-theme-text-secondary text-sm transition-colors"
+				className="text-theme-text-muted hover:text-theme-text-muted text-sm transition-colors"
 			>
 				← No, go back
 			</button>
@@ -409,7 +409,7 @@ function JoinHashStep({
 }) {
 	return (
 		<div className="flex flex-col gap-4">
-			<p className="text-center text-theme-text-secondary">
+			<p className="text-center text-theme-text-muted">
 				Enter the game code shared by your Keeper
 			</p>
 			<input
@@ -431,7 +431,7 @@ function JoinHashStep({
 			<button
 				type="button"
 				onClick={onBack}
-				className="text-theme-text-muted hover:text-theme-text-secondary text-sm transition-colors"
+				className="text-theme-text-muted hover:text-theme-text-muted text-sm transition-colors"
 			>
 				← Back
 			</button>
@@ -481,10 +481,10 @@ function UploadGameFileStep({
 	};
 	return (
 		<div className="flex flex-col gap-4">
-			<p className="text-center text-theme-text-secondary">
+			<p className="text-center text-theme-text-muted">
 				Upload your game file below.
 			</p>
-			<p className="text-theme-text-secondary text-sm text-left">
+			<p className="text-theme-text-muted text-sm text-left">
 				If you didn't rename the file, it should look something like:
 				"TheBetween-game-abc123.json"
 			</p>
@@ -506,7 +506,7 @@ function UploadGameFileStep({
 			<button
 				type="button"
 				onClick={onBack}
-				className="text-theme-text-muted hover:text-theme-text-secondary text-sm transition-colors"
+				className="text-theme-text-muted hover:text-theme-text-muted text-sm transition-colors"
 			>
 				← Back
 			</button>
@@ -532,7 +532,7 @@ function ConfirmNameStep({
 	return (
 		<div className="flex flex-col gap-4">
 			<div className="text-center">
-				<p className="text-theme-text-secondary mb-2">
+				<p className="text-theme-text-muted mb-2">
 					You're joining as{" "}
 					<span className="text-theme-text-accent font-bold">{playerName}</span>
 				</p>
@@ -572,14 +572,14 @@ function ConfirmNameStep({
 				<button
 					type="button"
 					onClick={onBack}
-					className="text-theme-text-muted hover:text-theme-text-secondary transition-colors"
+					className="text-theme-text-muted hover:text-theme-text-muted transition-colors"
 				>
 					← Different game
 				</button>
 				<button
 					type="button"
 					onClick={onEditName}
-					className="text-theme-text-muted hover:text-theme-text-secondary transition-colors"
+					className="text-theme-text-muted hover:text-theme-text-muted transition-colors"
 				>
 					Edit my name
 				</button>

@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from "framer-motion"
 import { Dialog } from "radix-ui"
 import { useId, useState } from "react"
 import { useGame } from "../../../context/GameContext"
+import { CloseButton } from "../../shared/CloseButton"
 import type { Abilities, Abilities as AbilityType } from "../types"
 
 export function AbilityBoxes({ stats, abbreviate = false }: { stats: AbilityType; abbreviate?: boolean }) {
@@ -153,7 +154,7 @@ export function AbilityBox({ ability, value }: AbilityBoxProps) {
   }
 
   return (
-    <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog.Root open={isOpen} onOpenChange={handleOpenChange}>
       <Dialog.Trigger asChild>
         <div className="flex flex-col gap-1 rounded-lg border border-theme-border-accent p-1 bg-theme-bg-secondary justify-center items-center min-w-[10%]">
           <h4 className="text-theme-text-muted truncate max-w-full whitespace-nowrap overflow-hidden text-ellipsis">
@@ -166,13 +167,7 @@ export function AbilityBox({ ability, value }: AbilityBoxProps) {
         <Dialog.Overlay className="DialogOverlay" />
         <Dialog.Content className="DialogContent">
           <Dialog.Close asChild>
-            <button
-              type="button"
-              onClick={() => handleOpenChange(false)}
-              className="absolute top-2 right-2 aspect-square w-8 h-8 bg-theme-bg-accent text-theme-text-primary rounded-full flex justify-center items-center"
-            >
-              X
-            </button>
+<CloseButton onClick={() => handleOpenChange(false)}/>
           </Dialog.Close>
           <Dialog.Title className="DialogTitle">Roll {ability.charAt(0).toUpperCase() + ability.slice(1)}</Dialog.Title>
           <Dialog.Description className="hidden">Roll with {ability}</Dialog.Description>
@@ -213,7 +208,7 @@ export function AbilityBox({ ability, value }: AbilityBoxProps) {
             <button
               type="button"
               onClick={handleRoll}
-              className="mx-auto bg-theme-bg-accent text-theme-text-primary rounded-md p-2 hover:bg-theme-bg-accent/80 hover:text-theme-text-primary/80"
+              className="mx-auto bg-theme-bg-secondary border border-theme-border text-theme-text-primary rounded-md p-2 hover:bg-theme-bg-accent hover:text-theme-text-accent"
             >
               Roll
             </button>

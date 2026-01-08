@@ -23,7 +23,7 @@ export function EditableLine({
 
   return (
     <div className="inline-flex justify-between items-center gap-2">
-      <span className="text-sm text-theme-text-secondary">◆</span>
+      <span className="text-sm text-theme-text-muted">◆</span>
       {showEdit ? (
         <Input text={text} onSave={(value) => handleSave(value)} />
       ) : (

@@ -115,7 +115,7 @@ function CharacterCreationStarter({ onCollapse }: { onCollapse: () => void }) {
                 <button
                   key={playbookKey}
                   type="button"
-                  className={`border border-theme-border px-4 py-3 rounded-lg bg-theme-bg-secondary hover:bg-theme-bg-accent hover:text-theme-text-accent transition-colors flex flex-col ${activeHunter ? "text-theme-text-secondary opacity-60" : "text-theme-text-primary"}`}
+                  className={`border border-theme-border px-4 py-3 rounded-lg bg-theme-bg-secondary hover:bg-theme-bg-accent hover:text-theme-text-accent transition-colors flex flex-col ${activeHunter ? "text-theme-text-muted opacity-60" : "text-theme-text-primary"}`}
                   onClick={() => setKey(playbookKey)}
                 >
                   {base.title}{" "}

@@ -65,7 +65,7 @@ export function Countdown({ mystery }: { mystery: Mystery }) {
 								<button
 									type="button"
 									onClick={onRemove}
-									className="border border-theme-border bg-theme-bg-primary hover:bg-theme-bg-accent px-2 py-1 rounded-lg text-sm text-theme-text-secondary hover:text-theme-text-primary"
+									className="border border-theme-border bg-theme-bg-primary hover:bg-theme-bg-accent px-2 py-1 rounded-lg text-sm text-theme-text-muted hover:text-theme-text-primary"
 								>
 									Remove this mystery
 								</button>
@@ -126,7 +126,7 @@ export function Countdown({ mystery }: { mystery: Mystery }) {
 								)}
 							</div>
 						)}
-						<div className="text-theme-text-secondary text-sm">
+						<div className="text-theme-text-muted text-sm">
 							{mystery.countdownCurrent} / {mystery.countdownTotal}
 						</div>
 					</div>
@@ -140,11 +140,11 @@ export function Countdown({ mystery }: { mystery: Mystery }) {
 							<div key={question.text}>
 								<div className="flex gap-2 justify-start items-center">
 									{question.text}{" "}
-									<span className="text-sm text-theme-text-secondary italic">
+									<span className="text-sm text-theme-text-muted italic">
 										(Complexity: {question.complexity})
 									</span>
 								</div>
-								<div className="text-sm text-theme-text-secondary text-left">
+								<div className="text-sm text-theme-text-muted text-left">
 									<span className="italic">Opportunity:</span>{" "}
 									{question.opportunity}
 								</div>
@@ -154,7 +154,7 @@ export function Countdown({ mystery }: { mystery: Mystery }) {
 											<Tooltip.Trigger>
 												<button
 													type="button"
-													className="border border-theme-border bg-theme-bg-primary hover:bg-theme-bg-accent px-2 py-1 rounded-lg text-sm text-theme-text-secondary hover:text-theme-text-primary"
+													className="border border-theme-border bg-theme-bg-primary hover:bg-theme-bg-accent px-2 py-1 rounded-lg text-sm text-theme-text-muted hover:text-theme-text-primary"
 													onClick={() => resolveQuestion(question.text)}
 												>
 													Resolve Question
@@ -294,7 +294,7 @@ function ClueSection({
 			<h3 className="text-sm text-theme-text-primary text-center">
 				Earned Clues
 			</h3>
-			<div className="flex gap-2 text-sm text-theme-text-secondary text-left justify-center items-center">
+			<div className="flex gap-2 text-sm text-theme-text-muted text-left justify-center items-center">
 				<div>Earned: {earnedClues?.length}</div> <div>|</div>
 				<div>
 					{" "}
@@ -335,7 +335,7 @@ function ClueSection({
 							/>
 							<button
 								type="button"
-								className="text-xs text-theme-text-secondary bg-theme-bg-primary rounded-full px-0 aspect-square hover:bg-theme-bg-accent hover:text-theme-text-accent hover:border hover:border-theme-border-accent"
+								className="text-xs text-theme-text-muted bg-theme-bg-primary rounded-full px-0 aspect-square hover:bg-theme-bg-accent hover:text-theme-text-accent hover:border hover:border-theme-border-accent"
 								onClick={() => removeClue(clue.text)}
 							>
 								X

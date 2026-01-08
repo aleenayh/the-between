@@ -2,7 +2,8 @@ import { Dialog } from "radix-ui";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useGame } from "../../../context/GameContext";
-import type {CharacterNotTroupe, Abilities } from "../types";
+import { CloseButton } from "../../shared/CloseButton";
+import type {Abilities, CharacterNotTroupe } from "../types";
 
 export function AdjustmentModal({ character }: { character: CharacterNotTroupe }) {
 
@@ -54,12 +55,7 @@ export function AdjustmentModal({ character }: { character: CharacterNotTroupe }
 				<Dialog.Overlay className="DialogOverlay" />
 				<Dialog.Content className="DialogContent">
 					<Dialog.Close asChild>
-						<button
-							type="button"
-							className="absolute top-2 right-2 aspect-square w-8 h-8 bg-theme-bg-accent text-theme-text-primary rounded-full flex justify-center items-center"
-						>
-							X
-						</button>
+						<CloseButton/>
 					</Dialog.Close>
 					<Dialog.Title className="DialogTitle">Edit Hunter</Dialog.Title>
 					<Dialog.Description className="hidden">

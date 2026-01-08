@@ -69,7 +69,7 @@ export function NotesPane({
 							<button
 								type="button"
 								onClick={saveLocal}
-								className="bg-theme-bg-accent text-theme-text-accent border-2 border-theme-border-accent rounded-lg p-2 w-full hover:bg-theme-bg-accent/80 hover:text-theme-text-accent/80 transition-colors"
+								className="hover:bg-theme-bg-accent hover:text-theme-text-accent border-2 hover:border-theme-border-accent rounded-lg p-2 w-full bg-theme-bg-secondary text-theme-text-primary border-theme-border transition-colors"
 							>
 								{buttonText}
 							</button>

@@ -2,6 +2,7 @@ import { Dialog } from "radix-ui"
 import { useState } from "react"
 import toast from "react-hot-toast"
 import { useGame } from "../../../context/GameContext"
+import { CloseButton } from "../../shared/CloseButton"
 import { DiceIndicator } from "../../shared/DiceIndicator"
 import { EditableLine } from "../../shared/EditableLine"
 import { Section } from "../../shared/Section"
@@ -89,12 +90,7 @@ export function InformalsExpanded({ troupe }: { troupe: Troupe }) {
               <Dialog.Overlay className="DialogOverlay" />
               <Dialog.Content className="DialogContent">
                 <Dialog.Close asChild>
-                  <button
-                    type="button"
-                    className="absolute top-2 right-2 aspect-square w-8 h-8 bg-theme-bg-accent text-theme-text-primary rounded-full flex justify-center items-center"
-                  >
-                    X
-                  </button>
+<CloseButton/>
                 </Dialog.Close>
                 <Dialog.Title className="DialogTitle">Masks of the Future</Dialog.Title>
                 <Dialog.Description className="DialogDescription hidden">Masks of Future</Dialog.Description>
@@ -205,8 +201,8 @@ function TabContent({ member, troupe }: { member: keyof typeof members, troupe: 
         {personalQuarters.map((quarter, index) => (
          <EditableLine key={`personal-quarter-${quarter.text}-${index}`} editable={editable} index={index} text={quarter.text} onSave={(index, value) => handleSetPersonalQuarter(member, index, value)} />
         ))}
-        <i className="text-sm text-theme-text-secondary">If {pretty(member)} would suffer fatal harm, you can cross off the Personal Quarters section and then describe how an item from the Personal Quarters (marked or unmarked) helps them narrowly avoid death. {pretty(member)} no longer has access to Personal Quarters.</i>
-        <button type="button" className="bg-theme-bg-secondary text-theme-text-secondary border-theme-bg-primary border-2 rounded-lg p-1 w-1/2 mx-auto hover:bg-theme-bg-accent hover:text-theme-text-accent" onClick={() => handleSetPersonalQuartersDisabled(member)}>Narrowly Avoid Death</button>
+        <i className="text-sm text-theme-text-muted">If {pretty(member)} would suffer fatal harm, you can cross off the Personal Quarters section and then describe how an item from the Personal Quarters (marked or unmarked) helps them narrowly avoid death. {pretty(member)} no longer has access to Personal Quarters.</i>
+        <button type="button" className="bg-theme-bg-secondary text-theme-text-muted border-theme-bg-primary border-2 rounded-lg p-1 w-1/2 mx-auto hover:bg-theme-bg-accent hover:text-theme-text-accent" onClick={() => handleSetPersonalQuartersDisabled(member)}>Narrowly Avoid Death</button>
 </div>
       }
 
