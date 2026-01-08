@@ -21,9 +21,9 @@ export function MastermindSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsO
   const [modalOpen, setModalOpen] = useState(false)
   if (!mastermind && role !== PlayerRole.KEEPER) return null
 
-  const { title, intro, servants, layers } = mastermind
+  const { title, servants, layers } = mastermind
     ? Masterminds[mastermind.title as keyof typeof Masterminds]
-    : { title: "Mastermind", intro: [], servants: [], layers: [] }
+    : { title: "Mastermind", servants: [], layers: [] }
   return (
     <div className="flex flex-col justify-start items-start h-full w-full pointer-events-none">
       {(mastermind || role === PlayerRole.KEEPER) && (
@@ -31,9 +31,10 @@ export function MastermindSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsO
           <Tooltip.Trigger asChild>
           <button
           type="button"
-          aria-label="Open mystery sheet"
+          aria-label="Open mastermind sheet"
           className="drawerButton"
           onClick={() => setIsOpen(!isOpen)}
+          
         >
           <MastermindIcon className="w-full h-full" />
         </button>
@@ -60,13 +61,7 @@ export function MastermindSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsO
                 </button>
                 <h1 className="text-2xl font-bold text-theme-text-accent mb-10">{title}</h1>
                 <div className="flex flex-col gap-10">
-                  <Section title="Introduction" collapsible={true} minify={true}>
-                    {intro.map((i) => (
-                      <p key={i} className="text-left leading-relaxed text-sm">
-                        {parseStaticText(i)}
-                      </p>
-                    ))}
-                  </Section>
+                  
                   <ClueSection role={role} />
                   {role === PlayerRole.KEEPER && (
                     <div className="flex flex-col gap-2 mt-8 border border-theme-border-accent rounded-lg p-4">
@@ -74,7 +69,7 @@ export function MastermindSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsO
                       <p className="text-sm text-theme-text-muted italic">Not visible to Hunters.</p>
                       <Section title="Layers" collapsible={true}>
                         {layers.map((l) => (
-                          <Section title={l.title} collapsible={true} minify={true} key={l.title}>
+                          <Section title={l.title} collapsible minify leftAlign key={l.title}>
                             {l.text.map((t) => (
                               <p key={t} className="text-left leading-relaxed">
                                 {parseStaticText(t)}
@@ -93,7 +88,7 @@ export function MastermindSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsO
                               </p>
                             ))}
                             {s.quotes.length > 0 && (
-                              <h3 className="text-lg font-bold text-theme-text-accent">Quotes</h3>
+                              <h3 className="text-md font-bold text-theme-text-accent text-left">Quotes</h3>
                             )}
                             {s.quotes.map((q) => (
                               <p key={q} className="text-left leading-relaxed italic">
@@ -196,12 +191,21 @@ function MastermindForm({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void })
     setIsOpen(false)
   }
 
+  const masterminds = Object.keys(Masterminds).map((key) => ({
+    title: key,
+    label: Masterminds[key as keyof typeof Masterminds].title,
+  }))
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex gap-2 items-center justify-start my-4">
-        <input type="radio" {...register("title")} value="noxilliax" />
-        <label htmlFor="title">Noxilliax, The Emerald Nightmare (The Great Forest)</label>
-      </div>
+
+        {masterminds.map((mastermind) => (
+          <div className="flex gap-2 items-center justify-start my-4" key={`select-${mastermind.title}`}>
+          <input type="radio" {...register("title")} value={mastermind.title} />
+          <label htmlFor="title">{mastermind.label}</label>
+          </div>
+        ))}
+
       <div className="w-full flex gap-2 items-center justify-center">
         <button
           type="submit"
@@ -216,7 +220,7 @@ function MastermindForm({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void })
             updateGameState({ mastermind: null })
           }}
         >
-          Remove Dominion
+          Remove Mastermind
         </button>
       </div>
     </form>

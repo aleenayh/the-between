@@ -8,7 +8,7 @@ export const questionSchema = z.object({
 		.catch(catchWithWarning("mystery.question.opportunity", "")),
 	complexity: z.coerce
 		.number()
-		.catch(catchWithWarning("mystery.question.coplexity", 2)),
+		.catch(catchWithWarning("mystery.question.complexity", 2)),
 });
 
 export type Question = z.infer<typeof questionSchema>;
@@ -28,11 +28,20 @@ type Servant = {
 type Layer = {
 	title: string;
 	text: string[];
+	checkList?: string[],
+	addServant?: boolean,
 };
+
+type MastermindQuestion = {
+	layer: string;
+	question: string;
+	complexity: number;
+	opportunity?: string;
+}
 
 export type MastermindContent = {
 	title: string;
-	intro: string[];
+	questions: MastermindQuestion[];
 	servants: Servant[];
 	layers: Layer[];
 };
