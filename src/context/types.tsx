@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { clueSchema, mysterySchema } from "../components/mystery/types";
+import { mastermindSchema } from "../components/mastermind/types";
+import { mysterySchema } from "../components/mystery/types";
 import { abilitiesKeys, characterSchema, troupeSchema } from "../components/playbooks/types";
 import { catchWithWarning } from "../utils/schemaValidation";
 
@@ -40,11 +41,6 @@ const playerSchema = z.object({
 const safetySchema = z.object({
 	lines: z.array(z.string()).optional().catch(undefined),
 	veils: z.array(z.string()).optional().catch(undefined),
-});
-
-const mastermindSchema = z.object({
-	title: z.string(),
-	clues: z.array(clueSchema).optional().catch(undefined),
 });
 
 const roomSchema = z.object({
