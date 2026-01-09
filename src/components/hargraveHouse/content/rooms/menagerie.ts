@@ -1,4 +1,4 @@
-import type { RoomContent } from "./types";
+import type { RoomContent } from "../../types";
 
 export const menagerieContent: RoomContent = {
 	title: "The Menagerie",
