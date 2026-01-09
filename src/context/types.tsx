@@ -1,8 +1,10 @@
 import { z } from "zod";
+import { residentSchema, roomSchema } from "../components/hargraveHouse/types";
 import { mastermindSchema } from "../components/mastermind/types";
 import { mysterySchema } from "../components/mystery/types";
 import { abilitiesKeys, characterSchema, troupeSchema } from "../components/playbooks/types";
-import { catchWithWarning } from "../utils/schemaValidation";
+import { catchWithWarning } from "../utils/schemaValidation";	
+import { startingRooms } from "./defaults";
 
 export enum PlayerRole {
 	KEEPER = "keeper",
@@ -43,21 +45,9 @@ const safetySchema = z.object({
 	veils: z.array(z.string()).optional().catch(undefined),
 });
 
-const roomSchema = z.object({
-	key: z.string(),
-	status: z.enum(["available", "unlocked", "active"]).catch("available"),
-	checks: z.array(z.number()).optional().catch(undefined),
-	extraLines: z.array(z.string()).optional().catch(undefined),
-});
-
-const residentSchema = z.object({
-	name: z.string(),
-	checks: z.array(z.number()).catch([]),
-});
-
 const hargraveHouseSchema = z.object({
-	residents: z.array(residentSchema).catch([]),
-	rooms: z.array(roomSchema).catch([]),
+	residents: z.array(residentSchema).optional().catch([]),
+	rooms: z.array(roomSchema).catch(startingRooms),
 });
 
 export const gameStateSchema = z.object({
