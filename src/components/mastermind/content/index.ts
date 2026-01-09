@@ -61,6 +61,33 @@ export const Masterminds: Record<string, MastermindContent> = {
 			{ title: "Layer Three: A Threat Becomes a Servant",
 				text: ["This layer is unlocked after the fourth Threat is introduced.  Anytime thereafter, you can choose an active Threat and narrate a scene showing how the Threat becomes a Servant of the Mastermind. Add them to the Servants section and tell the Hunters the Threat can no longer be resolved (nor is it active for game purposes, though it may still be a danger to the city). You can do this once. "],
 				addServant:true
+			},
+			{ title: "Layer Four: The Assault on Hargrave House",
+				text: ["This layer is unlocked after the Hunters have successfully resolved three Threats and all boxes from Layer Two have been marked, or if the Hunters get a miss on an attempt to answer the Mastermind Question. Anytime thereafter, you may read the below text at the start of a Day Phase instead of doing the normal procedure; if you do, any countdowns on active Threats are suspended for a single Day/Night cycle, and The Assault on Hargrave House becomes the only active Threat until the end of the Night Phase.", 
+
+"You have received information from a reliable source: Mrs. Brathwaite is sending a group of her henchmen to lay siege to Hargrave House tonight. Perhaps she’s tired of playing cat & mouse, or maybe she wants to send you a message; she may be testing you… or toying with you. No matter, the result is the same: her forces intend to ransack the house, and you’ll have to stop them. You don’t have much time to prepare a defense.",
+
+"Question: How can we defend Hargrave House from Mrs. Brathwaite’s Servants? (Complexity: 6)",
+"Opportunity: Resolve the Threat by defending Hargrave House and capturing a Servant. If successful, the Servant will reveal a Mastermind Clue in the form of vital information about Mrs. Brathwaite’s plans. ",
+
+"Let the Hunters know that investigating this Threat means finding ways to defend the house from—and devising traps for—the Mastermind’s Servants. The following Clues are available (and can be used more than once, as needed):",
+"<li>A good spot for an ambush or trap.</li>",
+"<li>A good spot to put a lookout.</li>",
+"<li>Materials to make a barricade.</li>",
+"<li>A Side Character volunteers to help you.</li>",
+"<li>A Side Character reveals a hidden talent for hand-to-hand combat.</li>",
+"<li>An object of power (pick one: a mirror that causes the viewer to see their greatest fear, a talisman that makes a portal impassable, a veil that makes the wearer difficult to notice, something else).</li>",
+"<li>A door that opens into an impossible room.</li>",
+"<li>A staircase that’s a much longer climb/descent than it appears to be.</li>",
+"<li>A hallway with impenetrable darkness.</li>",
+"<li>A torture device (pick one: an iron maiden, a vise, shackles, something else).</li>",
+
+"No matter the result of Answer a Question, the Servants will attack Hargrave House during the Night Phase. On a 10+, the Opportunity can be pursued in a straightforward and decisive way; have the Hunters narrate their great success, and only trigger another move if part of their plan is particularly risky. On a 7-9, the ﬁght is much tougher, and should trigger more moves to be successful. On a miss (or if the Hunters are unable to attempt the Question at all), the Hunters will have to make a few tough Night Moves in order to survive, and some of their property is destroyed during the assault; each Hunter must erase an unmarked item from their Personal Quarters.",
+
+"The players must then immediately attempt to answer the Mastermind Question. The Threat is considered resolved at the end of the Night Phase."],
+			},
+			{ title: "Layer Five: The Confrontation",
+				text: ["This layer is unlocked after the Hunters successfully answer the Mastermind Question, or The Assault on Hargrave House is resolved, whichever comes first. Follow the instructions on the associated Confrontation sheet. "],
 			}
 		],
 	},
