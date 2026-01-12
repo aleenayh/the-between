@@ -3,8 +3,10 @@ import { toast } from "react-hot-toast";
 import { useGame } from "../../../context/GameContext";
 import {ReactComponent as AdaptorKey } from "../../assets/adaptor.svg";
 import { ReactComponent as BabySVG } from "../../assets/baby.svg";
+import { ReactComponent as DragonIcon } from "../../assets/dragon.svg";
+import { ReactComponent as XIcon } from "../../assets/ex.svg";
 import { ReactComponent as LockIcon } from "../../assets/lock.svg";
-import { ReactComponent as UnlockIcon } from "../../assets/unlock.svg";
+import { ReactComponent as OIcon } from "../../assets/oh.svg";
 import { Divider } from "../../shared/Divider";
 import { EditableLine } from "../../shared/EditableLine";
 import { playbookBases } from "../content";
@@ -32,7 +34,7 @@ export function Moves({ character }: { character: CharacterNotTroupe }) {
 	);
 }
 
-const specialMoveTitles = ["The Child", "The Royal Explorer's Club","Rites of Salt & Smoke", "The Reflection","The Family", "The Phantom", "Doll Parts", "The Offering", "The Dragon Sickness"]
+const specialMoveTitles = ["The Child", "The Royal Explorer's Club","Rites of Salt & Smoke", "The Reflection","The Family", "The Phantom", "Doll Parts", "The Offering", "The Dragon Sickness", "…Is Never Over"]
 
 function MoveDisplay({
 	character,
@@ -184,6 +186,8 @@ function SpecialMoveDisplay({ character, title }: { character: CharacterNotTroup
 			return <TheOffering character={character} />
 		case "The Dragon Sickness":
 			return <TheDragonSickness character={character} />
+		case "…Is Never Over":
+			return <IsNeverOver character={character} />
 	}
 	return <div>{title} Special Display not built yet!</div>
 }
@@ -793,7 +797,7 @@ lineIndex}`}>
                 disabled={!editable}
                 onClick={() => toggleCheck("boon", idx)}
               >
-				{boons[idx] === 0 ? <LockIcon className="w-6 h-6 text-theme-text-muted" /> : <UnlockIcon className="w-6 h-6 text-theme-text-accent" />}
+				{boons[idx] === 0 ? <LockIcon className="w-6 h-6 text-theme-text-muted" /> : <DragonIcon className="w-6 h-6 text-theme-text-accent" />}
 			  </button>
               {parseStaticText(boon)}
             </div>
@@ -811,7 +815,7 @@ lineIndex}`}>
                 disabled={!editable}
                 onClick={() => toggleCheck("bane", idx)}
               >
-				{banes[idx] === 0 ? <LockIcon className="w-6 h-6 text-theme-text-muted" /> : <UnlockIcon className="w-6 h-6 text-theme-text-accent" />}
+				{banes[idx] === 0 ? <LockIcon className="w-6 h-6 text-theme-text-muted" /> : <DragonIcon className="w-6 h-6 text-theme-text-accent" />}
 			  </button>
               {parseStaticText(bane)}
             </div>
@@ -828,6 +832,91 @@ lineIndex}`}>
           return <div key={`dragonSickness-hoard-line-${lineIndex}-${line}`} className="w-full flex flex-col gap-2 items-center justify-start">{lineIndex === 0 && <span>The crown jewel of your hoard. Describe it:</span>}<EditableLine text={line} editable={editable} onSave={(index, value) => updateHoard(index, value)} index={lineIndex} /></div>
         })}
 		</div>
+    </div>
+  )
+}
+
+function IsNeverOver({ character }: { character: CharacterNotTroupe }) {
+  const {
+    gameState,
+    updateGameState,
+    user: { id },
+  } = useGame()
+  const editable = id === character.playerId
+  const moveState = character.coreMoveState 
+  if (!moveState || moveState.type !== "legacy") return null;
+  const {hunt} = moveState;
+  const contentDef = playbookBases[playbookKeys.legacy].moves.find((m) => m.title === "…Is Never Over");
+  const {text} = contentDef ?? {};
+
+  const adjustHunt = (type: "X" | "O", direction: "add" | "remove") =>   {
+    if (!editable) return
+    const newHunt = [...hunt]
+    if (direction === "add") {
+      const index = newHunt.indexOf("-")
+      if (index === -1) return
+      newHunt[index] = type
+    } else {
+      const index = newHunt.indexOf(type)
+      if (index === -1) return
+      newHunt[index] = "-"
+    }
+	updateGameState({
+		players: gameState.players.map((player) =>
+			player.id === id && player.character
+				? {
+						...player,
+						character: { ...player.character, coreMoveState: { ...moveState, hunt: newHunt } },
+					}
+				: player,
+		),
+	})
+  }
+
+
+  return (
+    <div className="flex flex-col justify-center gap-1">
+      <h3 className="text-sm font-bold text-theme-text-accent text-center">…Is Never Over</h3>
+      {text &&
+        text.length > 0 &&
+        text.map((line, lineIndex) => {
+          return <p className="text-left leading-relaxed" key={`line-${// biome-ignore lint/suspicious/noArrayIndexKey: don't care
+lineIndex}`}>{parseStaticText(line)}</p>
+        })}
+
+		<div className="mx-auto grid grid-cols-10 gap-1 items-center justify-center">
+			{Array.from({length: 20}).map((_, idx) => {
+				const randomRotation =( Math.floor(Math.random() * 4) * 20)
+				const randomOffsetX = Math.floor(Math.random() * 2) * 4
+				const randomOffsetY = Math.floor(Math.random() * 2) * 4
+				return <div key={`hunt-box-${// biome-ignore lint/suspicious/noArrayIndexKey: visual only
+idx}`} className="w-6 h-6 border border-theme-border-accent rounded-lg flex items-center justify-center overflow-visible relative">
+	{hunt[idx] === "X" ? <XIcon className="absolute -pt-[1rem] -pl-[1rem] w-10 h-10 text-theme-accent-primary" style={{ transform: `rotate(${randomRotation}deg) translateX(${randomOffsetX}px) translateY(${randomOffsetY}px)` }} /> : hunt[idx] === "O" ? <OIcon className="absolute -pt-[1rem] -pl-[1rem] w-10 h-10 text-theme-border-accent" style={{ transform: `rotate(${randomRotation}deg) translateX(${randomOffsetX}px) translateY(${randomOffsetY}px)` }} /> : <span className="w-6 h-6"></span>}
+				</div>
+			})}
+		</div>
+		{editable && (
+				<div className="flex flex-col gap-2">
+				<div className="flex items-center justify-center gap text-lg">
+					<button type="button" className="hover:bg-theme-bg-" onClick={() => adjustHunt("X", "remove")} disabled={!editable}>
+						-
+					</button>
+					<XIcon className="w-10 h-10 text-theme-text-accent" />
+					<button type="button" onClick={() => adjustHunt("X", "add")} disabled={!editable}>
+						+
+					</button>
+				</div>
+				<div className="flex items-center justify-center gap text-lg">
+					<button type="button" onClick={() => adjustHunt("O", "remove")} disabled={!editable}>
+						-
+					</button>
+					<OIcon className="w-10 h-10 text-theme-border-accent" />
+					<button type="button" onClick={() => adjustHunt("O", "add")} disabled={!editable}>
+						+
+					</button>
+				</div>
+				</div>
+			)}
     </div>
   )
 }

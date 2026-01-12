@@ -36,7 +36,7 @@ const stepToComponent = (step: AdvancementSteps, character: CharacterNotTroupe, 
     case "custom-adaptor":
       return <DollPartAdvancement character={character} closeModal={closeModal} advancementIndex={advancementIndex} mode="custom"/>
     case "unmark-hunterslife":
-      return <ClearChecksFromMove character={character} closeModal={closeModal} advancementIndex={advancementIndex} titleOfMove="A Hunter's life..." />
+      return <ClearChecksFromMove character={character} closeModal={closeModal} advancementIndex={advancementIndex} titleOfMove="A Hunter's Life…" />
     case "unmark-reflection":
       return <ClearChecksFromMove character={character} closeModal={closeModal} advancementIndex={advancementIndex} titleOfMove="The Reflection" />
     case "unlock-energy":
@@ -177,7 +177,7 @@ function mapStepToAdvancement(advancementIndex: number, playbook: playbookKey): 
     //herald and informals don't have advancements
 
   //legacy
-  if (advancement.includes("Unmark all the boxes on “A Hunter’s life…”")) {
+  if (advancement.includes("Unmark all the boxes on “A Hunter’s Life…”")) {
     return "unmark-hunterslife"
   }
 

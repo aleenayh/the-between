@@ -102,6 +102,9 @@ const coreMoveStateSchema = z.discriminatedUnion("type", [z.object({
   boons: z.array(z.number()).catch([0, 0, 0, 0]),
   banes: z.array(z.number()).catch([0, 0, 0, 0]),
   hoard: z.array(z.string()).catch([""]),
+}), z.object({
+  type: z.literal("legacy"),
+  hunt: z.array(z.string()).catch(Array.from({length:20}, () => "-")),
 })])
 
 export type CoreMoveState = z.infer<typeof coreMoveStateSchema>

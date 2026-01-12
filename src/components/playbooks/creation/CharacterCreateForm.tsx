@@ -539,15 +539,15 @@ const constructMoves = (moves:PlaybookBase["moves"]) => {
 }
 
 function hasCustomMoveState(playbookKey: playbookKey) {
-  return playbookKey === playbookKeys.facsimile || playbookKey === playbookKeys.dodger;
+  return playbookKey === playbookKeys.facsimile || playbookKey === playbookKeys.dodger || playbookKey === playbookKeys.legacy;
 }
 
 const coreMoveState = (playbookKey: playbookKey): {coreMoveState:CoreMoveState} | undefined => {
   if (playbookKey === playbookKeys.facsimile)   {
     return { coreMoveState: { type: "facsimile" as const, parts: startingParts, adaptorKeys: 1 } }
   } else if (playbookKey === playbookKeys.dodger) {
-    
-
     return { coreMoveState: { type: "dodger" as const, boons: Array.from({ length: 5 }, (_, idx) => idx === 0 ? 1 : 0), banes: Array.from    ({ length: 5 }, () => 0), hoard: Array.from({ length: 8 }, () => "") } }
+  } else if (playbookKey === playbookKeys.legacy) {
+    return { coreMoveState: { type: "legacy" as const, hunt: Array.from({length:20}, () => "-") } }
   }
 }
