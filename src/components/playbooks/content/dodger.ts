@@ -2,9 +2,9 @@ import type { PlaybookBase } from "../types"
 
 export const boons = [
   "Wield the dragon’s trove: use an item from your Hoard to give you advantage on an appropriate roll, to assist another Hunter by adding 1 to their roll (applied after they roll, and only if they agree), or to function as a Clue when Answering a Question for an active Threat. The item remains in your Hoard.",
-"Wield the dragon’s claws: make a single Day or Night Move with +3 Vitality (no max),",
+"Wield the dragon’s claws: make a single Day or Night Move with +3 Vitality (no max).",
 "Wield the dragon’s sight: immediately gain 2 Clues for an active Threat.",
-"Wield the dragon’s wings: appear or disappear from a place you shouldn’t be able to get into or out of",
+"Wield the dragon’s wings: appear or disappear from a place you shouldn’t be able to get into or out of.",
 "Wield the dragon’s flame: utterly destroy something or someone that can be destroyed by fire (cannot be used against Threats unless an appropriate Opportunity has been unlocked).",
 ] as const;
 
