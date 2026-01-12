@@ -8,6 +8,7 @@ import { PlayerRole } from "../../context/types"
 import { PencilIcon } from "../playbooks/creation/PencilIconButton"
 import { parseStaticText } from "../playbooks/utils"
 import { CloseButton } from "../shared/CloseButton"
+import { Divider } from "../shared/Divider"
 import { EditableLine } from "../shared/EditableLine"
 import { Section } from "../shared/Section"
 import { StyledTooltip } from "../shared/Tooltip"
@@ -93,8 +94,7 @@ export function MastermindSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsO
 function MastermindContent({ mastermind }: { mastermind: Mastermind }) {
   const { user: { role }, updateGameState } = useGame()
   const [editModalOpen, setEditModalOpen] = useState(false)
-  const mastermindContent = Masterminds[mastermind.title]
-  const { servants, layers } = mastermindContent ? mastermindContent : { servants: [], layers: [] }
+  const mastermindContent = mastermind.type === "canon" ? Masterminds[mastermind.title] : undefined
   const activeQuestion = mastermind.questions.find((q) => q.isActive)
   const stateAddedServants = mastermind.servants
 
@@ -136,17 +136,17 @@ function MastermindContent({ mastermind }: { mastermind: Mastermind }) {
     )}
     
     <ClueSection role={role} />
-    {role === PlayerRole.KEEPER && mastermindContent && (
+    {role === PlayerRole.KEEPER && <div> {mastermind.type === "canon" && mastermindContent ? (
       <div className="flex flex-col gap-2 border border-theme-border-accent rounded-lg p-2">
         <Section title="Keeper Materials" collapsible={true}>
         <p className="text-sm text-theme-text-muted italic">Not visible to Hunters.</p>
-        <Section title="Layers" collapsible={true}>
-          {layers.map((l) => (
+                <Section title="Layers" collapsible={true}>
+          {mastermindContent.layers.map((l) => (
             <LayerSection key={l.title} layer={l.title} />
           ))}
         </Section>
         <Section title="Servants" collapsible={true}>
-          {servants.map((s) => (
+          {mastermindContent.servants.map((s) => (
             <div key={s.title}>
               <h3 className="text-lg font-bold text-theme-text-accent">{s.title}</h3>
               {s.description.map((d) => (
@@ -174,20 +174,42 @@ idx}`} editable={true} text={s} onSave={(idx, value) => addServant(idx, value)} 
             </div>
         </Section>
         </Section>
-      </div>
-    )}
+      </div>)
+    : (<div><SwitchQuestionsCustomMastermind mastermind={mastermind} /></div>)}</div>}
   </div>)
 }
 
-//TODO - once I've figured out how to switch between questions void of layer structure 
-const allowCustom = false
+function SwitchQuestionsCustomMastermind({ mastermind }: { mastermind: Mastermind }) {
+  const { updateGameState } = useGame()
+  const updateQuestion = (newQuestion: string) => {
+    updateGameState({
+      mastermind: {
+        ...mastermind,
+        questions: mastermind.questions.map((q) => q.question === newQuestion ? { ...q, isActive: true } : {...q, isActive: false}),
+    },
+  })
+}
+  return (
+    <div className="flex flex-col gap-2">
+      <h2 className="text-lg font-bold text-theme-text-accent">Available Questions</h2>
+      <div className="flex flex-col gap-2">
+        {mastermind.questions.map((q) => (
+          <div key={q.question} className="bg-theme-bg-secondary border border-theme-border-accent rounded-lg p-2">
+    <p><strong>{q.question}</strong> (Complexity: {q.complexity})</p>
+    <p className="italic text-left text-sm">Opportunity: {q.opportunity ?? "None"}</p>
+    <p className="text-left text-sm my-2 text-theme-text-muted">Click the button below to display this question to your Hunters. This does not affect earned clues for other mastermind questions.</p>
+    <button type="button" className="w-1/3 mx-auto bg-theme-bg-secondary text-theme-text-primary px-4 py-2 rounded-lg opacity-80 hover:opacity-100 border-2 hover:bg-theme-bg-accent hover:border border-2-theme-border border-2-accent hover:text-theme-text-accent" onClick={() => updateQuestion(q.question)}>Display this question</button></div>
+        ))}
+      </div>
+    </div>
+  )
+}
 
 function MastermindForm({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void }) {
   const [formType, setFormType] = useState<"canon" | "custom">("canon")
   return (
       <div className="flex flex-col gap-2 items-center justify-start my-4 min-h-[20rem]">
         <div className="flex gap-2 items-center justify-center">
-              {allowCustom && (
         <div className="flex w-full max-w-[30rem] rounded-full border border-theme-border bg-theme-bg-secondary text-sm">
           <motion.div
             className={`relative flex w-full cursor-pointer items-center justify-center text-nowrap rounded-full px-2 text-theme-text-primary transition-colors duration-300 ${formType === "canon" ? "font-semibold text-theme-text-accent" : ""}`}
@@ -215,7 +237,6 @@ function MastermindForm({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void })
             <span className="z-20">Custom Mastermind</span>{" "}
           </motion.div>
         </div>
-      )}
         </div>
       <div className="relative w-full ">
         <AnimatePresence>
@@ -276,6 +297,7 @@ function CanonMastermindForm({setIsOpen}: {setIsOpen: (isOpen: boolean) => void}
     updateGameState({
       mastermind: {
         title: data.title,
+        type: "canon",
         layers,
         questions,
         servants:         [],
@@ -350,7 +372,7 @@ function CustomMastermindForm({setIsOpen}: {setIsOpen: (isOpen: boolean) => void
     updateGameState({
       mastermind: {
         title: data.title,
-        layers:         [{title: "Layer 1"}],
+        type: "custom",
         questions,
         servants:         [""],
       },
@@ -405,6 +427,7 @@ index}`} className="flex flex-col gap-2">
                   <label htmlFor={`questions.${index}.isActive`}>Active</label>
 
                   </div>
+                  <Divider/>
 								</div>
 							))}
 							<div className="flex gap-2 items-center justify-evenly my-4 w-full"><button
@@ -465,11 +488,11 @@ function EditMastermindQuestionForm({question, closeModal}: {question: string, c
   })
   if (!mastermindState) return null
 
-  const onSubmit = (data: { question: string, complexity: number }) => {
+  const onSubmit = (data: { question: string, complexity: number, opportunity: string }) => {
     updateGameState({
       mastermind: {
         ...mastermindState,
-        questions: mastermindState.questions?.map((q) => q.question === question ? { ...q, question: data.question, complexity: data.complexity } : q),
+        questions: mastermindState.questions?.map((q) => q.question === question ? { ...q, question: data.question, complexity: data.complexity, opportunity: data.opportunity } : q),
       },
     })
     closeModal()
@@ -624,7 +647,7 @@ function ClueSection({ role }: { role: PlayerRole }) {
 function LayerSection({ layer }: { layer: string }) {
   const { gameState, updateGameState } = useGame()
   const { mastermind: mastermindState } = gameState
-  if (!mastermindState) return null
+  if (!mastermindState || mastermindState.type !== "canon") return null
   const mastermindContent = Masterminds[mastermindState.title as keyof typeof Masterminds]
   const hasQuestion = mastermindContent.questions.find((q) => q.layer === layer)
   const stateLayer = mastermindState.layers?.find((l) => l.title === layer)

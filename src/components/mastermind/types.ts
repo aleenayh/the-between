@@ -27,12 +27,22 @@ const layerSchema = z.object({
 
 export type Question = z.infer<typeof questionSchema>;
 
-export const mastermindSchema = z.object({
+const canonMastermindSchema = z.object({
+	type: z.literal("canon"),
 	title: z.string(),
-	layers: z.array(layerSchema).optional().catch(undefined), //undefined on custom
+	layers: z.array(layerSchema).catch([]),
 	questions: z.array(questionSchema).catch(catchWithWarning("mastermind.questions", [])),
-	servants: z.array(z.string()).optional().catch(undefined), //undefined on custom
+	servants: z.array(z.string()).optional().catch(undefined),
 });
+
+const customMastermindSchema = z.object({
+	type: z.literal("custom"),
+	title: z.string(),
+	questions: z.array(questionSchema).catch(catchWithWarning("mastermind.questions", [])),
+	servants: z.array(z.string()).optional().catch(undefined),
+})
+
+export const mastermindSchema = z.discriminatedUnion("type", [canonMastermindSchema, customMastermindSchema]);
 
 export type Mastermind = z.infer<typeof mastermindSchema>;
 
