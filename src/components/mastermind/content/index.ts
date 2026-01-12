@@ -91,4 +91,79 @@ export const Masterminds: Record<string, MastermindContent> = {
 			}
 		],
 	},
+	flagg: {
+		title: "Vice Admiral Thaddeus Flagg",
+		questions: [
+			{ question: "Who or what will Admiral Flagg sacrifice to his dark god? (Complexity: 8)",
+				layer: "Layer One: The Mastermind Question",
+				complexity: 8,
+			},
+			{
+				question: "How can we call Flagg’s monstrosity to us?",
+				layer: "Layer Four: Infiltrating Chimaera",
+				opportunity: "Engage in a Struggle against the Chimaera.",
+				complexity: 6,
+			},
+			{
+				question: "[Keeper, replace this with your question!]",
+				layer: "Layer Five: The Confrontation",
+				complexity: 6,
+			}
+
+		],
+		servants:   [
+			{
+				title: "The “crew” of Chimaera",
+				description:     ["While Admiral Flagg moves in elite social circles and spends a fair amount of time at the Royal Explorers Club, his true confidantes are the survivors of HMS Chimaera. He’s so dedicated to his crew, most now middle-aged, he lets them live in his mansion on Belgrave Square. There, they relive their glory days in the Royal Navy, tell stories of their time on Chimaera, and perform strange, ritualistic reenactments of the events surrounding the Bailey expedition. They are fiercely loyal to Flagg, and happily do his bidding, no matter how violent, criminal, or taboo. When someone needs to be taught a lesson or otherwise brought before Flagg, they will form a press-gang for the purpose, forcibly bringing the target “aboard” Chimaera. Some names (and positions), if you need them: Saxon (first mate), Patterson (second mate), Bixby (quartermaster), Rolande (parson), Hemwick (surgeon), Kreel (boatswain), Haxton (carpenter), Dumpley (cook), Nemitz (watch leader), Billy (cabin “boy”)."],
+				quotes:          ["Heave ho, stars below/Chimaera finds the way/Night falls, and so we go/star-gazing in the bay/Stars above and stars below/three heads will call us home/A sweeter milk we’ll never know/but in our dreams we’ll roam. "],
+			},
+		],
+		layers:   [
+			{ title: "Layer One: The Mastermind Question",
+				text:     [
+					"This layer is unlocked at the end of the first Night Phase. Immediately read the following:", 
+
+"<i>Before we move into the Dawn, I want to tell you about one more person doing dark work tonight. The room we see is no ordinary cellar. Its stone walls have been painted a brilliant, cloud-flecked blue; ropes hang from beams like rigging; the floorboards are smeared with tar to mimic a ship’s deck. Lanterns swing overhead, though there is no breeze. The shadows they cast rock gently, as if the whole false vessel were rolling at sea.</i>",
+
+"<i>Gathered in a tight circle are the surviving crew of HMS Chimaera—elderly men in threadbare naval coats, skin creased and leathery from decades of salt and sun. Their medals clink softly with every movement. They surround a younger man: Midshipman Miller. He stands stripped to his trousers, shivering despite the heat, his hair damp with sweat. The crew chant old naval verses—half drinking songs, half prayers—and shove him from man to man, each delivering blows disguised as a test of “discipline.”</i>",
+
+"<i>The ritual grows harsher. Someone forces a rope across Miller’s back and hauls him to his knees. Another pours a bucket of seawater over his head. The men laugh, bark orders, demand he show the mettle of an officer. Their hands roam across his shoulders, his chest, his face, as they violently correct his “posture” and “bearing.” Miller tries to stand, tries to maintain dignity, but the laughter and the chanting drown him, the vicious blows break him. His breath comes shallow; his eyes glaze with fear and something like shame.</i>",
+
+"<i>A sudden shift in the air stills the room. The chanting dies. The men part, reverently, almost trembling. From the painted horizon—through a doorway made to resemble a ship’s forecastle—steps Vice Admiral Thaddeus Flagg. His elderly body is lean and corded, bare of clothing, save for a lion’s pelt draped across his shoulders. Goat horns curl from a headdress strapped to his brow. Around his legs coils a living serpent, its scales catching the lantern-light like wet oil. Flagg walks among the assembly as a god.</i>",
+
+"<i>The young man collapses at the Admiral’s feet, limbs stiffening, mouth frozen in a silent scream. The serpent slips from Flagg’s thigh to Miller’s chest as if claiming him. When the final breath rattles from Miller’s body, the crew bow their heads. Flagg smiles, touches the lion’s mane on his shoulders, and says, almost gently, “An unworthy sacrifice, I fear.”</i>",
+
+"Hargrave House does not yet know it, but we do: Admiral Flagg is in contact with a dark god. He will make a sacrifice to this dark god so he can claim some of its power for himself, and then use that power to destroy London. As players, we have our own Question to answer: Who or what will Admiral Flagg sacrifice to his dark god? (Complexity: 8) Hargrave House will immediately confront him once we’ve answered it."
+				],
+			},
+			{ title: "Layer Two: A History of Admiral Flagg's Service",
+				text:     [
+					"This layer is unlocked after the second Threat is introduced. You now have a new Keeper reaction: Reveal History. Whenever you do it, mark a box below and reveal the information in whatever way makes sense in the scene."],
+					checkList: [
+"1834: A young Lieutenant Flagg receives a special commendation for leading the daring nighttime boarding action that led to the capture of the Pirate Queen of Barbuda. Lieutenant Flagg singlehandedly killed six pirates during the boarding and fought the Pirate Queen herself to a draw in a sword duel that is still spoken of with reverence on British mess decks.",
+
+"1838: Captain Flagg is given his first command, HMS Chimaera. Chimaera is widely considered a strange career path for Flagg, it being an ugly, unglamorous warship during a time of peace, and Flagg’s reputation as a dashing pirate hunter so well-established. But it was Flagg who aggressively pursued the commission, saying he was compelled to do so by a dream of a three-headed monster, similar to the creature depicted on Chimaera’s crest.",
+
+"1843: Sir Bailey begins his expedition to the Arctic. Chimaera, as a warship, is easily refitted to be a polar exploration vessel and, with Flagg at the helm, sets out with Bailey to navigate the Northwest Passage, along with a second ship, HMS Fang. The ships were never seen again.",
+
+"1846: Captain Flagg and most of his crew from Chimaera miraculously return to London. They share a story about how Chimaera and Fang became icebound, and how Flagg and his crew took shelter in a cave system near the wreckage of their ship, and were later rescued by a Canadian vessel. They claim to have no idea what happened to Fang. Flagg is celebrated throughout the Empire, and though he never again sets foot on a ship, he distinguishes himself as an effective administrator and rises in the ranks of the Royal Navy.",
+
+"Present day: The wreckage of Chimaera and Fang have been found, and rumors are swirling. There is evidence of hostility—even fighting—between the two icebound vessels, and the bones of Fang’s dead crew members are said to have what appear to be bite marks on them. The interior bulkheads of Chimaera are said to be marked with numerous profane, arcane symbols, and Flagg’s diary—found in his stateroom—indicates he was tormented by strange hallucinations at the end…",
+				],
+			},
+			{ title: "Layer Three: A Threat Becomes a Servant",
+				text:     ["This layer is unlocked after the fourth Threat is introduced.  Anytime thereafter, you can choose an active Threat and narrate a scene showing how the Threat becomes a Servant of the Mastermind. Add them to the Servants section and tell the Hunters the Threat can no longer be resolved (nor is it active for game purposes, though it may still be a danger to the city). You can do this once."],
+			},
+			{ title: "Layer Four: Infiltrating Chimaera",
+				text:     ["This layer is unlocked after the Hunters have successfully resolved three Threats and all boxes from Layer Two have been marked, or if the Hunters get a miss on an attempt to answer the Mastermind Question. Anytime thereafter, you may read the below text at the start of a Day Phase instead of doing the normal procedure; if you do, any countdowns on active Threats are suspended for a single Day/Night cycle. There is no Day or Dusk Phase during this event; rather, it’s a single, long Night Phase, with no Unscene:" ,
+
+"<i>A young naval officer, Midshipman Strangford, comes to you early one evening. He’s seen something terrifying and strange at the home of Vice Admiral Flagg—a monstrosity Flagg calls “the Chimaera.” He informs you that Flagg and his “crew” are out for the evening, and that this might be the only chance to find and destroy the creature. You have a single Question, and just this Night Phase to answer it: How can we call Flagg’s monstrosity to us? (Complexity: 6) No matter the result of the Answer a Question roll, the answer is a Mastermind Clue, and you immediately confront the monstrosity. </i>",
+
+"After the Question is attempted, immediately go to Struggle: The Chimaera. The players must then immediately attempt to answer the Mastermind Question. This event is considered resolved after the end of the Struggle and the Mastermind Question is attempted; immediately go to the Dawn Phase."],
+			},
+			{ title: "Layer Five: The Confrontation",
+				text:     ["This layer is unlocked after the Hunters successfully answer the Mastermind Question, or Infiltrating Chimaera is resolved, whichever comes first. Follow the instructions on the associated Confrontation sheet. "],
+			},
+		]
+	}
 } as const;
