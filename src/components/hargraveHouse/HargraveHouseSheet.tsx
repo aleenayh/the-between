@@ -9,9 +9,11 @@ import { playbookKeys } from "../playbooks/types"
 import { parseStaticText, parseWithCheckboxes } from "../playbooks/utils"
 import { Divider } from "../shared/Divider"
 import { EditableLine } from "../shared/EditableLine"
+import { RollableLine } from "../shared/RollableLine"
 import { Section } from "../shared/Section"
 import { StyledTooltip, } from "../shared/Tooltip"
 import { residentContent } from "./content/residents"
+import { diverValues, dreamerValues, guideValues } from "./content/residents/greco"
 import { roomContent } from "./content/rooms"
 import { ReactComponent as HouseIcon } from "./house.svg"
 import type { ResidentContent, Resident as ResidentState, RoomContent } from "./types"
@@ -373,10 +375,13 @@ function AddResidentForm({ setIsOpen }: { setIsOpen: (open: boolean) => void }) 
       toast.error("Invalid resident selected.")
       return
     }
+    const startingLines = content.title === "Greco, the Dream Sovereign" ? [diverValues[Math.floor(Math.random() * diverValues.length)], dreamerValues[Math.floor(Math.random() * dreamerValues.length)], guideValues[Math.floor(Math.random() * guideValues.length)]] : Array.from({ length: content.onUnlock.extraLines ?? 0 }, () => "")
+    const numberChecks = content.prompts.length + (content.onUnlock.checks ?? 0) + (content.onUnlock.inlineChecks ?? 0) + 1 //always +1 for unlock header
+    const checks =Array.from({ length: numberChecks ?? 0 }, () => 0)
     const newResident = {
       key: data.resident,
-      checks: Array.from({ length: content.prompts.length ?? 0 }, () => 0),
-      extraLines: Array.from({ length: content.onUnlock.extraLines ?? 0 }, () => ""),
+      checks,
+      extraLines: startingLines,
       unlockCheck: Array.from({ length: content.onUnlock.checks ?? 0 }, () => 0),
     }
     const newResidents = [...(gameState.hargraveHouse.residents ?? []), newResident]
@@ -410,16 +415,13 @@ function Resident({ content, state }: { content: ResidentContent; state: Residen
     })
   }
 
-  const { title, onUnlock } = content
-  let {checks, extraLines} = state
+  const { title, intro, onUnlock, prompts } = content
+  const {checks, extraLines} = state
 
   let checkIndex = 0
-  if (!checks && (onUnlock.checks || onUnlock.inlineChecks))   {
-    const numberChecks = Math.max(onUnlock.checks ?? 0, onUnlock.inlineChecks ?? 0)
-    checks = Array.from({ length: numberChecks }, () => 0)
-  } 
+  let inlineCheckIndex = 1 + prompts.length //1 for the unlock header 
 
-          const saveExtraLine = (index: number, value: string) => {
+  const saveExtraLine = (index: number, value: string) => {
             const updatedExtraLines = [...(extraLines ?? []), value]
             updatedExtraLines[index] = value
             updateGameState({
@@ -433,10 +435,10 @@ function Resident({ content, state }: { content: ResidentContent; state: Residen
                 )
               }
             })
-          }
+  }
 
-          const setRoomCheck = (index: number) => {
-            if (!checks) return
+  const setResidentCheck = (index: number) => {
+              if (!checks) return
             const updatedChecks = [...checks]
               updatedChecks[index] = updatedChecks[index] === 1 ? 0 : 1
               updateGameState({
@@ -450,18 +452,26 @@ function Resident({ content, state }: { content: ResidentContent; state: Residen
                   )
                 }
               })
-          }
+}
 
   return     <div className="flex flex-col justify-start items-start text-left w-full">
     <Section title={title} key={title} collapsible leftAlign minify>
-      {onUnlock.text.map((text) => {
-        const { elements, nextAspectIndex } = parseWithCheckboxes(text, checks ?? [], checkIndex, true, setRoomCheck)
-        checkIndex = nextAspectIndex
+      {intro && <p className="text-sm">{parseStaticText(intro)}</p>}
+      {prompts.map((prompt, index) => {
+        checkIndex = index
         return (
-          <p key={text} className="text-sm">
-            {elements}
-          </p>
-        )
+        <p key={prompt} className="text-sm"><input type="checkbox" checked={checks?.[index] === 1} onChange={() => setResidentCheck(index)} /> {parseStaticText(prompt)}</p>
+      )})}
+      <h4 className="inline text-sm font-bold text-theme-text-accent font-[var(--header-font]"><input type="checkbox" checked={checks?.[checkIndex+1] === 1} onChange={() => setResidentCheck(checkIndex+1)} /> {onUnlock.title}: </h4>
+      {onUnlock.text.map((text, index) => {
+        const { elements, nextAspectIndex } = parseWithCheckboxes(text, checks ?? [], inlineCheckIndex, true, setResidentCheck)
+        inlineCheckIndex = nextAspectIndex
+        return (
+          <div key={text} className="text-sm flex flex-col gap-2">
+            {index === 1 && title === "Greco, the Dream Sovereign" && <DreamDivingLines/>}
+            <span className="inline">{elements}</span>
+          </div>
+        ) 
       })}
       {onUnlock.checks && (
         <div className="flex gap-3 w-full justify-center items-start">
@@ -471,7 +481,7 @@ function Resident({ content, state }: { content: ResidentContent; state: Residen
           ))}
         </div>
       )}
-      {onUnlock.extraLines && (
+      {onUnlock.extraLines && title !== "Greco, the Dream Sovereign" && (
         <div className="text-sm flex flex-col justify-start items-stretch gap-2">
           {Array.from({ length: onUnlock.extraLines }).map((_, index) => (
             <EditableLine
@@ -506,4 +516,37 @@ function Resident({ content, state }: { content: ResidentContent; state: Residen
       )}
     </Section>
   </div>
+}
+
+function DreamDivingLines() {
+const {gameState, updateGameState} = useGame()
+const [diver, dreamer, guide] = gameState.hargraveHouse.residents?.find((r) => r.key === "greco")?.extraLines ?? ["","",""]
+  const saveValue = (index: number, value: string) => {
+    const updatedExtraLines = [diver, dreamer, guide].map((line, i) => i === index ? value : line)
+    updateGameState({
+      ...gameState,
+      hargraveHouse: {
+        ...gameState.hargraveHouse,
+        residents: gameState.hargraveHouse.residents?.map(r =>
+          r.key === "greco"
+            ? { ...r, extraLines: updatedExtraLines }
+            : r
+          )
+        }
+      })
+  }
+
+  return (
+    <div className="flex flex-col w-full gap-0 justify-center items-center border border-theme-border rounded-lg p-2">
+      <h4 className="text-sm text-theme-text-accent">The Diver Must...</h4>
+      <RollableLine startingValue=    {diver} values={diverValues} editable=     {true} onSave={(value) => {
+        saveValue(0, value)}}/>
+        <h4 className="text-sm text-theme-text-accent">... While the Dreamer...</h4>
+      <RollableLine startingValue=    {dreamer} values={dreamerValues} editable=    {true} onSave={(value) => {
+        saveValue(1, value)}}/>
+        <h4 className="text-sm text-theme-text-accent">The Guides Must...</h4>
+      <RollableLine startingValue=    {guide} values={guideValues} editable=    {true} onSave={(value) => {
+        saveValue(2, value)}}/>
+    </div>
+  )
 }
