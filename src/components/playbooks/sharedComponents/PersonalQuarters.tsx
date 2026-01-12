@@ -26,6 +26,7 @@ export function PersonalQuarters({ character }: { character: CharacterNotTroupe 
     })
   }
   const handleCheck = (index: number, checked: boolean) => {
+    if (character.personalQuarters[index]?.text === "") return
     const newPQ = [...(character.personalQuarters ?? [])]
     newPQ[index] = { text: newPQ[index].text, marked: checked }
     updateGameState({

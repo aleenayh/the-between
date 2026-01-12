@@ -131,7 +131,7 @@ export function CheckableEditableLine({
       <input
         type="checkbox"
         checked={checked}
-        disabled={!editable}
+        disabled={!editable || text === ""}
         onChange={(e) => onCheck(index, e.target.checked)}
       />
       {showEdit ? (

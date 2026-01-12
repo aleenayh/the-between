@@ -1,4 +1,5 @@
 import { roomKeys } from "../components/hargraveHouse/content/rooms";
+import { getLocalSchemaVersion } from "../utils/versionCheck";
 import type { GameState } from "./types";
 
 export const startingRooms = Object.values(roomKeys).map((key) => ({
@@ -21,4 +22,5 @@ export const defaultGameState: GameState = {
 		rooms: startingRooms,
 	},
 	heraldUnlocked: false,
+	schemaVersion: getLocalSchemaVersion(),
 };
