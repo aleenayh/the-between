@@ -7,7 +7,7 @@ export function parseStaticText(text: string): React.ReactNode {
   let lastEnd = 0
 
   // Combined regex to match all tag types in order of appearance
-  const tagRegex = /<(h2|li|strong|i)>(.*?)<\/\1>/g
+  const tagRegex = /<(h2|li|strong|i|check)>(.*?)<\/\1>/g
   let match = tagRegex.exec(text)
 
   while (match !== null) {
@@ -36,6 +36,11 @@ export function parseStaticText(text: string): React.ReactNode {
 	case "i":
 		parts.push(<i key={match.index}>{content}</i>)
 		break
+	case "check": 
+	//functional checkboxes are parsed first and should not hit this function 
+	//if we find them in display text, just strip them out
+	parts.push(content)
+	break
     }
 
     lastEnd = match.index + fullMatch.length
@@ -139,7 +144,7 @@ function AspectSpan({
 	onToggle: () => void;
 }) {
 	return (
-		<span>
+		<span className="ml-4">
 			<button
 				type="button"
 				onClick={onToggle}
@@ -149,15 +154,15 @@ function AspectSpan({
 						? "bg-theme-accent-primary border-theme-accent-primary text-theme-text-accent"
 						: "border-theme-border-accent bg-transparent"
 				} ${editable ? "cursor-pointer hover:border-theme-accent-primary" : "cursor-default opacity-70"}`}
-				aria-label={checked ? "Uncheck aspect" : "Check aspect"}
+				aria-label={checked ? "Uncheck" : "Check"}
 			>
 				{checked && "✓"}
 			</button>
-			<strong
-				className={`${checked ? "line-through opacity-60" : ""} text-theme-text-primary`}
+			<span
+				className={`${checked ? "text-theme-text-muted opacity-60" : ""} text-theme-text-primary`}
 			>
 				{parseStaticText(text)}
-			</strong>
+			</span>
 		</span>
 	);
 }

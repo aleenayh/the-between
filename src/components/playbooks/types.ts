@@ -1,6 +1,5 @@
 import { z } from "zod"
 import { catchWithWarning } from "../../utils/schemaValidation"
-import { startingParts } from "./content/facsimile"
 
 export const abilitiesSchema = z.object({
   vitality: z.number(),
@@ -55,8 +54,10 @@ export type PlaybookMove = {
 
 export const playbookKeys = {
   american: "american",
+  dodger: "dodger",
   explorer: "explorer",
   factotum: "factotum",
+  legacy: "legacy",
   mother: "mother",
   orphan: "orphan",
   undeniable: "undeniable",
@@ -92,11 +93,21 @@ const dollPartSchema = z.object({
 
 export type DollPart = z.infer<typeof dollPartSchema>
 
-const coreMoveStateSchema = z.object({
+const coreMoveStateSchema = z.discriminatedUnion("type", [z.object({
   type: z.literal("facsimile"),
   parts: z.array(dollPartSchema),
   adaptorKeys: z.number().catch(1),
-})
+}), z.object({
+  type: z.literal("dodger"),
+  boons: z.array(z.number()).catch([0, 0, 0, 0]),
+  banes: z.array(z.number()).catch([0, 0, 0, 0]),
+  hoard: z.array(z.string()).catch([""]),
+}), z.object({
+  type: z.literal("legacy"),
+  hunt: z.array(z.string()).catch(Array.from({length:20}, () => "-")),
+})])
+
+export type CoreMoveState = z.infer<typeof coreMoveStateSchema>
 
 
 const customTextFieldsSchema = z.object({
@@ -150,7 +161,7 @@ export const characterSchema = z.object({
   questions: z.array(z.number()).catch(catchWithWarning("character.questions", [0, 0, 0, 0, 0])),
   customTextFields: customTextFieldsSchema.optional().catch({}),
   isHerald: z.boolean().catch(catchWithWarning("character.isHerald", false)),
-  coreMoveState: coreMoveStateSchema.optional  ().catch({type: "facsimile", parts: startingParts, adaptorKeys: 1})
+  coreMoveState: coreMoveStateSchema.optional  ().catch(undefined)
 })
 
 export type CharacterNotTroupe = z.infer<typeof characterSchema>

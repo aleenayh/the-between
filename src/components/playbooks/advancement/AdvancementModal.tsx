@@ -6,11 +6,12 @@ import toast from "react-hot-toast"
 import { useGame } from "../../../context/GameContext"
 import { CloseButton } from "../../shared/CloseButton"
 import { playbookBases } from "../content"
+import { banes } from "../content/dodger"
 import { orderAbilities } from "../sharedComponents/AbilityBoxes"
 import type { Abilities, CharacterNotTroupe, playbookKey } from "../types"
 import { parseStaticText } from "../utils"
 
-type AdvancementSteps = "select-advancement" | "adjust-stats" | "select-move" | "write-custom-move" | "unmark-pq-items" | "unlock-rec" | "unmark-rec" | "doll-part" | "unlock-adaptor-key" | "custom-adaptor" | "unmark-hunterslife" | "unmark-reflection" | "unlock-energy"
+type AdvancementSteps = "select-advancement" | "adjust-stats" | "select-move" | "write-custom-move" | "unmark-pq-items" | "unlock-rec" | "unmark-rec" | "doll-part" | "unlock-adaptor-key" | "custom-adaptor" | "unmark-hunterslife" | "unmark-reflection" | "unlock-energy" | "unmark-wyrmbane"
 
 const stepToComponent = (step: AdvancementSteps, character: CharacterNotTroupe, closeModal: () => void, advancementIndex: number|null) => {
   switch (step) {
@@ -35,11 +36,13 @@ const stepToComponent = (step: AdvancementSteps, character: CharacterNotTroupe, 
     case "custom-adaptor":
       return <DollPartAdvancement character={character} closeModal={closeModal} advancementIndex={advancementIndex} mode="custom"/>
     case "unmark-hunterslife":
-      return <ClearChecksFromMove character={character} closeModal={closeModal} advancementIndex={advancementIndex} titleOfMove="A Hunter's life..." />
+      return <ClearChecksFromMove character={character} closeModal={closeModal} advancementIndex={advancementIndex} titleOfMove="A Hunter's Life…" />
     case "unmark-reflection":
       return <ClearChecksFromMove character={character} closeModal={closeModal} advancementIndex={advancementIndex} titleOfMove="The Reflection" />
     case "unlock-energy":
       return <AddChecksToMove character={character} closeModal={closeModal} advancementIndex={advancementIndex} numberOfChecks={2} titleOfMove="The Phantom" />
+    case "unmark-wyrmbane":
+      return <UnlockWyrmbane character={character} closeModal={closeModal} advancementIndex={advancementIndex} />
   }
 }
 
@@ -146,6 +149,11 @@ function mapStepToAdvancement(advancementIndex: number, playbook: playbookKey): 
     return "unmark-pq-items"
   }
 
+  //dodger 
+  if (advancement.includes("Unmark one Bane of the Wyrm of your choice.")) {
+    return "unmark-wyrmbane"
+  }
+
   //explorer
   if (advancement.includes("Unlock two checkboxes on The Royal Explorers Club.")) {
     return "unlock-rec"
@@ -169,12 +177,12 @@ function mapStepToAdvancement(advancementIndex: number, playbook: playbookKey): 
     //herald and informals don't have advancements
 
   //legacy
-  if (advancement.includes("Unmark all the boxes on “A Hunter’s life…”")) {
+  if (advancement.includes("Unmark all the boxes on “A Hunter’s Life…”")) {
     return "unmark-hunterslife"
   }
 
     //no custom for mother
-    //no custom for orpha
+    //no custom for orphan
 
   //undeniable
     if (advancement.includes("Unmark all the boxes on The Reflection")) {
@@ -775,4 +783,63 @@ function DollPartAdvancement({ character, closeModal, advancementIndex, mode }: 
       </form>
     )
   }
+}
+
+function UnlockWyrmbane({ character, closeModal, advancementIndex }: { character: CharacterNotTroupe, closeModal: () => void, advancementIndex: number|null }) {
+  const { gameState, updateGameState } = useGame()
+  const coreMove = character.coreMoveState
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      index: 0,
+    },
+  })
+  if (!coreMove || coreMove.type !== "dodger") {
+    toast.error("Something went wrong! You can try again, or manually unmark your move.")
+    return
+  }
+
+  const confirm = (data: { index: number }) => {
+    if (advancementIndex === null) {
+      return
+    }
+    const { index } = data
+  const newAdvancements = [...character.advancements]
+  newAdvancements[advancementIndex] = 1
+  const newBanes = [...coreMove.banes]
+  newBanes[index] = 0
+
+  updateGameState({
+    players: gameState.players.map((player) =>
+      player.id === character.playerId
+        ? {
+            ...player,
+            character: {
+              ...character,
+              coreMoveState: { ...coreMove, banes: newBanes },
+              advancements: newAdvancements,
+            },
+          }
+        : player,
+    ),
+  })
+  closeModal()
+  }
+
+return (
+  <form onSubmit={handleSubmit(confirm)} className="flex flex-col gap-2 justify-center items-center">
+    <h3>Remove a Bane of the Wyrm</h3>
+    <p>Choose which of your current Banes to remove.</p>
+    <div className="flex flex-col justify-start items-start gap-2">{banes.map((bane, index) => { 
+      if (coreMove.banes[index] === 0) {
+        return null
+      }
+      return (
+      <div key={bane} className="flex justify-start items-baseline gap-2">
+        <input type="radio" id={`${bane}-${index}`} value={index} {...register("index")} />
+        <label htmlFor={`${bane}-${index}`} className="flex flex-col gap-0">{bane}</label>
+      </div>
+    )})}</div>
+    <ConfirmChoice onClick={handleSubmit(confirm)} />
+  </form>
+)
 }
