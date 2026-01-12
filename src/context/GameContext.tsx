@@ -156,8 +156,11 @@ export const GameProvider: React.FC<GameProviderProps> = ({
 			// Update local state immediately (optimistic update)
 			setGameState(newState);
 
+			//filter out undefined before sending to firebase; it can't save them and we backfill legitimately undefined values on entry
+			const filteredUpdates = Object.fromEntries(Object.entries(updates).filter(([_, value]) => value !== undefined));
+
 			// Send to Firebase
-			firebaseUpdateState(updates).catch((error) => {
+			firebaseUpdateState(filteredUpdates).catch((error) => {
 				console.error("Failed to sync state to Firebase:", error);
 			});
 		} catch (error) {

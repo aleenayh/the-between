@@ -7,7 +7,7 @@ import { Section } from "../../shared/Section"
 import { playbookBases } from "../content"
 import { startingParts } from "../content/facsimile"
 import { heraldPlaybookAdditions } from "../content/herald"
-import { type Abilities, type Character, type PlaybookBase, type playbookKey, playbookKeys } from "../types"
+import { type Abilities, type Character, type CoreMoveState, type PlaybookBase, type playbookKey, playbookKeys } from "../types"
 import { convertToTitle, parseStaticText } from "../utils"
 import { PencilIconButton } from "./PencilIconButton"
 
@@ -36,6 +36,7 @@ type CharacterCreateFormInputs = {
 }
 
 const extraMovesPerPlaybook: Record<playbookKey, number> = {
+  [playbookKeys.dodger]: 1,
   [playbookKeys.facsimile]: 0,
   [playbookKeys.unquiet]: 0,
   [playbookKeys.explorer]: 0,
@@ -47,6 +48,7 @@ const extraMovesPerPlaybook: Record<playbookKey, number> = {
   [playbookKeys.vessel]: 1,
   [playbookKeys.informals]: 0,
   [playbookKeys.custom]: 0,
+  [playbookKeys.legacy]: 0,
 }
 
 export function CharacterCreateForm({ playbookKey }: { playbookKey: Exclude<playbookKey, "custom" | "informals"> }) {
@@ -498,8 +500,6 @@ function constructCharacter(
   const startingCondition = playbookKey === playbookKeys.facsimile ? "Being Human" : ""
   const conditions: string[] = [startingCondition, "", ""]
 
-  const coreMoveState = playbookKey === playbookKeys.facsimile ? {type: "facsimile" as const, parts: startingParts, adaptorKeys: 1} : undefined
-
   const advancements = Array.from({ length: 7 }, () => 0);
 
   return {
@@ -525,7 +525,7 @@ function constructCharacter(
     questions: [0, 0, 0, 0, 0],
     personalQuarters: [{text: "", marked: false}],
     customTextFields: {},
-    coreMoveState,
+  ...(hasCustomMoveState(playbookKey) && coreMoveState(playbookKey)),
   }
 }
 
@@ -536,4 +536,18 @@ const constructMoves = (moves:PlaybookBase["moves"]) => {
     checks: Array.from({ length: move.checkboxes ?? 0 }, () => 0),
     lines: Array.from({ length: move.extraLines ?? 0 }, () => ""),
   }))
+}
+
+function hasCustomMoveState(playbookKey: playbookKey) {
+  return playbookKey === playbookKeys.facsimile || playbookKey === playbookKeys.dodger;
+}
+
+const coreMoveState = (playbookKey: playbookKey): {coreMoveState:CoreMoveState} | undefined => {
+  if (playbookKey === playbookKeys.facsimile)   {
+    return { coreMoveState: { type: "facsimile" as const, parts: startingParts, adaptorKeys: 1 } }
+  } else if (playbookKey === playbookKeys.dodger) {
+    
+
+    return { coreMoveState: { type: "dodger" as const, boons: Array.from({ length: 5 }, (_, idx) => idx === 0 ? 1 : 0), banes: Array.from    ({ length: 5 }, () => 0), hoard: Array.from({ length: 8 }, () => "") } }
+  }
 }

@@ -2,10 +2,12 @@ import type { Character, CustomTextFields, PlaybookBase } from "../types"
 import { playbookKeys } from "../types"
 import { americanPlaybook } from "./american"
 import { blankPlaybook } from "./blank"
+import { dodgerPlaybook } from "./dodger"
 import { explorerPlaybook } from "./explorer"
 import { facsimilePlaybook } from "./facsimile"
 import { factotumPlaybook } from "./factotum"
 import { informalsPlaybook } from "./informals"
+import { legacyPlaybook } from "./legacy"
 import { motherPlaybook } from "./mother"
 import { orphanPlaybook } from "./orphan"
 import { undeniablePlaybook } from "./undeniable"
@@ -15,8 +17,10 @@ import { vesselPlaybook } from "./vessel"
 export const playbookBases: Record<(typeof playbookKeys)[keyof typeof playbookKeys], PlaybookBase> = {
   [playbookKeys.custom]: blankPlaybook,
   [playbookKeys.american]: americanPlaybook,
+  [playbookKeys.dodger]: dodgerPlaybook,
   [playbookKeys.explorer]: explorerPlaybook,
   [playbookKeys.factotum]: factotumPlaybook,
+  [playbookKeys.legacy]: legacyPlaybook,
   [playbookKeys.mother]: motherPlaybook,
   [playbookKeys.orphan]: orphanPlaybook,
   [playbookKeys.undeniable]: undeniablePlaybook,

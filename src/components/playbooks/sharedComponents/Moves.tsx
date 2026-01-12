@@ -3,11 +3,15 @@ import { toast } from "react-hot-toast";
 import { useGame } from "../../../context/GameContext";
 import {ReactComponent as AdaptorKey } from "../../assets/adaptor.svg";
 import { ReactComponent as BabySVG } from "../../assets/baby.svg";
+import { ReactComponent as LockIcon } from "../../assets/lock.svg";
+import { ReactComponent as UnlockIcon } from "../../assets/unlock.svg";
+import { Divider } from "../../shared/Divider";
 import { EditableLine } from "../../shared/EditableLine";
 import { playbookBases } from "../content";
+import { banes as baneText, boons as boonText } from "../content/dodger";
 import { dollPartDescriptions } from "../content/facsimile";
 import { heraldPlaybookAdditions } from "../content/herald";
-import type { CharacterNotTroupe } from "../types";
+import { type CharacterNotTroupe, playbookKeys } from "../types";
 import { parseStaticText, parseWithCheckboxes } from "../utils";
 
 export function Moves({ character }: { character: CharacterNotTroupe }) {
@@ -19,14 +23,16 @@ export function Moves({ character }: { character: CharacterNotTroupe }) {
 			{otherMoves.length > 0 &&
 				otherMoves.map((move) => {
 					return (
-						<MoveDisplay key={move.title} character={character} move={move} />
-					);
+						<div key={move.title}>
+							<MoveDisplay character={character} move={move} />
+							<Divider/>
+						</div>)
 				})}
 		</div>
 	);
 }
 
-const specialMoveTitles = ["The Child", "The Royal Explorer's Club","Rites of Salt & Smoke", "The Reflection","The Family", "The Phantom", "Doll Parts", "The Offering"]
+const specialMoveTitles = ["The Child", "The Royal Explorer's Club","Rites of Salt & Smoke", "The Reflection","The Family", "The Phantom", "Doll Parts", "The Offering", "The Dragon Sickness"]
 
 function MoveDisplay({
 	character,
@@ -176,6 +182,8 @@ function SpecialMoveDisplay({ character, title }: { character: CharacterNotTroup
 			return <DollParts character={character} />
 		case "The Offering":
 			return <TheOffering character={character} />
+		case "The Dragon Sickness":
+			return <TheDragonSickness character={character} />
 	}
 	return <div>{title} Special Display not built yet!</div>
 }
@@ -699,4 +707,127 @@ function TheOffering({ character }: { character: CharacterNotTroupe }) {
     })}
   </div>
 
+}
+
+function TheDragonSickness({ character }: { character: CharacterNotTroupe }) {
+	const moveState = character.coreMoveState 
+	const {
+		gameState,
+		updateGameState,
+		user: { id },
+	} = useGame();
+	const editable = id === character.playerId;
+	if (!moveState || moveState.type !== "dodger") return null;
+	const {boons, banes, hoard} = moveState;
+	const contentDef = playbookBases[playbookKeys.dodger].moves.find((m) => m.title === "The Dragon Sickness");
+	const {text} = contentDef ?? {};
+	const toggleCheck = (type: "boon" | "bane", index: number) => {
+			if (!editable) return;
+
+			const currentChecks = type === "boon" ? boons : banes;
+			const newChecks = [...currentChecks];
+			newChecks[index] = currentChecks[index] === 1 ? 0 : 1;
+
+			const newBoons = type === "boon" ? newChecks : boons;
+			const newBanes = type === "bane" ? newChecks : banes;
+
+			updateGameState({
+				players: gameState.players.map((player) =>
+					player.id === id
+						? {
+								...player,
+								character: player.character
+									? {
+											...player.character,
+											coreMoveState: { ...moveState, boons: newBoons, banes: newBanes },
+										}
+									: null,
+							}
+						: player,
+				),
+			});
+	}
+
+	const updateHoard = (index: number, line: string) => {
+		const newHoard = [...hoard ?? []];
+		newHoard[index] = line;
+		updateGameState({
+			players: gameState.players.map((player) =>
+				player.id === id && player.character
+					? {
+							...player,
+							character: {
+								...player.character,
+								coreMoveState: { ...moveState, hoard: newHoard },
+							},
+						}
+					: player,
+			),
+		});
+	};
+
+	const introText = text?.slice(0,10)
+
+
+  return (
+    <div className="flex flex-col justify-center gap-1">
+      <h3 className="text-sm font-bold text-theme-text-accent text-center">The Dragon Sickness</h3>
+      {introText &&
+        introText.length > 0 &&
+        introText.map((line, lineIndex) => {
+          return (
+            <p className="text-left leading-relaxed" key={`dragonSickness-line-${// biome-ignore lint/suspicious/noArrayIndexKey: hate this rule 
+lineIndex}`}>
+              {parseStaticText(line)}
+            </p>
+          )
+        })}
+		<Divider/>
+		<div className="flex flex-col gap-2 p-1 border border-theme-border rounded-lg items-stretch justify-center">
+		<h4 className="text-sm font-bold text-theme-text-accent text-center">Boons of the Wyrm</h4>
+		        {boonText.map((boon, idx) => {
+          return (
+            <div key={`${boon}`} className="w-full inline-flex gap-2 items-center text-left text-sm">
+              <button
+                type="button"
+                disabled={!editable}
+                onClick={() => toggleCheck("boon", idx)}
+              >
+				{boons[idx] === 0 ? <LockIcon className="w-6 h-6 text-theme-text-muted" /> : <UnlockIcon className="w-6 h-6 text-theme-text-accent" />}
+			  </button>
+              {parseStaticText(boon)}
+            </div>
+          )
+        })}
+		</div>
+		<Divider/>
+		<div className="flex flex-col gap-2 p-1 border border-theme-border rounded-lg items-stretch justify-center">
+		<h4 className="text-sm font-bold text-theme-text-accent text-center">Banes of the Wyrm</h4>
+		{baneText.map((bane, idx) => {
+          return (
+            <div key={`${	bane}`} className="w-full inline-flex gap-2 items-center text-left text-sm">
+              <button
+                type="button"
+                disabled={!editable}
+                onClick={() => toggleCheck("bane", idx)}
+              >
+				{banes[idx] === 0 ? <LockIcon className="w-6 h-6 text-theme-text-muted" /> : <UnlockIcon className="w-6 h-6 text-theme-text-accent" />}
+			  </button>
+              {parseStaticText(bane)}
+            </div>
+          )
+        })}
+		</div>
+
+
+
+      <Divider/>
+	  <div className="flex flex-col gap-2 p-1 border border-theme-border rounded-lg items-stretch justify-center">
+	  <h4 className="text-sm font-bold text-theme-text-accent text-center">Your Hoard</h4>
+      {moveState.hoard.map((line, lineIndex) => {
+          return <div key={`dragonSickness-hoard-line-${lineIndex}-${line}`} className="w-full flex flex-col gap-2 items-center justify-start">{lineIndex === 0 && <span>The crown jewel of your hoard. Describe it:</span>}<EditableLine text={line} editable={editable} onSave={(index, value) => updateHoard(index, value)} index={lineIndex} /></div>
+        })}
+		</div>
+    </div>
+  )
 }
