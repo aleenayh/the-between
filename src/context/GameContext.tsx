@@ -1,13 +1,16 @@
 import React, {
 	createContext,
 	type ReactNode,
+	useCallback,
 	useContext,
 	useEffect,
 	useState,
 } from "react";
 import toast from "react-hot-toast";
-import { useFirebase } from "../hooks/useFirebase";
+import { VersionMismatchModal } from "../components/shared/VersionMismatchModal";
+import { useFirebase, VersionMismatchError } from "../hooks/useFirebase";
 import { validateGameState } from "../utils/schemaValidation";
+import { getLocalSchemaVersion } from "../utils/versionCheck";
 import { defaultGameState } from "./defaults";
 import type { GameState, UserInfo } from "./types";
 
@@ -67,6 +70,9 @@ export const GameProvider: React.FC<GameProviderProps> = ({
 	);
 	const [firebaseInitialized, setFirebaseInitialized] = useState(false);
 	const [warningsShown, setWarningsShown] = useState<string[]>([]);
+	const [showVersionMismatchModal, setShowVersionMismatchModal] =
+	useState(false);
+const localSchemaVersion = getLocalSchemaVersion();
 
 	/**
 	 * Firebase connection with state sync callback
@@ -76,6 +82,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({
 		gameState: firebaseState,
 		updateGameState: firebaseUpdateState,
 		initializeGame,
+		firebaseSchemaVersion,
 	} = useFirebase({
 		gameHash,
 		onStateSync: (state: GameState) => {
@@ -108,6 +115,14 @@ export const GameProvider: React.FC<GameProviderProps> = ({
 
 			setGameState(mergedState);
 			setFirebaseInitialized(true);
+
+						// Check version on sync
+						if (validatedState.schemaVersion && localSchemaVersion) {
+							if (validatedState.schemaVersion !== localSchemaVersion) {
+								console.log("showing version mismatch modal");
+								setShowVersionMismatchModal(true);
+							}
+						}
 		},
 	});
 
@@ -137,36 +152,68 @@ export const GameProvider: React.FC<GameProviderProps> = ({
 		gameState,
 	]);
 
+		/**
+	 * Check version mismatch and show modal if needed
+	 */
+		const checkVersionMismatch = useCallback(() => {
+			if (firebaseSchemaVersion && localSchemaVersion) {
+				if (firebaseSchemaVersion !== localSchemaVersion) {
+					setShowVersionMismatchModal(true);
+					return true;
+				}
+			}
+			return false;
+		}, [firebaseSchemaVersion, localSchemaVersion]);
+
+			/**
+	 * Tab visibility handler - check version on focus
+	 */
+	useEffect(() => {
+		const handleVisibilityChange = () => {
+			if (document.visibilityState === "visible") {
+				// Tab became visible, check version
+				checkVersionMismatch();
+			}
+		};
+
+		document.addEventListener("visibilitychange", handleVisibilityChange);
+
+		return () => {
+			document.removeEventListener("visibilitychange", handleVisibilityChange);
+		};
+	}, [checkVersionMismatch]);
+
 	/**
 	 * Update game state locally AND send to Firebase
 	 */
 	const updateGameState = (updates: Partial<GameState>) => {
-		try {
-			const newState = { ...gameState, ...updates };
+  try {
+    const newState = { ...gameState, ...updates }
 
-			if (updates.players) {
-				for (const player of updates.players) {
-					if (player.id === userInfo.id && player.role !== userInfo.role) {
-						localStorage.setItem("playerRole", player.role);
-						setUserInfo({ ...userInfo, role: player.role });
-					}
-				}
-			}
+    if (updates.players) {
+      for (const player of updates.players) {
+        if (player.id === userInfo.id && player.role !== userInfo.role) {
+          localStorage.setItem("playerRole", player.role)
+          setUserInfo({ ...userInfo, role: player.role })
+        }
+      }
+    }
 
-			// Update local state immediately (optimistic update)
-			setGameState(newState);
+    // Update local state immediately (optimistic update)
+    setGameState(newState)
 
-			//filter out undefined before sending to firebase; it can't save them and we backfill legitimately undefined values on entry
-			const filteredUpdates = Object.fromEntries(Object.entries(updates).filter(([_, value]) => value !== undefined));
-
-			// Send to Firebase
-			firebaseUpdateState(filteredUpdates).catch((error) => {
-				console.error("Failed to sync state to Firebase:", error);
-			});
-		} catch (error) {
-			console.error("Error updating game state:", error);
-		}
-	};
+    // Send to Firebase
+    firebaseUpdateState(updates).catch((error) => {
+      if (error instanceof VersionMismatchError) {
+        setShowVersionMismatchModal(true)
+      } else {
+        console.error("Failed to sync state to Firebase:", error)
+      }
+    })
+  } catch (error) {
+    console.error("Error updating game state:", error)
+  }
+}
 
 	/**
 	 * Add current user to players list after Firebase syncs
@@ -212,7 +259,13 @@ export const GameProvider: React.FC<GameProviderProps> = ({
 		return <div>Loading...</div>;
 	}
 
-	return <GameContext.Provider value={value}>{children}</GameContext.Provider>;
+	return <><GameContext.Provider value={value}>
+			{children}</GameContext.Provider>
+								<VersionMismatchModal
+								isOpen={showVersionMismatchModal}
+								localVersion={localSchemaVersion}
+								remoteVersion={firebaseSchemaVersion || ""}
+							/></>;
 };
 
 /**

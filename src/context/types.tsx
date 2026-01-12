@@ -63,6 +63,7 @@ export const gameStateSchema = z.object({
 	),
 	heraldUnlocked: z.boolean().catch(false),
 	heraldOfferings: z.array(z.string()).optional().catch(undefined),
+	schemaVersion: z.string().catch(""),
 });
 
 export type GameState = z.infer<typeof gameStateSchema>;

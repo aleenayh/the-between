@@ -2,6 +2,7 @@ import { off, onValue, ref, set, update } from "firebase/database";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { GameState } from "../context/types";
 import { db } from "../lib/firebase";
+import { compareVersions, getLocalSchemaVersion } from "../utils/versionCheck";
 
 // Connection status type
 type ConnectionStatus = "connecting" | "connected" | "disconnected" | "error";
@@ -16,6 +17,19 @@ interface UseFirebaseReturn {
 	gameState: GameState | null;
 	updateGameState: (updates: Partial<GameState>) => Promise<void>;
 	initializeGame: (initialState: GameState) => Promise<void>;
+	firebaseSchemaVersion: string | null;
+}
+
+export class VersionMismatchError extends Error {
+	constructor(
+		public localVersion: string,
+		public remoteVersion: string,
+	) {
+		super(
+			`Schema version mismatch: local ${localVersion} vs remote ${remoteVersion}`,
+		);
+		this.name = "VersionMismatchError";
+	}
 }
 
 /**
@@ -33,8 +47,12 @@ export const useFirebase = ({
 }: UseFirebaseOptions): UseFirebaseReturn => {
 	const [status, setStatus] = useState<ConnectionStatus>("connecting");
 	const [gameState, setGameState] = useState<GameState | null>(null);
+	const [firebaseSchemaVersion, setFirebaseSchemaVersion] = useState<
+		string | null
+	>(null);
 	const gameRefPath = `games/${gameHash}`;
 	const onStateSyncRef = useRef(onStateSync);
+	const localSchemaVersion = getLocalSchemaVersion();
 
 	// Keep the callback ref up to date
 	useEffect(() => {
@@ -57,6 +75,9 @@ export const useFirebase = ({
 
 				if (data) {
 					setGameState(data);
+					// Extract and store schema version from Firebase
+					const remoteVersion = data.schemaVersion || "";
+					setFirebaseSchemaVersion(remoteVersion);
 					if (onStateSyncRef.current) {
 						onStateSyncRef.current(data);
 					}
@@ -81,6 +102,19 @@ export const useFirebase = ({
 	 */
 	const updateGameState = useCallback(
 		async (updates: Partial<GameState>): Promise<void> => {
+			// Check version mismatch
+			if (firebaseSchemaVersion !== null) {
+							const versionMatch = compareVersions(
+								localSchemaVersion,
+								firebaseSchemaVersion,
+							);
+							if (!versionMatch) {
+								throw new VersionMismatchError(
+									localSchemaVersion,
+									firebaseSchemaVersion,
+								);
+							}
+			}
 			const gameRef = ref(db, gameRefPath);
 			const timestamp = new Date().toISOString();
 
@@ -94,7 +128,7 @@ export const useFirebase = ({
 				throw error;
 			}
 		},
-		[gameRefPath],
+		[gameRefPath, firebaseSchemaVersion, localSchemaVersion],
 	);
 
 	/**
@@ -125,5 +159,6 @@ export const useFirebase = ({
 		gameState,
 		updateGameState,
 		initializeGame,
+		firebaseSchemaVersion,
 	};
 };
