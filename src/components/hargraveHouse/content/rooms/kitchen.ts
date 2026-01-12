@@ -1,4 +1,4 @@
-import type { RoomContent } from "./types";
+import type { RoomContent } from "../../types";
 
 export const kitchenContent: RoomContent = {
 	title: "The Kitchen",

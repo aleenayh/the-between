@@ -1,3 +1,5 @@
+
+import type { RoomContent } from "../../types";
 import { ballroomContent } from "./ballroom";
 import { basementContent } from "./basement";
 import { conservatoryContent } from "./conservatory";
@@ -13,7 +15,6 @@ import { ritualContent } from "./ritual";
 import { salonContent } from "./salon";
 import { servantsContent } from "./servants";
 import { trophyContent } from "./trophy";
-import type { RoomContent } from "./types";
 
 export enum roomKeys {
 	ballroom = "ballroom",
