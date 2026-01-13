@@ -54,7 +54,7 @@ export const dodgerPlaybook: PlaybookBase = {
     "Narrate a flashback to your big score, when you acquired the crown jewel of your hoard and quickly realized you couldn’t ever sell, discard, or give away the treasure.",
   ],
   masksOfFuture:   [
-    "<strong>The Guilded Door</strong>: Take the following Condition: Most-Beloved. Tell the other Hunters they can no longer choose The Gilded Door on their own playbook (this does not count as being marked for them). You can never clear Most-Beloved.",
+    "<strong>The Gilded Door</strong>: Take the following Condition: Most-Beloved. Tell the other Hunters they can no longer choose The Gilded Door on their own playbook (this does not count as being marked for them). You can never clear Most-Beloved.",
     "<strong>The Moss-Covered Gate</strong>: Narrate a scene where you return to old stomping grounds and steal something of personal significance; add it to your Personal Quarters.",
     "<strong>The Darkened Threshold</strong>: Narrate a scene of your former criminal accomplices swearing a blood-oath of vengeance against you for your betrayal. Tell the Keeper the names and specialties of three criminals that can now serve as free-floating Dangers to you and your fellow Hunters. ",
     "<strong>The Cosmic Passage</strong>: Narrate a scene in which you see London from the point of view of an ancient dragon. Increase your Sensitivity by 1 (max 3) and reduce your Reason by 2.",

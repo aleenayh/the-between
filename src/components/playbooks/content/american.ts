@@ -134,7 +134,7 @@ export const americanPlaybook: PlaybookBase = {
 		"Narrate a flashback showing the incident that caused you to go on the run. ",
 	],
 	masksOfFuture: 	[
-		"<strong>The Guilded Door</strong>: Take the following Condition: Most-Beloved. Tell the other Hunters they can no longer choose The Gilded Door on their own playbook (this does not count as being marked for them). You can never clear Most-Beloved.",
+		"<strong>The Gilded Door</strong>: Take the following Condition: Most-Beloved. Tell the other Hunters they can no longer choose The Gilded Door on their own playbook (this does not count as being marked for them). You can never clear Most-Beloved.",
 		"<strong>The Moss-Covered Gate</strong>: Narrate a scene in which you receive a letter from one of your parents urging you to return home. What does the letter say? Then tell the Keeper to put The Pinkerton in play. ",
 		"<strong>The Darkened Threshold</strong>: Narrate a scene in which you hurt an innocent because of your curse. ",
 		"<strong>The Cosmic Passage</strong>: Increase your Sensitivity by 1 (max 3) and reduce your Reason by 2.",

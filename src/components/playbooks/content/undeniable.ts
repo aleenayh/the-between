@@ -98,7 +98,7 @@ export const undeniablePlaybook: PlaybookBase = {
     "Narrate a flashback to when you finally destroyed the person you fell madly in love with. How did the masterwork change to reflect your wrath?",
   ],
   masksOfFuture: [
-    "<strong>The Guilded Door</strong>: Take the following Condition: Most-Beloved. Tell the other Hunters they can no longer choose The Gilded Door on their own playbook (this does not count as being marked for them). You can never clear Most-Beloved.",
+    "<strong>The Gilded Door</strong>: Take the following Condition: Most-Beloved. Tell the other Hunters they can no longer choose The Gilded Door on their own playbook (this does not count as being marked for them). You can never clear Most-Beloved.",
     "<strong>The Moss-Covered Gate</strong>: Narrate a scene in which you express private regret for the harm you have caused. ",
     "<strong>The Darkened Threshold</strong>: Whenever you gaze upon the masterwork in an attempt to uncover something hidden in the world, roll with Sensitivity. <li><strong>On a 10+,</strong> the masterwork reveals a Clue or a Mastermind Clue, your choice.</li> <li><strong>On a 7-9,</strong> as above, but you also scar your Reflection.</li> ",
     "<strong>The Cosmic Passage</strong>: Narrate a scene during which people treat you like you’re nothing special. ",

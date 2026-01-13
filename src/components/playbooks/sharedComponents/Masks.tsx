@@ -14,7 +14,7 @@ export function Masks({ character }: { character: CharacterNotTroupe }) {
   } = useGame()
   const editable = id === character.playerId
 
-  const guildedDoorDisabled = checkGuiledDoorDisabled(gameState)
+  const gildedDoorDisabled = checkGuiledDoorDisabled(gameState)
 
   const onToggleMaskPast = useCallback(
     (checked: boolean, index: number) => {
@@ -115,7 +115,7 @@ export function Masks({ character }: { character: CharacterNotTroupe }) {
           index,
         )=> {
           const marked = character.masksOfFuture[index] === 1
-          const disabled = guildedDoorDisabled && mask.includes("<strong>The Guilded Door</strong>")
+          const disabled = gildedDoorDisabled && mask.includes("<strong>The Gilded Door</strong>")
           const override = isHerald && mask.includes("<strong>The Blood-Soaked Portal</strong>")?           heraldPlaybookAdditions.masksOfFuture?.[0]: undefined
           const parsed = mask.split(":")
           const maskWithoutKey = parsed.slice(1).join(":")
@@ -148,11 +148,11 @@ function checkGuiledDoorDisabled(gameState: GameState) {
     const character = player.character
     if (!character) continue
     const playbook = playbookBases[character.playbook as playbookKey]
-    //some playbooks don't have the guilded door
-    if (!playbook.masksOfFuture.includes("<strong>The Guilded Door:</strong>")) continue
+    //some playbooks don't have the Gilded door
+    if (!playbook.masksOfFuture.includes("<strong>The Gilded Door:</strong>")) continue
 
     //if they do, find the index of it
-    const index = playbook.masksOfFuture.findIndex((mask) => mask.includes("<strong>The Guilded Door:</strong>"))
+    const index = playbook.masksOfFuture.findIndex((mask) => mask.includes("<strong>The Gilded Door:</strong>"))
     const marked = character.masksOfFuture[index] === 1
     if (!marked) continue
     return true

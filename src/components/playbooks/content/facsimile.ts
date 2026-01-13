@@ -37,7 +37,7 @@ export const facsimilePlaybook: PlaybookBase = {
 
     ],
     masksOfFuture:   [
-      "<strong>The Guilded Door</strong>: Take the following Condition: Most-Beloved. Tell the other Hunters they can no longer choose The Gilded Door on their own playbook (this does not count as being marked for them). You can never clear Most-Beloved.",
+      "<strong>The Gilded Door</strong>: Take the following Condition: Most-Beloved. Tell the other Hunters they can no longer choose The Gilded Door on their own playbook (this does not count as being marked for them). You can never clear Most-Beloved.",
       "<strong>The Moss-Covered Gate</strong>: Your Creator has finally passed on. Narrate a scene in which an internal mechanism previously unknown to you is remotely activated, causing you—perhaps against your will—to mourn them. Take the Condition Mourning is Compulsory.",
       "<strong>The Darkened Threshold</strong>: Narrate a scene in which you violently lash out—against yourself or another—out of frustration over your inability to feel sensation. ",
       "<strong>The Cosmic Passage</strong>: You discover a room that had previously been used as a workshop for an artificer who has long departed Hargrave House. From now on, you can swap out 1 Doll Part for another and redistribute 1 Adaptor Key during the Dusk Phase. ",

@@ -16,7 +16,7 @@ export const blankPlaybook: PlaybookBase = {
   },
   masksOfPast: [],
   masksOfFuture:   [
-    "<strong>The Guilded Door</strong>: Take the following Condition: Most-Beloved. Tell the other Hunters they can no longer choose The Gilded Door on their own playbook (this does not count as being marked for them). You can never clear Most-Beloved.",
+    "<strong>The Gilded Door</strong>: Take the following Condition: Most-Beloved. Tell the other Hunters they can no longer choose The Gilded Door on their own playbook (this does not count as being marked for them). You can never clear Most-Beloved.",
     "<strong>The Moss-Covered Gate</strong>: ",
     "<strong>The Darkened Threshold</strong>: ",
     "<strong>The Cosmic Passage</strong>: Increase your Sensitivity by 1 (max 3) and reduce your Reason by 2.",

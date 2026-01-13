@@ -38,7 +38,7 @@ export const legacyPlaybook: PlaybookBase = {
 "Narrate a flashback where you showed up bloody and beaten to a place of comfort and were met with kindness." 
   ],
   masksOfFuture:   [
-    "<strong>The Guilded Door</strong>: Take the following Condition: Most-Beloved. Tell the other Hunters they can no longer choose The Gilded Door on their own playbook (this does not count as being marked for them). You can never clear Most-Beloved.",
+    "<strong>The Gilded Door</strong>: Take the following Condition: Most-Beloved. Tell the other Hunters they can no longer choose The Gilded Door on their own playbook (this does not count as being marked for them). You can never clear Most-Beloved.",
     "<strong>The Moss-Covered Gate</strong>: Narrate a scene where you stumble upon the Beast unprepared, but it shows no interest in you and vanishes into the night. Mark or erase two of either symbol on your Hunt.",
     "<strong>The Darkened Threshold</strong>: Narrate a scene where you kill an innocent for the sake of the hunt. Mark an X on your Hunt.",
     "<strong>The Cosmic Passage</strong>: Your connection to the Beast has grown. At the start of the Dusk Phase, roll with Presence. On a 10+, take advantage on your next roll and describe what aspect of the Beast you feel helping you. On a 7-9, as above, but take the Condition: Bloodthirsty; if you are already Bloodthirsty, put on a mask. Once The Beast is resolved, unmark this box. When you mark it again, change the connection to any active Threat. The box cannot be unmarked after that.",

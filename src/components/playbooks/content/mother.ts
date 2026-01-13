@@ -98,7 +98,7 @@ export const motherPlaybook: PlaybookBase = {
     "Narrate a flashback to the time when you finally said goodbye to the person you lost.",
   ],
   masksOfFuture: [    
-    "<strong>The Guilded Door</strong>: Take the following Condition: Most-Beloved. Tell the other Hunters they can no longer choose The Gilded Door on their own playbook (this does not count as being marked for them). You can never clear Most-Beloved.",
+    "<strong>The Gilded Door</strong>: Take the following Condition: Most-Beloved. Tell the other Hunters they can no longer choose The Gilded Door on their own playbook (this does not count as being marked for them). You can never clear Most-Beloved.",
     "<strong>The Moss-Covered Gate</strong>: You must attempt to bring the Child to life. ",
     "<strong>The Darkened Threshold</strong>: Narrate a scene in which you destroy a professional rival.",
     "<strong>The Cosmic Passage</strong>: Increase your Sensitivity by 1 (max 3).",
