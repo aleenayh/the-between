@@ -10,6 +10,7 @@ import { parseStaticText } from "../playbooks/utils"
 import { CloseButton } from "../shared/CloseButton"
 import { Divider } from "../shared/Divider"
 import { EditableLine } from "../shared/EditableLine"
+import { GlassyButton } from "../shared/GlassyButton"
 import { Section } from "../shared/Section"
 import { StyledTooltip } from "../shared/Tooltip"
 import { ReactComponent as MastermindIcon } from "./chess.svg"
@@ -56,9 +57,7 @@ export function MastermindSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsO
                 transition={{ duration: 1 }}
                 className="absolute top-0 left-0 w-full md:w-1/2 h-screen flex flex-col justify-start items-center bg-theme-bg-primary border-r border-theme-border-accent rounded-lg p-4 z-10 transition-all ease-linear overflow-y-auto pointer-events-auto"
               >
-                <button type="button" className="absolute top-0 right-0 w-8 h-8" onClick={() => setIsOpen(!isOpen)}>
-                  X
-                </button>
+                <CloseButton onClick={() => setIsOpen(!isOpen)} />
                 <h1 className="text-2xl font-bold text-theme-text-accent mb-10">{mastermindContent?.title ?? mastermind?.title ??"Mastermind Conspiracy"}</h1>
                 {mastermind && (<MastermindContent mastermind={mastermind}/>             )}
                {role === PlayerRole.KEEPER && (
@@ -633,12 +632,11 @@ function ClueSection({ role }: { role: PlayerRole }) {
       </div>
       <form onSubmit={handleSubmit(addCustomClue)} className="flex gap-2 w-full">
         <input type="text" placeholder="Add custom clue..." className="flex-grow" {...register("customClue")} />
-        <button
-          type="submit"
-          className="bg-theme-bg-secondary text-theme-text-primary px-4 py-2 rounded-lg opacity-80 hover:opacity-100 border-2 hover:bg-theme-bg-accent hover:border border-2-theme-border border-2-accent hover:text-theme-text-accent"
+        <GlassyButton
+        onClick={handleSubmit(addCustomClue)  }
         >
           Add
-        </button>
+        </GlassyButton>
       </form>
     </Section>
   )

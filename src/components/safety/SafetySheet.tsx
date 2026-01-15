@@ -6,6 +6,7 @@ import { toast } from "react-hot-toast"
 import { useGame } from "../../context/GameContext"
 import { CloseButton } from "../shared/CloseButton"
 import { Divider } from "../shared/Divider"
+import { GlassyButton } from "../shared/GlassyButton"
 import { StyledTooltip } from "../shared/Tooltip"
 import { ReactComponent as HeartShieldIcon } from "./heartshield.svg"
 
@@ -39,9 +40,7 @@ export function SafetyPane({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: 
             transition={{ duration: 1 }}
             className="absolute top-0 left-0 w-full md:w-1/2 h-screen flex flex-col justify-start items-center bg-theme-bg-primary border-r border-theme-border-accent rounded-lg p-4 z-10 transition-all ease-linear overflow-y-auto pointer-events-auto"
           >
-            <button type="button" className="absolute top-0 right-0 w-8 h-8" onClick={() => setIsOpen(!isOpen)}>
-              X
-            </button>
+            <CloseButton onClick={() => setIsOpen(!isOpen)} />
             <h1 className="text-2xl font-bold text-theme-text-accent mb-6">Safety Tools</h1>
             <div className="flex flex-col gap-4 justify-start items-center h-full">
               <p className="text-balance text-sm">
@@ -83,7 +82,7 @@ function LinesAndVeils() {
       </div>
       <Dialog.Root>
        <Dialog.Trigger asChild>
-          <button
+       <button
             type="button"
        className="md:col-span-2 mx-auto w-3/5 bg-theme-bg-secondary text-theme-text-primary px-4 py-2 rounded-lg opacity-80 hover:opacity-100 border-2 hover:bg-theme-bg-accent hover:border border-2-theme-border border-2-accent hover:text-theme-text-accent"
           >

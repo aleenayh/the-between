@@ -3,6 +3,8 @@ import { Tooltip } from "radix-ui";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useGame } from "../../context/GameContext";
+import { CloseButton } from "../shared/CloseButton";
+import { GlassyButton } from "../shared/GlassyButton";
 import { StyledTooltip } from "../shared/Tooltip";
 import { ReactComponent as NotesIcon } from "./quill.svg";
 
@@ -59,13 +61,7 @@ export function NotesPane({
 						transition={{ duration: 1 }}
 						className="absolute top-0 left-0 w-full md:w-1/2 h-screen flex flex-col justify-start items-center bg-theme-bg-primary border-r border-theme-border-accent rounded-lg p-4 z-10 transition-all ease-linear overflow-y-auto pointer-events-auto"
 					>
-						<button
-							type="button"
-							className="absolute top-0 right-0 w-8 h-8"
-							onClick={() => setIsOpen(!isOpen)}
-						>
-							X
-						</button>
+						<CloseButton onClick={() => setIsOpen(!isOpen)} />
 						<h1 className="text-2xl font-bold text-theme-text-accent mb-6">
 							Notes
 						</h1>
@@ -78,13 +74,11 @@ export function NotesPane({
 								defaultValue={notes}
 								onBlur={(e) => setNotes(e.target.value)}
 							/>
-							<button
-								type="button"
+							<GlassyButton
 								onClick={saveLocal}
-								className="hover:bg-theme-bg-accent hover:text-theme-text-accent border-2 hover:border-theme-border-accent rounded-lg p-2 w-full bg-theme-bg-secondary text-theme-text-primary border-theme-border transition-colors"
 							>
 								{buttonText}
-							</button>
+							</GlassyButton>
 							<p className="text-sm md:text-md w-full md:w-1/2 mx-auto italic">
 								Notes are saved locally. They will not persist if you change
 								devices and can be lost if you clear cache.

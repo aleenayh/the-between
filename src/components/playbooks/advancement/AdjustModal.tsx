@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useGame } from "../../../context/GameContext";
 import { CloseButton } from "../../shared/CloseButton";
+import { GlassyButton } from "../../shared/GlassyButton";
 import type {Abilities, CharacterNotTroupe } from "../types";
 
 export function AdjustmentModal({ character }: { character: CharacterNotTroupe }) {
@@ -49,7 +50,7 @@ export function AdjustmentModal({ character }: { character: CharacterNotTroupe }
 	return (
 		<Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
 			<Dialog.Trigger asChild className="DialogTrigger">
-				<button type="button">Edit Hunter</button>
+				<GlassyButton>Edit Hunter</GlassyButton>
 			</Dialog.Trigger>
 			<Dialog.Portal>
 				<Dialog.Overlay className="DialogOverlay" />
