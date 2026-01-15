@@ -10,7 +10,7 @@ import { Masks } from "./sharedComponents/Masks";
 import { Moves } from "./sharedComponents/Moves";
 import { PersonalQuarters } from "./sharedComponents/PersonalQuarters";
 import { Questions } from "./sharedComponents/Questions";
-import { playbookKeys, type Character } from "./types";
+import { type Character, playbookKeys } from "./types";
 
 export function PlaybookPane({ character }: { character: Character }) {
 	if (character.playbook === playbookKeys.informals) {

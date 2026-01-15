@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useGame } from "../../context/GameContext"
 import { resetGameToDefaults } from "../../lib/firebase"
 import { ReactComponent as Logo } from "../assets/between-logo.svg";
+import { CloseButton } from "../shared/CloseButton";
 import { Section } from "../shared/Section"
 import { StyledTooltip } from "../shared/Tooltip";
 import { ReactComponent as CogIcon } from "./cog.svg"
@@ -40,9 +41,7 @@ export function SettingsPane({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen
             transition={{ duration: 1 }}
             className="absolute top-0 left-0 w-full md:w-1/2 h-screen flex flex-col justify-start items-center bg-theme-bg-primary border-r border-theme-border-accent rounded-lg p-4 z-10 transition-all ease-linear overflow-y-auto pointer-events-auto"
           >
-            <button type="button" className="absolute top-0 right-0 w-8 h-8" onClick={() => setIsOpen(!isOpen)}>
-              X
-            </button>
+            <CloseButton onClick={() => setIsOpen(!isOpen)} />
             <h1 className="flex justify-center w-full text-theme-text-accent">
               <Logo className="w-1/3 h-auto mx-auto mb-4" />
             </h1>

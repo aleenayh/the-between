@@ -10,6 +10,7 @@ import { banes } from "../content/dodger"
 import { orderAbilities } from "../sharedComponents/AbilityBoxes"
 import type { Abilities, CharacterNotTroupe, playbookKey } from "../types"
 import { parseStaticText } from "../utils"
+import { GlassyButton } from "../../shared/GlassyButton"
 
 type AdvancementSteps = "select-advancement" | "adjust-stats" | "select-move" | "write-custom-move" | "unmark-pq-items" | "unlock-rec" | "unmark-rec" | "doll-part" | "unlock-adaptor-key" | "custom-adaptor" | "unmark-hunterslife" | "unmark-reflection" | "unlock-energy" | "unmark-wyrmbane"
 
@@ -75,7 +76,7 @@ export function AdvancementModal({ character }: { character: CharacterNotTroupe 
   return (
     <Dialog.Root open={open} onOpenChange={handleOpenChange}>
       <Dialog.Trigger asChild className="DialogTrigger">
-        <button type="button">Advancement</button>
+        <GlassyButton>Advancement</GlassyButton>
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="DialogOverlay" />

@@ -1,6 +1,7 @@
 import { Dialog } from "radix-ui";
 import { useGame } from "../../../context/GameContext";
 import { CloseButton } from "../../shared/CloseButton";
+import { GlassyButton } from "../../shared/GlassyButton";
 
 export function RetireCharacterModal() {
 	const {
@@ -20,7 +21,7 @@ export function RetireCharacterModal() {
 	return (
 		<Dialog.Root>
 			<Dialog.Trigger asChild className="DialogTrigger">
-				<button type="button">Retire Character</button>
+				<GlassyButton>Retire Character</GlassyButton>
 			</Dialog.Trigger>
 			<Dialog.Portal>
 				<Dialog.Overlay className="DialogOverlay" />

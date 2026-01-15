@@ -6,6 +6,7 @@ import { useGame } from "../../../context/GameContext";
 import { PlayerRole } from "../../../context/types";
 import { CloseButton } from "../../shared/CloseButton";
 import { Divider } from "../../shared/Divider";
+import { GlassyButton } from "../../shared/GlassyButton";
 import { heraldPlaybookAdditions } from "../content/herald";
 import { AbilityBoxes } from "../sharedComponents/AbilityBoxes";
 import type { Character } from "../types";
@@ -498,35 +499,26 @@ export function CustomCreateForm() {
 					<div className="h-6" />
 					<div className="flex flex-col md:flex-row justify-evenly gap-2">
 						{step !== "base" && (
-							<button
-								type="button"
-								className="bg-theme-bg-accent text-theme-text-accent px-4 py-2 rounded-lg opacity-80 hover:opacity-100"
-								onClick={(e) => {
-									e.preventDefault();
+							<GlassyButton
+								onClick={() => {
 									setStep(stepsInOrder[stepsInOrder.indexOf(step) - 1]);
 								}}
 							>
 								Return to {prettySteps[stepsInOrder.indexOf(step) - 1]}
-							</button>
+							</GlassyButton>
 						)}
 						{step !== "review" ? (
-							<button
-								type="button"
-								className="bg-theme-bg-accent text-theme-text-accent px-4 py-2 rounded-lg opacity-80 hover:opacity-100"
-								onClick={(e) => {
-									e.preventDefault();
-									setStep(stepsInOrder[stepsInOrder.indexOf(step) + 1]);
-								}}
+							<GlassyButton
+								onClick={() => setStep(stepsInOrder[stepsInOrder.indexOf(step) + 1])}
 							>
 								Continue to {prettySteps[stepsInOrder.indexOf(step) + 1]}
-							</button>
+							</GlassyButton>
 						) : (
-							<button
-								type="submit"
-								className="bg-theme-bg-accent text-theme-text-accent px-4 py-2 rounded-lg opacity-80 hover:opacity-100"
+							<GlassyButton
+								onClick={handleSubmit(saveCharacter)}
 							>
 								Save Character
-							</button>
+							</GlassyButton>
 						)}
 					</div>
 				</div>

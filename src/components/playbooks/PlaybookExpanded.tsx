@@ -63,8 +63,8 @@ export function PlaybookExpanded({ character }: { character: CharacterNotTroupe 
 							type="button"
 							className={
 								activeTab === tab.label
-									? "bg-theme-bg-accent text-theme-text-accent border-theme-border-accent border-2 rounded-lg p-1"
-									: "bg-theme-bg-secondary text-theme-text-muted border-theme-bg-primary border-2 rounded-lg p-1"
+									? "bg-theme-bg-accent text-theme-text-accent border-theme-border-accent border rounded-lg p-1"
+									: "bg-theme-bg-secondary text-theme-text-muted border-theme-border border rounded-lg p-1"
 							}
 							onClick={() => setActiveTab(tab.label as keyof typeof tabs)}
 							key={tab.label}

@@ -4,6 +4,7 @@ import { PlayerRole } from "../../context/types"
 import { KeeperPill } from "../keeper/KeeperPill"
 import { KeeperSummary } from "../keeper/KeeperSummary"
 import { CopyInvite } from "../settings/GameInfo"
+import { GlassyButton } from "../shared/GlassyButton"
 import { playbookBases } from "./content"
 import { CharacterCreateForm } from "./creation/CharacterCreateForm"
 import { CustomCreateForm } from "./creation/CustomCreateForm"
@@ -112,27 +113,23 @@ function CharacterCreationStarter({ onCollapse }: { onCollapse: () => void }) {
               const base = playbookBases[playbookKey]
               const activeHunter = activeHunters.find((Hunter) => Hunter.playbook === playbookKey)
               return (
-                <button
+                <GlassyButton
                   key={playbookKey}
-                  type="button"
-                  className={`border border-theme-border px-4 py-3 rounded-lg bg-theme-bg-secondary hover:bg-theme-bg-accent hover:text-theme-text-accent transition-colors flex flex-col ${activeHunter ? "text-theme-text-muted opacity-60" : "text-theme-text-primary"}`}
                   onClick={() => setKey(playbookKey)}
                 >
                   {base.title}{" "}
                   <span className="text-sm text-theme-text-muted italic hover:text-theme-text-accent">
                     {activeHunter ? `(Played by ${activeHunter.name})` : ""}
                   </span>
-                </button>
+                </GlassyButton>
               )
             })}
-            <button
+            <GlassyButton
               key="keeper"
-              type="button"
-              className="border border-theme-border px-4 py-3 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent transition-colors"
               onClick={() => onCollapse()}
             >
               Play as Keeper (No Character)
-            </button>
+            </GlassyButton>
           </div>
         </div>
       )}

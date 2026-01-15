@@ -3,6 +3,7 @@ import { type UseFormRegister, type UseFormSetValue, type UseFormWatch, useForm 
 import { toast } from "react-hot-toast"
 import { useGame } from "../../../context/GameContext"
 import { PlayerRole } from "../../../context/types"
+import { GlassyButton } from "../../shared/GlassyButton"
 import { Section } from "../../shared/Section"
 import { playbookBases } from "../content"
 import { startingParts } from "../content/facsimile"
@@ -79,16 +80,16 @@ export function CharacterCreateForm({ playbookKey }: { playbookKey: Exclude<play
 
   const checkMove = (moveTitle: string, checked: boolean) => {
     const currentMoves = watch("moves")
-    if (checked) {
+    if (checked && currentMoves.length >= maxMoves) {
+      toast(`You can only select ${maxMoves} moves, including your starting move(s).`)
+      return
+    } else if (checked) {
       setValue("moves", [...currentMoves, moveTitle])
     } else {
       setValue(
         "moves",
         currentMoves.filter((m) => m !== moveTitle),
       )
-    }
-    if (currentMoves.length > maxMoves) {
-      toast(`You can only select ${maxMoves} moves, including your starting move(s). Please remove one.`)
     }
   }
 
@@ -184,13 +185,11 @@ export function CharacterCreateForm({ playbookKey }: { playbookKey: Exclude<play
                   </Section>
                 )}
 
-          <button
-            type="button"
+          <div className="flex justify-center"><GlassyButton
             onClick={() => setStep("moves")}
-            className="bg-theme-bg-accent text-theme-text-accent px-4 py-2 rounded-lg opacity-80 hover:opacity-100"
           >
             Continue to Choose Moves
-          </button>
+          </GlassyButton></div>
         </div>
       )}
 
@@ -223,19 +222,16 @@ export function CharacterCreateForm({ playbookKey }: { playbookKey: Exclude<play
             ))}
           </div>
           <div className="flex gap-2 w-full justify-evenly">
-            <button
-              type="button"
+            <GlassyButton
               onClick={() => setStep("basics")}
-              className="bg-theme-bg-accent text-theme-text-accent px-4 py-2 rounded-lg opacity-80 hover:opacity-100"
             >
               Return to Previous Page
-            </button>
-            <button
-              type="submit"
-              className="bg-theme-bg-accent text-theme-text-accent px-4 py-2 rounded-lg opacity-80 hover:opacity-100"
+            </GlassyButton>
+            <GlassyButton
+              onClick={handleSubmit(saveCharacter)}
             >
               Save Character
-            </button>
+            </GlassyButton>
           </div>
         </div>
       )}

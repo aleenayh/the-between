@@ -6,6 +6,7 @@ import { CloseButton } from "../shared/CloseButton"
 import { Divider } from "../shared/Divider"
 import { CountdownItem } from "./Countdown"
 import { type Mystery, MysteryTheme, type Question } from "./types"
+import { GlassyButton } from "../shared/GlassyButton"
 
 type AddMysteryFormInputs = {
   title: string
@@ -21,12 +22,10 @@ export function AddMystery() {
   return (
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
       <Dialog.Trigger asChild>
-        <button
-          type="button"
-          className="bg-theme-bg-accent text-theme-text-accent px-4 py-2 rounded-lg opacity-80 hover:opacity-100"
+        <GlassyButton
         >
           Add Threat
-        </button>
+        </GlassyButton>
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="DialogOverlay" style={{ zIndex: 20 }} />
