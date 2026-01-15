@@ -5,12 +5,12 @@ import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import { useGame } from "../../../context/GameContext"
 import { CloseButton } from "../../shared/CloseButton"
+import { GlassyButton } from "../../shared/GlassyButton"
 import { playbookBases } from "../content"
 import { banes } from "../content/dodger"
 import { orderAbilities } from "../sharedComponents/AbilityBoxes"
 import type { Abilities, CharacterNotTroupe, playbookKey } from "../types"
 import { parseStaticText } from "../utils"
-import { GlassyButton } from "../../shared/GlassyButton"
 
 type AdvancementSteps = "select-advancement" | "adjust-stats" | "select-move" | "write-custom-move" | "unmark-pq-items" | "unlock-rec" | "unmark-rec" | "doll-part" | "unlock-adaptor-key" | "custom-adaptor" | "unmark-hunterslife" | "unmark-reflection" | "unlock-energy" | "unmark-wyrmbane"
 

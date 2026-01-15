@@ -6,7 +6,6 @@ import { toast } from "react-hot-toast"
 import { useGame } from "../../context/GameContext"
 import { CloseButton } from "../shared/CloseButton"
 import { Divider } from "../shared/Divider"
-import { GlassyButton } from "../shared/GlassyButton"
 import { StyledTooltip } from "../shared/Tooltip"
 import { ReactComponent as HeartShieldIcon } from "./heartshield.svg"
 
