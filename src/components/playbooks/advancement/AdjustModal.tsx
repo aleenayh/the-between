@@ -4,10 +4,11 @@ import { useForm } from "react-hook-form";
 import { useGame } from "../../../context/GameContext";
 import { CloseButton } from "../../shared/CloseButton";
 import { GlassyButton } from "../../shared/GlassyButton";
-import type {Abilities, CharacterNotTroupe } from "../types";
+import { americanRealNames } from "../content/american";
+import { martianRealNames } from "../content/martian";
+import {type Abilities, type CharacterNotTroupe, type playbookKey, playbookKeys } from "../types";
 
 export function AdjustmentModal({ character }: { character: CharacterNotTroupe }) {
-
 	const [isOpen, setIsOpen] = useState(false);
 	const {
 		gameState,
@@ -47,6 +48,8 @@ export function AdjustmentModal({ character }: { character: CharacterNotTroupe }
 		setIsOpen(false);
 	};
 
+	const choosesNameLater = character.playbook === playbookKeys.american || character.playbook === playbookKeys.martian
+
 	return (
 		<Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
 			<Dialog.Trigger asChild className="DialogTrigger">
@@ -68,6 +71,7 @@ export function AdjustmentModal({ character }: { character: CharacterNotTroupe }
 					>
 						<label htmlFor="name">Name</label>
 						<input type="text" {...register("name")} />
+						{choosesNameLater && <LaterNameOptions characterKey={character.playbook} />}
 						<label htmlFor="look">Look</label>
 						<input type="text" {...register("look")} />
 						<label htmlFor="vice">Ritual</label>
@@ -112,4 +116,22 @@ export function AdjustmentModal({ character }: { character: CharacterNotTroupe }
 			</Dialog.Portal>
 		</Dialog.Root>
 	);
+}
+
+function LaterNameOptions({ characterKey }: { characterKey: playbookKey }) {
+	const nameOptions = characterKey === playbookKeys.american ? americanRealNames : characterKey === playbookKeys.martian ? martianRealNames : []
+
+	if (!nameOptions) {
+		return null
+	}
+
+	return (
+		<div>
+			<h4 className="text-sm font-bold text-theme-text-accent text-center">Ready to reveal your real name?</h4>
+			<p>Choose from the list below, or make up your own.</p>
+			<ul className="list-disc list-inside w-full text-left grid grid-cols-3 text-xs">
+				{nameOptions.map((name) => <li key={name}>{name}</li>)}
+			</ul>
+		</div>
+	)
 }

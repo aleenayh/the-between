@@ -1,7 +1,6 @@
-import { useState } from "react"
 import { useGame } from "../../../context/GameContext"
-import { playbookKeys, type MiniCharacter } from "../types"
 import { members } from "../content/informals"
+import { type MiniCharacter, playbookKeys } from "../types"
 
 export function InformalsStub() {
     const { updateGameState, user, gameState } = useGame()

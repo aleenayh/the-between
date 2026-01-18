@@ -3,7 +3,7 @@ import { useGame } from "../../../context/GameContext"
 import type { GameState } from "../../../context/types"
 import { customFieldOrFallback, playbookBases } from "../content"
 import { heraldPlaybookAdditions } from "../content/herald"
-import { type CharacterNotTroupe, type playbookKey, playbookKeys } from "../types"
+import { type CharacterNotTroupe, type CoreMoveState, type playbookKey, playbookKeys } from "../types"
 import { parseStaticText } from "../utils"
 
 export function Masks({ character }: { character: CharacterNotTroupe }) {
@@ -18,6 +18,7 @@ export function Masks({ character }: { character: CharacterNotTroupe }) {
 
   const onToggleMaskPast = useCallback(
     (checked: boolean, index: number) => {
+      const coreMoveUpdate = checkCoreMoveUpdate(character, "past", index)
       const newMasksOfPast = [...character.masksOfPast]
       newMasksOfPast[index] = checked ? 1 : 0
       updateGameState({
@@ -28,6 +29,7 @@ export function Masks({ character }: { character: CharacterNotTroupe }) {
                 character: {
                   ...player.character,
                   masksOfPast: newMasksOfPast,
+                  ...(coreMoveUpdate ? { coreMoveState: coreMoveUpdate } : {}),
                 },
               }
             : player,
@@ -39,6 +41,7 @@ export function Masks({ character }: { character: CharacterNotTroupe }) {
 
   const onToggleMaskFuture = useCallback(
     (checked: boolean, index: number) => {
+      const coreMoveUpdate = checkCoreMoveUpdate(character, "future", index)
       const newMasksOfFuture = [...character.masksOfFuture]
       newMasksOfFuture[index] = checked ? 1 : 0
       updateGameState({
@@ -49,6 +52,7 @@ export function Masks({ character }: { character: CharacterNotTroupe }) {
                 character: {
                   ...character,
                   masksOfFuture: newMasksOfFuture,
+                  ...(coreMoveUpdate ? { coreMoveState: coreMoveUpdate } : {}),
                 },
               }
             : player,
@@ -115,7 +119,7 @@ export function Masks({ character }: { character: CharacterNotTroupe }) {
           index,
         )=> {
           const marked = character.masksOfFuture[index] === 1
-          const disabled = gildedDoorDisabled && mask.includes("<strong>The Gilded Door</strong>")
+          const disabled = gildedDoorDisabled && mask.includes("<strong>The Gilded Door</strong>") && character.playbook !== playbookKeys.martian
           const override = isHerald && mask.includes("<strong>The Blood-Soaked Portal</strong>")?           heraldPlaybookAdditions.masksOfFuture?.[0]: undefined
           const parsed = mask.split(":")
           const maskWithoutKey = parsed.slice(1).join(":")
@@ -156,5 +160,46 @@ function checkGuiledDoorDisabled(gameState: GameState) {
     const marked = character.masksOfFuture[index] === 1
     if (!marked) continue
     return true
+  }
+}
+
+function checkCoreMoveUpdate(character: CharacterNotTroupe, type: "past" | "future", index: number):CoreMoveState | null {
+  if (character.playbook !== playbookKeys.martian) return null
+  const coreMove = character.coreMoveState
+  if (!coreMove || coreMove.type !== "martian") return null
+  if (type === "past") {
+    switch (index) {
+      case 0:
+        return null
+      case 1:
+        return { ...coreMove, vaults: { ...coreMove.vaults, fourLimbs: true } }
+      case 2:
+        return null
+      case 3:
+        return { ...coreMove, keys: coreMove.keys + 1 }
+      case 4:
+        return { ...coreMove, vaults: { ...coreMove.vaults, uthavia: true } }
+      case 5: 
+      return null
+      case 6: 
+      return { ...coreMove, vaults: { ...coreMove.vaults, cinnabarTemple: true } }
+      default:
+        return null
+    }
+  } else {
+    switch (index) {
+      case 0:
+        return { ...coreMove, vaults: { ...coreMove.vaults, royals: true } }
+      case 1:
+        return { ...coreMove, keys: coreMove.keys + 1 }
+      case 2:
+        return null
+      case 3:
+        return { ...coreMove, vaults: { ...coreMove.vaults, cosmicMind: true } }
+      case 4:
+        return null
+      default:
+        return null
+    }
   }
 }

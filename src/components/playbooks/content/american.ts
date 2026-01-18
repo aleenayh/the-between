@@ -71,19 +71,6 @@ export const americanPlaybook: PlaybookBase = {
 			"Carson",
 			"Baker",
 		],
-		realName: [
-			"(Chance)",
-			"(Morton)",
-			"(Newton)",
-			"(Maximilian)",
-			"(Augustus)",
-			"(Julius)",
-			"(Gloriana)",
-			"(Mildred)",
-			"(Beatrice)",
-			"(Evangeline)",
-			"(Samantha)",
-		],
 	},
 	look: [
 		"extravagant coat with fringe on the arms",
@@ -188,3 +175,17 @@ export const americanPlaybook: PlaybookBase = {
 		"Unmark everything in your Personal Quarters.",
 	],
 };
+
+export const americanRealNames = [
+		"Chance",
+		"Morton",
+		"Newton",
+		"Maximilian",
+		"Augustus",
+		"Julius",
+		"Gloriana",
+		"Mildred",
+		"Beatrice",
+		"Evangeline",
+		"Samantha",
+	]

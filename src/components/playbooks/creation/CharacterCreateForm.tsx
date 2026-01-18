@@ -8,7 +8,7 @@ import { Section } from "../../shared/Section"
 import { playbookBases } from "../content"
 import { startingParts } from "../content/facsimile"
 import { heraldPlaybookAdditions } from "../content/herald"
-import { type Abilities, type Character, type CoreMoveState, type PlaybookBase, type playbookKey, playbookKeys } from "../types"
+import { type Abilities, type Character, type CoreMoveState, type PlaybookBase, type playbookKey, playbookKeys, startingVaults } from "../types"
 import { convertToTitle, parseStaticText } from "../utils"
 import { PencilIconButton } from "./PencilIconButton"
 
@@ -43,6 +43,7 @@ const extraMovesPerPlaybook: Record<playbookKey, number> = {
   [playbookKeys.explorer]: 0,
   [playbookKeys.american]: 1,
   [playbookKeys.factotum]: 1,
+  [playbookKeys.martian]: 0,
   [playbookKeys.mother]: 1,
   [playbookKeys.orphan]: 1,
   [playbookKeys.undeniable]: 1,
@@ -535,7 +536,7 @@ const constructMoves = (moves:PlaybookBase["moves"]) => {
 }
 
 function hasCustomMoveState(playbookKey: playbookKey) {
-  return playbookKey === playbookKeys.facsimile || playbookKey === playbookKeys.dodger || playbookKey === playbookKeys.legacy;
+  return playbookKey === playbookKeys.facsimile || playbookKey === playbookKeys.dodger || playbookKey === playbookKeys.legacy || playbookKey === playbookKeys.martian;
 }
 
 const coreMoveState = (playbookKey: playbookKey): {coreMoveState:CoreMoveState} | undefined => {
@@ -545,5 +546,7 @@ const coreMoveState = (playbookKey: playbookKey): {coreMoveState:CoreMoveState} 
     return { coreMoveState: { type: "dodger" as const, boons: Array.from({ length: 5 }, (_, idx) => idx === 0 ? 1 : 0), banes: Array.from    ({ length: 5 }, () => 0), hoard: Array.from({ length: 8 }, () => "") } }
   } else if (playbookKey === playbookKeys.legacy) {
     return { coreMoveState: { type: "legacy" as const, hunt: Array.from({length:20}, () => "-") } }
+  } else if (playbookKey === playbookKeys.martian)   {
+    return { coreMoveState: { type: "martian" as const, keys: 1, vaults: startingVaults, activeAbilities: [] } }
   }
 }

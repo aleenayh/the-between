@@ -8,6 +8,7 @@ import { facsimilePlaybook } from "./facsimile"
 import { factotumPlaybook } from "./factotum"
 import { informalsPlaybook } from "./informals"
 import { legacyPlaybook } from "./legacy"
+import { martianPlaybook } from "./martian"
 import { motherPlaybook } from "./mother"
 import { orphanPlaybook } from "./orphan"
 import { undeniablePlaybook } from "./undeniable"
@@ -21,6 +22,7 @@ export const playbookBases: Record<(typeof playbookKeys)[keyof typeof playbookKe
   [playbookKeys.explorer]: explorerPlaybook,
   [playbookKeys.factotum]: factotumPlaybook,
   [playbookKeys.legacy]: legacyPlaybook,
+  [playbookKeys.martian]: martianPlaybook,
   [playbookKeys.mother]: motherPlaybook,
   [playbookKeys.orphan]: orphanPlaybook,
   [playbookKeys.undeniable]: undeniablePlaybook,
@@ -37,7 +39,7 @@ export function customFieldOrFallback(
   key: keyof CustomTextFields
   value: string[]
 } {
-  if (character.playbook === playbookKeys.informals) {
+  if (character.playbook !== playbookKeys.custom) {
     return { key: key, value: [""] }
   }
   const rawText = character.customTextFields?.[key]
