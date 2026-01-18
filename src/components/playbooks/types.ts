@@ -58,6 +58,7 @@ export const playbookKeys = {
   explorer: "explorer",
   factotum: "factotum",
   legacy: "legacy",
+  martian: "martian",
   mother: "mother",
   orphan: "orphan",
   undeniable: "undeniable",
@@ -93,19 +94,40 @@ const dollPartSchema = z.object({
 
 export type DollPart = z.infer<typeof dollPartSchema>
 
-const coreMoveStateSchema = z.discriminatedUnion("type", [z.object({
-  type: z.literal("facsimile"),
-  parts: z.array(dollPartSchema),
-  adaptorKeys: z.number().catch(1),
-}), z.object({
-  type: z.literal("dodger"),
-  boons: z.array(z.number()).catch([0, 0, 0, 0]),
-  banes: z.array(z.number()).catch([0, 0, 0, 0]),
-  hoard: z.array(z.string()).catch([""]),
-}), z.object({
-  type: z.literal("legacy"),
-  hunt: z.array(z.string()).catch(Array.from({length:20}, () => "-")),
-})])
+export const startingVaults = {
+  cosmicMind: false,
+  fourLimbs: false,
+  uthavia: false,
+  royals: false,
+  cinnabarTemple: false,
+}
+
+const coreMoveStateSchema = z.discriminatedUnion("type", [
+  z.object({
+    type: z.literal("facsimile"),
+    parts: z.array(dollPartSchema),
+    adaptorKeys: z.number().catch(1),
+  }),
+  z.object({
+    type: z.literal("dodger"),
+    boons: z.array(z.number()).catch([0, 0, 0, 0]),
+    banes: z.array(z.number()).catch([0, 0, 0, 0]),
+    hoard: z.array(z.string()).catch([""]),
+  }),
+  z.object({
+    type: z.literal("legacy"),
+    hunt: z.array(z.string()).catch(Array.from({ length: 20 }, () => "-")),
+  }),
+  z.object({
+    type: z.literal("martian"),
+    keys: z.number().catch(1),
+    vaults: z
+      .record(z.enum(["cosmicMind", "fourLimbs", "uthavia", "royals", "cinnabarTemple"]), z.boolean().catch(false))
+      .catch(startingVaults),
+    activeAbilities: z.array(z.string()).optional().catch([]),
+  }),
+]
+)
 
 export type CoreMoveState = z.infer<typeof coreMoveStateSchema>
 

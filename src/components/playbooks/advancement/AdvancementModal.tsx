@@ -12,7 +12,7 @@ import { orderAbilities } from "../sharedComponents/AbilityBoxes"
 import type { Abilities, CharacterNotTroupe, playbookKey } from "../types"
 import { parseStaticText } from "../utils"
 
-type AdvancementSteps = "select-advancement" | "adjust-stats" | "select-move" | "write-custom-move" | "unmark-pq-items" | "unlock-rec" | "unmark-rec" | "doll-part" | "unlock-adaptor-key" | "custom-adaptor" | "unmark-hunterslife" | "unmark-reflection" | "unlock-energy" | "unmark-wyrmbane"
+type AdvancementSteps = "select-advancement" | "adjust-stats" | "select-move" | "write-custom-move" | "unmark-pq-items" | "unlock-rec" | "unmark-rec" | "doll-part" | "unlock-adaptor-key" | "custom-adaptor" | "unmark-hunterslife" | "unmark-reflection" | "unlock-energy" | "unmark-wyrmbane" | "unmark-mask" | "unlock-vault-key"
 
 const stepToComponent = (step: AdvancementSteps, character: CharacterNotTroupe, closeModal: () => void, advancementIndex: number|null) => {
   switch (step) {
@@ -44,6 +44,10 @@ const stepToComponent = (step: AdvancementSteps, character: CharacterNotTroupe, 
       return <AddChecksToMove character={character} closeModal={closeModal} advancementIndex={advancementIndex} numberOfChecks={2} titleOfMove="The Phantom" />
     case "unmark-wyrmbane":
       return <UnlockWyrmbane character={character} closeModal={closeModal} advancementIndex={advancementIndex} />
+    case "unmark-mask":
+      return <UnmarkMask character={character} closeModal={closeModal} advancementIndex={advancementIndex} />
+    case "unlock-vault-key":
+      return <AddChecksToMove character={character} closeModal={closeModal} advancementIndex={advancementIndex} numberOfChecks={1} titleOfMove="The Five Vaults of Tarthor" />
   }
 }
 
@@ -182,13 +186,25 @@ function mapStepToAdvancement(advancementIndex: number, playbook: playbookKey): 
     return "unmark-hunterslife"
   }
 
+  //martian'
+  if (advancement.includes("Unmark a box from the Mask of the Future.")) {
+    return "unmark-mask"
+  }
+  if (advancement.includes("Gain a Key to the Five Vaults of Tarthor.")) {
+    return "unlock-vault-key"
+  }
+
     //no custom for mother
     //no custom for orphan
+
+    //selkie 
 
   //undeniable
     if (advancement.includes("Unmark all the boxes on The Reflection")) {
       return "unmark-reflection"
     }
+
+    //underground
 
   //unquiet
   if (advancement.includes("Unlock the next two marks on the Energy track.")) {
@@ -196,6 +212,9 @@ function mapStepToAdvancement(advancementIndex: number, playbook: playbookKey): 
   }
 
   //no custom for vessel
+
+  //volatile 
+
   console.error(`Attempted to select advancement ${advancement} for playbook ${playbook} but advancement was not found.`)
   return "select-advancement"
 }
@@ -557,12 +576,40 @@ function AddChecksToMove({ character, closeModal, advancementIndex, numberOfChec
     if (advancementIndex === null) {
       return
     }
-    const move = existingMoves.find((m) => m.title === titleOfMove)
-    if (!move) {
-      return
-    }
     const newAdvancements = [...character.advancements]
     newAdvancements[advancementIndex] = 1
+
+    //intercept for martian
+    if (titleOfMove === "The Five Vaults of Tarthor") {
+      const move = character.coreMoveState
+      if (!move || move.type !== "martian") {
+        toast.error("Something went wrong! You can try again, or manually unmark your move.")
+        return
+      }
+
+    updateGameState({
+      players: gameState.players.map((player) =>
+        player.id === character.playerId
+          ? {
+              ...player,
+              character: {
+                ...character,
+                coreMoveState: { ...move, keys: move.keys + numberOfChecks },
+                advancements: newAdvancements,
+              },
+            }
+          : player,
+      ),
+    })
+    closeModal()
+      return
+    }
+
+    const move = existingMoves.find((m) => m.title === titleOfMove)
+    if (!move)     {
+      return
+    }
+
     const newChecks = [...(move.checks ?? []), ...Array.from({ length: numberOfChecks }, () => 0)]
     updateGameState({
       players: gameState.players.map((player) =>
@@ -583,8 +630,8 @@ function AddChecksToMove({ character, closeModal, advancementIndex, numberOfChec
 
   return (
     <div className="flex flex-col gap-2 justify-center items-center">
-      <h3>Add Checkboxes to {titleOfMove}</h3>
-      <p>This will add {numberOfChecks} unmarked checkboxes to {titleOfMove}.</p>
+      <h3>Add {titleOfMove === "The Five Vaults of Tarthor" ? "Keys" : "Checkboxes"} to {titleOfMove}</h3>
+      <p>This will add {numberOfChecks} {titleOfMove === "The Five Vaults of Tarthor" ? "key" : "unmarked checkboxes"} to {titleOfMove}.</p>
       <ConfirmChoice onClick={confirm} />
     </div>
   )
@@ -636,6 +683,54 @@ return (
 )
 }
 
+function UnmarkMask({ character, closeModal, advancementIndex }: { character: CharacterNotTroupe, closeModal: () => void, advancementIndex: number | null }) {
+  const { gameState, updateGameState } = useGame()
+  const content = playbookBases[character.playbook as playbookKey]
+  const allMaskKeys = content.masksOfFuture.map((m) => m.split(":")[0])
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      maskKey: null,
+    },
+  })
+  const confirm = (data: { maskKey: number | null }) => {
+    if (advancementIndex === null) {
+      return
+    }
+    const { maskKey } = data
+    if (maskKey === null) {
+      toast.error("You must choose a Mask to unmark.")
+      return
+    }
+    const newMasksOfFuture = [...character.masksOfFuture]
+    newMasksOfFuture[maskKey] = 0
+    const newAdvancements = [...character.advancements]
+    newAdvancements[advancementIndex] = 1
+    updateGameState({
+      players: gameState.players.map((player) =>
+        player.id === character.playerId
+          ? {
+              ...player,
+              character: { ...character, masksOfFuture: newMasksOfFuture, advancements: newAdvancements },
+            }
+          : player,
+      ),
+    })
+    closeModal()
+  }
+  return (
+    <form onSubmit={handleSubmit(confirm)} className="flex flex-col gap-2 justify-center items-center">
+      <h3>Choose a Mask to Unmark</h3>
+      <div className="flex flex-col justify-start items-start gap-2">{allMaskKeys.map((key, index) => (
+        <div key={key} className="flex justify-start items-baseline gap-2">
+          <input type="radio" id={`mask-${key}`} disabled={character.masksOfFuture[index] === 0} value={index} {...register("maskKey")} />
+          <label htmlFor={`mask-${key}`} className="flex flex-col gap-0"><span>        {parseStaticText(key)}</span>
+          {character.masksOfFuture[index] === 0 && <span className="text-sm text-theme-text-muted italic ml-4">(Unmarked)</span>}</label>
+        </div>
+      ))}</div>
+    <ConfirmChoice onClick={handleSubmit(confirm)} />
+    </form>
+  )
+}
 function DollPartAdvancement({ character, closeModal, advancementIndex, mode }: { character: CharacterNotTroupe, closeModal: () => void, advancementIndex: number | null, mode: "upgrade" | "add-key" | "custom" }) {
   const { gameState, updateGameState } = useGame()
   const { register, handleSubmit } = useForm({

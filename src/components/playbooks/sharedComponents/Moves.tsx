@@ -1,3 +1,4 @@
+import { Dialog } from "radix-ui";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useGame } from "../../../context/GameContext";
@@ -6,13 +7,22 @@ import { ReactComponent as BabySVG } from "../../assets/baby.svg";
 import { ReactComponent as DragonIcon } from "../../assets/dragon.svg";
 import { ReactComponent as XIcon } from "../../assets/ex.svg";
 import { ReactComponent as LockIcon } from "../../assets/lock.svg";
+import { ReactComponent as KeyA } from "../../assets/martian/keyA.svg";
+import { ReactComponent as KeyB } from "../../assets/martian/keyB.svg";
+import { ReactComponent as KeyC } from "../../assets/martian/keyC.svg";
+import { ReactComponent as KeyD } from "../../assets/martian/keyD.svg";
+import { ReactComponent as KeyE } from "../../assets/martian/keyE.svg";
+import { ReactComponent as KeyF } from "../../assets/martian/keyF.svg";
 import { ReactComponent as OIcon } from "../../assets/oh.svg";
+import { CloseButton } from "../../shared/CloseButton";
 import { Divider } from "../../shared/Divider";
 import { EditableLine } from "../../shared/EditableLine";
+import { GlassyButton } from "../../shared/GlassyButton";
 import { playbookBases } from "../content";
 import { banes as baneText, boons as boonText } from "../content/dodger";
 import { dollPartDescriptions } from "../content/facsimile";
 import { heraldPlaybookAdditions } from "../content/herald";
+import { vaults } from "../content/martian";
 import { type CharacterNotTroupe, playbookKeys } from "../types";
 import { parseStaticText, parseWithCheckboxes } from "../utils";
 
@@ -34,7 +44,7 @@ export function Moves({ character }: { character: CharacterNotTroupe }) {
 	);
 }
 
-const specialMoveTitles = ["The Child", "The Royal Explorer's Club","Rites of Salt & Smoke", "The Reflection","The Family", "The Phantom", "Doll Parts", "The Offering", "The Dragon Sickness", "…Is Never Over"]
+const specialMoveTitles = ["The Child", "The Royal Explorer's Club","Rites of Salt & Smoke", "The Reflection","The Family", "The Phantom", "Doll Parts", "The Offering", "The Dragon Sickness", "…Is Never Over", "The Five Vaults of Tarthor"]
 
 function MoveDisplay({
 	character,
@@ -188,6 +198,8 @@ function SpecialMoveDisplay({ character, title }: { character: CharacterNotTroup
 			return <TheDragonSickness character={character} />
 		case "…Is Never Over":
 			return <IsNeverOver character={character} />
+		case "The Five Vaults of Tarthor":
+			return <TheFiveVaultsOfTarthor character={character} />
 	}
 	return <div>{title} Special Display not built yet!</div>
 }
@@ -917,6 +929,163 @@ idx}`} className="w-6 h-6 border border-theme-border-accent rounded-lg flex item
 				</div>
 				</div>
 			)}
+    </div>
+  )
+}
+
+const keyIcons: React.ReactNode[]= [
+<KeyA key="martianVaultKeyA" className="w-6 h-6" />,
+<KeyB key="martianVaultKeyB" className="w-6 h-6" />,
+<KeyC key="martianVaultKeyC" className="w-6 h-6" />,
+<KeyD key="martianVaultKeyD" className="w-6 h-6" />,
+<KeyE key="martianVaultKeyE" className="w-6 h-6" />,
+<KeyF key="martianVaultKeyF" className="w-6 h-6" />,
+];
+
+function TheFiveVaultsOfTarthor({ character }: { character: CharacterNotTroupe }) {
+	const {user: {id}} = useGame();
+	const editable = id === character.playerId;
+  const moveState = character.coreMoveState 
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  if (!moveState || moveState.type !== "martian") return null;
+  const {keys, vaults: vaultsLockedState, activeAbilities} = moveState;
+  const vaultContent = vaults
+
+  return (
+    <div className="flex flex-col justify-center gap-1">
+      <h3 className="text-sm font-bold text-theme-text-accent text-center">The Five Vaults of Tarthor</h3>
+	  <p className="text-left leading-relaxed">The Five Vaults of Tarthor represent the secret arts and priceless treasures of the Martians. You will gain access to these Vaults as you learn more about your Martian heritage. You need Keys to use the arts and treasures within the Vaults. Each Dawn phase, assign your Keys to the Vaults you have access to.</p>
+
+	  {activeAbilities && activeAbilities.length > 0 && <div>
+		<h4 className="text-sm font-bold text-theme-text-accent text-center">Active Effects</h4>
+	  <ul className="list-disc list-inside w-full text-left">
+		{activeAbilities.map((effect) => {
+			const vaultDescription = vaultContent.find((vault) => vault.effects.includes(effect))
+			return <li key={effect}>{effect} <i>(from {vaultDescription?.title})</i></li>
+		})}
+	  </ul>
+	  </div>}
+
+
+	      {editable && (
+      <div className="flex flex-col gap-2">
+        <strong>Keys:</strong>
+        <div className="flex items-center justify-center gap-2 text-theme-text-accent">
+          {Array.from({ length: keys }).map((_, idx) => keyIcons[idx])}
+        </div>
+
+        <strong>Vaults:</strong>
+        <ul className="list-disc list-outside w-full text-left">
+          {vaultContent.map((vault) => {
+			const locked = vaultsLockedState[vault.key as keyof typeof vaultsLockedState] === false
+			return (
+            <li key={vault.key} className={`${locked ? "text-theme-text-muted" : "text-theme-text-accent"} mb-2`}>{vault.title} {locked && "(Undiscovered)"}
+			{!locked && <p className="text-left italic text-xs text-theme-text-primary ml-4">{vault.description}</p>}
+			</li>
+          )
+		})}
+        </ul>
+
+		<Dialog.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
+			<Dialog.Trigger asChild>
+				<div className="flex justify-center mx-auto w-1/2"><GlassyButton>Assign Keys</GlassyButton></div>
+			</Dialog.Trigger>
+			<Dialog.Portal>
+				<Dialog.Overlay className="DialogOverlay" />
+				<Dialog.Content className="DialogContent">
+					<Dialog.Close asChild>
+						<CloseButton/>
+					</Dialog.Close>
+					<Dialog.Title className="DialogTitle">Assign Keys</Dialog.Title>
+					<Dialog.Description className="DialogDescription">Each Dawn phase, assign your Keys to the Vaults you have access to. Tap a Key to select it, then tap an art or treasure to assign it.</Dialog.Description>
+					<AssignVaultKeysMartian character={character} closeModal={() => setIsModalOpen(false)} />
+				</Dialog.Content>
+			</Dialog.Portal>
+		</Dialog.Root>
+      </div>
+    )}
+    </div>
+  )
+}
+
+function AssignVaultKeysMartian({character, closeModal}: {character: CharacterNotTroupe, closeModal: () => void}) {
+  const { gameState, updateGameState } = useGame()
+  const moveState = character.coreMoveState
+  const [selectedPairs, setSelectedPairs] = useState<Record<number, string | null>>(  {
+	0: null,
+	1: null,
+	2: null,
+	3: null,
+	4: null,
+	5: null,
+  })
+  if (!moveState || moveState.type !== "martian") return null
+  const { keys, vaults: vaultsLockedState } = moveState
+  const vaultContent = vaults.filter((vault) => vaultsLockedState[vault.key as keyof typeof vaultsLockedState] === true)
+
+  const onClickKey = (idx: number) =>   {
+	const newSelectedPairs = { ...selectedPairs }
+	if (newSelectedPairs[idx]) {
+		newSelectedPairs[idx] = null
+	} else {
+		newSelectedPairs[idx] = ""
+	}
+  setSelectedPairs(newSelectedPairs)
+}
+
+  const onClickVaultEffect = (effect: string) => {
+	const newSelectedPairs = { ...selectedPairs }
+	for (const key in newSelectedPairs) {
+  if (newSelectedPairs[key] === "") {
+    newSelectedPairs[key] = effect
+  }
+}
+	setSelectedPairs(newSelectedPairs)
+  }
+
+  const confirm = () => {
+	const effects = Object.values(selectedPairs).filter((pair) => pair !== null && pair !== "").filter((effect) => effect !== null)
+	updateGameState({
+		players: gameState.players.map((player) =>
+			player.id === character.playerId
+				? {
+						...player,
+						character: { ...character, coreMoveState: { ...moveState, activeAbilities: effects } },
+					}
+				: player,
+		),
+	})
+	closeModal()
+  }
+
+  return (
+	<div className="flex flex-col gap-2">
+      <div className="flex gap-2">
+        <div className="flex items-center justify-evenly w-full gap-2 text-theme-text-accent">{Array.from({length: 6}).map((_, idx) => {
+			const show = keys > idx
+			const active = selectedPairs[idx] !== null
+			return <button type="button" key={`key-${// biome-ignore lint/suspicious/noArrayIndexKey: visual only
+idx}`} className={`w-6 h-6 ${active ? "text-theme-text-accent" : show ? "text-theme-text-primary" : "text-theme-text-muted opacity-20"}`} onClick={() => onClickKey(idx)}>{keyIcons[idx]}</button> })}</div>
+      </div>
+
+	  <div className="flex flex-col gap-2">
+		{vaultContent.length > 0 ? vaultContent.map((vault) => {
+			return <div key={vault.key} className="w-full border border-theme-border-accent rounded-lg flex flex-col text-sm items-center justify-center overflow-visible relative px-1">
+				<strong>{vault.title}</strong>
+				<p className="italic">{vault.description}</p>
+				<ul className="list-disc list-inside w-full">
+					{vault.effects.map((effect) => {
+						const active = Object.values(selectedPairs).some((pair) => pair === effect)
+						const iconIdx = active ? Object.entries(selectedPairs).map(([key, value]) => value === effect ? parseInt(key, 10) : null).filter((key) => key !== null)[0] : -1
+						const icon = keyIcons[iconIdx]
+						return <li key={effect} className="flex"><button type="button" className=      {`${active ? "text-theme-text-accent" : "text-theme-text-muted"} w-full flex gap-2 justify-start items-center text-left`} onClick={() => onClickVaultEffect(effect)}>{icon ? <span className="w-6 h-6">{icon}</span> : <span className="w-6 h-6 border border-theme-border rounded-full aspect-square"></span>} <span className="flex-1 flex-grow">{effect}</span></button></li>
+					})}
+				</ul>
+			</div>
+		}) : <div className="flex h-full w-full items-center justify-center text-balance text-center text-sm italic text-theme-text-muted">You have not discovered any Vaults yet.</div>}
+	  </div>
+
+	  <div className="mx-auto"><GlassyButton onClick={confirm}>Confirm</GlassyButton></div>
     </div>
   )
 }
