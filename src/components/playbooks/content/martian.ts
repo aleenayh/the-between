@@ -11,11 +11,9 @@ export const martianPlaybook: PlaybookBase = {
     "Oswald", "Matthew", "Christopher", "Edmund", "Michael", "Iakobos", "Gopi", "Nikolai", "Hugh", "Maddox", "Edith", "Lauren", "Helen", "Jean", "Agnes", "Erfanieh", "Beth", "Manon", "Melenaida", "Kira"
   ], surname: [
     "Thomson", "Sutherland", "Griffiths", "Kingsbury", "Wolcott", "Churchyard", "Persson", "Walsh", "Palani", "Santos", "Tinka", "Sako", "Brown", "Hall", "March", "Aprenos", "Essex"
-  ], martianName: [
-    "Korlak", "Axatos", "Ban-Thas", "Nator", "Naxatar", "Corithax", "Anatos", "Zantos", "Uthavas", "Uthorkal", "Dotanda", "Thavia", "Zithia", "Em-Thia", "U-Tija", "Ptar", "Rabis", "Ulsis", "Sojas", "Tor-Dus"
   ] },
   look: [
-    "a faded boater hat", "a hand-me-down bonnet with a burgundy ribbon", "slightly out-of-trim hair", "silver-rimmed pince-nez", "“one of those faces,”", "a perfectly smooth face", "moss-colored trousers", "maroon waistcoat", "mustard yellow cravat", "plain white blouse", "navy skirt and petticoats", "a walking stick with an unrecognizable animal", "a lapel pin with an indiscernible quadruped", "a necklace with a dusty red stone", "brown boots for “any occasion,”", "worn black riding boots", "brandy leather Chelsea boots"
+    "a faded boater hat", "a hand-me-down bonnet with a burgundy ribbon", "slightly out-of-trim hair", "silver-rimmed pince-nez", "“one of those faces”", "a perfectly smooth face", "moss-colored trousers", "maroon waistcoat", "mustard yellow cravat", "plain white blouse", "navy skirt and petticoats", "a walking stick with an unrecognizable animal", "a lapel pin with an indiscernible quadruped", "a necklace with a dusty red stone", "brown boots for “any occasion”", "worn black riding boots", "brandy leather Chelsea boots"
   ],
   vices: ["ginger beer", "Whist", "the morning paper", "letters from home", "helping people"],
   questions: [
@@ -120,4 +118,8 @@ export const vaults = [
             "When you discover any Clue, tell the Keeper what it is. The Clue cannot conclusively answer a Question by itself. ",
         ],
     }
+]
+
+export const martianRealNames = [
+    "Korlak", "Axatos", "Ban-Thas", "Nator", "Naxatar", "Corithax", "Anatos", "Zantos", "Uthavas", "Uthorkal", "Dotanda", "Thavia", "Zithia", "Em-Thia", "U-Tija", "Ptar", "Rabis", "Ulsis", "Sojas", "Tor-Dus"
 ]
