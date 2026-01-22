@@ -5,14 +5,16 @@ import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import { useGame } from "../../../context/GameContext"
 import { CloseButton } from "../../shared/CloseButton"
+import { Divider } from "../../shared/Divider"
 import { GlassyButton } from "../../shared/GlassyButton"
 import { playbookBases } from "../content"
 import { banes } from "../content/dodger"
+import { obligationDefs } from "../content/underground"
 import { orderAbilities } from "../sharedComponents/AbilityBoxes"
 import type { Abilities, CharacterNotTroupe, playbookKey } from "../types"
 import { parseStaticText } from "../utils"
 
-type AdvancementSteps = "select-advancement" | "adjust-stats" | "select-move" | "write-custom-move" | "unmark-pq-items" | "unlock-rec" | "unmark-rec" | "doll-part" | "unlock-adaptor-key" | "custom-adaptor" | "unmark-hunterslife" | "unmark-reflection" | "unlock-energy" | "unmark-wyrmbane" | "unmark-mask" | "unlock-vault-key"
+type AdvancementSteps = "select-advancement" | "adjust-stats" | "select-move" | "write-custom-move" | "unmark-pq-items" | "unlock-rec" | "unmark-rec" | "doll-part" | "unlock-adaptor-key" | "custom-adaptor" | "unmark-hunterslife" | "unmark-reflection" | "unlock-energy" | "unmark-wyrmbane" | "unmark-mask" | "unlock-vault-key" | "change-all" | "new-aperture" | "new-obligation"
 
 const stepToComponent = (step: AdvancementSteps, character: CharacterNotTroupe, closeModal: () => void, advancementIndex: number|null) => {
   switch (step) {
@@ -23,7 +25,9 @@ const stepToComponent = (step: AdvancementSteps, character: CharacterNotTroupe, 
     case "select-move":
       return <MoveSelector character={character} closeModal={closeModal} advancementIndex={advancementIndex} />
     case "write-custom-move":
-      return <MoveWriter character={character} closeModal={closeModal} advancementIndex={advancementIndex} />
+      return <MoveWriter character={character} closeModal={closeModal} advancementIndex={advancementIndex} apertureVersion={false} />
+    case "new-aperture":
+      return <MoveWriter character={character} closeModal={closeModal} advancementIndex={advancementIndex} apertureVersion={true} />
     case "unmark-pq-items":
       return <UnmarkPQItems character={character} closeModal={closeModal} advancementIndex={advancementIndex} />
     case "unlock-rec":
@@ -48,6 +52,10 @@ const stepToComponent = (step: AdvancementSteps, character: CharacterNotTroupe, 
       return <UnmarkMask character={character} closeModal={closeModal} advancementIndex={advancementIndex} />
     case "unlock-vault-key":
       return <AddChecksToMove character={character} closeModal={closeModal} advancementIndex={advancementIndex} numberOfChecks={1} titleOfMove="The Five Vaults of Tarthor" />
+    case "change-all":
+      return <ChangeEverything character={character} closeModal={closeModal} advancementIndex={advancementIndex} />
+    case "new-obligation":
+      return <NewObligations character={character} closeModal={closeModal} advancementIndex={advancementIndex} />
   }
 }
 
@@ -205,6 +213,15 @@ function mapStepToAdvancement(advancementIndex: number, playbook: playbookKey): 
     }
 
     //underground
+    if (advancement.includes("Change your Name, Look, and Vice; then, reassign your ability points.")) {
+      return "change-all"
+    }
+    if (advancement.includes("Work with the Keeper to create a new Aperture of the Awakened Mind, which is automatically unlocked.")) {
+      return "new-aperture"
+    }
+    if (advancement.includes("Select three more Obligations.")) {
+      return "new-obligation"
+    }
 
   //unquiet
   if (advancement.includes("Unlock the next two marks on the Energy track.")) {
@@ -351,10 +368,12 @@ function MoveWriter({
   character,
   closeModal,
   advancementIndex,
+  apertureVersion = false
 }: {
   character: CharacterNotTroupe
   closeModal: () => void
   advancementIndex: number | null
+  apertureVersion?: boolean
 }) {
   const {
     gameState,
@@ -405,8 +424,8 @@ function MoveWriter({
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2 justify-center text-theme-text-primary">
-      <h3 className="text-2xl font-bold text-center text-theme-text-accent">Write a Custom Move</h3>
-      <p>Name your move below: </p>
+      <h3 className="text-2xl font-bold text-center text-theme-text-accent">Write a Custom {apertureVersion ? "Aperture" : "Move"}</h3>
+      <p>Name your {apertureVersion ? "aperture" : "move"} below: </p>
       <input
         type="text"
         {...register("title")}
@@ -414,9 +433,7 @@ function MoveWriter({
       />
 
       <p>
-        Write a description of your move below. To include inline check boxes, surround your text with
-        &lt; &gt; symbols. For example:{" "}
-        <span className="italic">once a day you may &lt;gain advantage on a combat-related roll&gt;</span>
+        Write a description of your {apertureVersion ? "aperture" : "move"} below.
       </p>
       <textarea
         {...register("text")}
@@ -424,8 +441,8 @@ function MoveWriter({
       />
 
       <p>
-        Optionally, moves can include some number of unlabeled check boxes or editable blank lines. Define the number of
-        each below. If you need a labeled check box, instead add it to your description as a &lt;check&gt;.
+        Optionally, {apertureVersion ? "apertures" : "moves"} can include some number of unlabeled check boxes or editable blank lines. Define the number of
+        each below.
       </p>
       <div className="grid grid-cols-4 gap-2">
         <p>Checkboxes:</p>
@@ -566,6 +583,110 @@ function AdjustStats({
     </form>
   )
 }
+
+type ChangeEverythingData = {
+  vitality: number
+  composure: number
+  reason: number
+  presence: number
+  sensitivity: number
+  name: string
+  look: string
+  vice: string
+}
+
+function ChangeEverything({ character, closeModal, advancementIndex }: { character: CharacterNotTroupe, closeModal: () => void, advancementIndex: number | null }) {
+    const currentStats = character.abilities
+    const { updateGameState, gameState } = useGame()
+  
+    const { register, handleSubmit } = useForm<ChangeEverythingData>({
+      defaultValues: {
+        vitality: currentStats.vitality,
+        composure: currentStats.composure,
+        reason: currentStats.reason,
+        presence: currentStats.presence,
+        sensitivity: currentStats.sensitivity,
+        name: character.name,
+        look: character.look,
+        vice: character.vice,
+      },
+    })
+  
+    const onSubmit = (data: ChangeEverythingData) => {
+      if (advancementIndex === null) {
+        return
+      }
+      const newAdvancements = [...character.advancements]
+      newAdvancements[advancementIndex] = 1
+      updateGameState({
+        players: gameState.players.map((player) =>
+          player.id === character.playerId
+            ? {
+                ...player,
+                character: {
+                  ...character,
+                  abilities: data,
+                  advancements: newAdvancements,
+                  look: data.look,
+                  vice: data.vice,
+                },
+              }
+            : player,
+        ),
+      })
+      closeModal()
+    }
+    return (
+      <form onSubmit={handleSubmit(onSubmit)}>
+                        <h3 className="text-center">Change Your Name</h3>
+                <input
+                  type="text"
+                  {...register("name")}
+                  className="w-full border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent flex-grow"
+                />
+                <Divider/>
+                                <h3 className="text-center">Change Your Look</h3>
+                <input
+                  type="text"
+                  {...register("look")}
+                  className="w-full border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent flex-grow"
+                />
+                <Divider/>
+
+
+
+                <h3 className="text-center">Pick A New Vice</h3>
+                <input
+                  type="text"
+                  {...register("vice")}
+                  className="w-full border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent flex-grow"
+                />
+                <Divider/>
+
+        <h3 className="text-center">Adjust Abilities</h3>
+  
+        <div className="flex justify-center w-full my-4">
+          <div className="grid grid-cols-5 gap-1">
+            {orderAbilities(currentStats).map(({ ability, value }) => (
+              <div key={ability} className="flex flex-col gap-1">
+                <label htmlFor={ability} className="flex flex-col gap-1">
+                  <span className="text-sm text-theme-text-muted text-center">{ability}</span>
+                </label>
+                <input
+                  id={ability}
+                  type="number"
+                  defaultValue={value}
+                  {...register(ability, { valueAsNumber: true })}
+                  className="border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent flex-grow"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+        <ConfirmChoice onClick={handleSubmit(onSubmit)} />
+      </form>
+    )
+  }
 
 function AddChecksToMove({ character, closeModal, advancementIndex, numberOfChecks, titleOfMove }: { character: CharacterNotTroupe, closeModal: () => void, advancementIndex: number | null, numberOfChecks: number, titleOfMove: string }) {
   const { gameState, updateGameState } = useGame()
@@ -938,4 +1059,70 @@ return (
     <ConfirmChoice onClick={handleSubmit(confirm)} />
   </form>
 )
+}
+
+function NewObligations({ character, closeModal, advancementIndex }: { character: CharacterNotTroupe, closeModal: () => void, advancementIndex: number | null }) {
+  const { gameState, updateGameState } = useGame()
+  const coreMove = character.coreMoveState
+  const { register, handleSubmit } = useForm({
+    defaultValues: {
+      selectedIds:       []
+    },
+  })
+  if (!coreMove || coreMove.type !== "underground") {
+    toast.error("Something went wrong! You can try again, or manually adjust your obligations.")
+    return
+  }
+
+  const confirm = (data: { selectedIds: number[] | string[] }) => {
+    const selectedIdsAsNumbers = data.selectedIds.map(id => typeof id === "string" ? Number.parseInt(id, 10) : id)
+    if (selectedIdsAsNumbers.length !== 3) {
+      toast.error("You must select exactly three Obligations.")
+      return
+    }
+    if (advancementIndex === null) {
+      return
+    }
+    const newMoveState = { ...coreMove }
+    newMoveState.obligations.forEach((_, index) => {
+      if (selectedIdsAsNumbers.includes(index)) {
+        newMoveState.obligations[index] = "1"
+      }
+    })
+    const newAdvancements = [...character.advancements]
+    newAdvancements[advancementIndex] = 1
+    updateGameState({
+      players: gameState.players.map((player) =>
+        player.id === character.playerId
+          ? {
+            ...player,
+            character: {
+              ...character,
+              coreMoveState: newMoveState,
+              advancements: newAdvancements,
+            },
+          }
+        : player,
+    ),
+  })
+    closeModal    ()
+  }
+
+  return (
+    <form onSubmit={handleSubmit(confirm)} className="flex flex-col gap-2 justify-center items-center">
+      <h3>Select Three More Obligations</h3>
+      <div className="flex flex-col justify-start items-start gap-2">{coreMove.obligations.map((obligation, index) => {
+        const label =         obligationDefs[index] ?? "obligation"
+        const unavailable = obligation !== "-"
+        return (
+        <div key={`obligation-${// biome-ignore lint/suspicious/noArrayIndexKey: order unimportant
+index}`} className={`text-sm flex justify-start items-baseline gap-2 ${unavailable ? "text-theme-text-muted line-through" : "text-theme-text-primary"}`}>
+          <input type="checkbox" id={`${obligation}-${index}`} value={index} {...register("selectedIds")} disabled={unavailable} />
+          <label htmlFor={`${obligation}-${index}`} className="flex flex-col gap-0">{label}</label>
+        </div>
+      )
+    })}</div>
+    <ConfirmChoice onClick={handleSubmit(confirm)} />
+    </form>
+  )
 }

@@ -51,6 +51,7 @@ const extraMovesPerPlaybook: Record<playbookKey, number> = {
   [playbookKeys.informals]: 0,
   [playbookKeys.custom]: 0,
   [playbookKeys.legacy]: 0,
+  [playbookKeys.underground]: 0,
 }
 
 export function CharacterCreateForm({ playbookKey }: { playbookKey: Exclude<playbookKey, "custom" | "informals"> }) {
@@ -536,7 +537,7 @@ const constructMoves = (moves:PlaybookBase["moves"]) => {
 }
 
 function hasCustomMoveState(playbookKey: playbookKey) {
-  return playbookKey === playbookKeys.facsimile || playbookKey === playbookKeys.dodger || playbookKey === playbookKeys.legacy || playbookKey === playbookKeys.martian;
+  return playbookKey === playbookKeys.facsimile || playbookKey === playbookKeys.dodger || playbookKey === playbookKeys.legacy || playbookKey === playbookKeys.martian || playbookKey === playbookKeys.underground;
 }
 
 const coreMoveState = (playbookKey: playbookKey): {coreMoveState:CoreMoveState} | undefined => {
@@ -548,5 +549,7 @@ const coreMoveState = (playbookKey: playbookKey): {coreMoveState:CoreMoveState} 
     return { coreMoveState: { type: "legacy" as const, hunt: Array.from({length:20}, () => "-") } }
   } else if (playbookKey === playbookKeys.martian)   {
     return { coreMoveState: { type: "martian" as const, keys: 1, vaults: startingVaults, activeAbilities: [] } }
+  } else if (playbookKey === playbookKeys.underground) {
+    return { coreMoveState: { type: "underground" as const, obligations: Array.from({ length: 15 }, () => "-"), obligationTrack: Array.from({ length: 6 }, () => 0) } }
   }
 }

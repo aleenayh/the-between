@@ -798,3 +798,21 @@ input[type="textarea"]:hover {
   z-index: 0;
   mix-blend-mode: multiply;
 }
+
+.wavyText {
+  display: inline-block;
+  transform-origin: center bottom;
+  letter-spacing: 0.05em;
+}
+
+/* Cycle through 9 values to create wave effect */
+.wavyText:nth-child(9n+1) { transform: translateY(0); }
+.wavyText:nth-child(9n+2) { transform: translateY(-0.1em); }
+.wavyText:nth-child(9n+3) { transform: translateY(-0.2em); }
+.wavyText:nth-child(9n+4) { transform: translateY(-0.1em); }
+.wavyText:nth-child(9n+5) { transform: translateY(0); }
+.wavyText:nth-child(9n+6) { transform: translateY(0.1em); }
+.wavyText:nth-child(9n+7) { transform: translateY(0.2em); }
+.wavyText:nth-child(9n+8) { transform: translateY(0.1em); }
+.wavyText:nth-child(9n+9) { transform: translateY(0); }
+

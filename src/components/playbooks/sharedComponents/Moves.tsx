@@ -3,6 +3,7 @@ import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useGame } from "../../../context/GameContext";
 import {ReactComponent as AdaptorKey } from "../../assets/adaptor.svg";
+import { ReactComponent as ApertureIcon } from "../../assets/aperture.svg";
 import { ReactComponent as BabySVG } from "../../assets/baby.svg";
 import { ReactComponent as DragonIcon } from "../../assets/dragon.svg";
 import { ReactComponent as XIcon } from "../../assets/ex.svg";
@@ -14,6 +15,7 @@ import { ReactComponent as KeyD } from "../../assets/martian/keyD.svg";
 import { ReactComponent as KeyE } from "../../assets/martian/keyE.svg";
 import { ReactComponent as KeyF } from "../../assets/martian/keyF.svg";
 import { ReactComponent as OIcon } from "../../assets/oh.svg";
+import { ReactComponent as PocketWatchIcon } from "../../assets/pocketwatch.svg";
 import { CloseButton } from "../../shared/CloseButton";
 import { Divider } from "../../shared/Divider";
 import { EditableLine } from "../../shared/EditableLine";
@@ -23,6 +25,7 @@ import { banes as baneText, boons as boonText } from "../content/dodger";
 import { dollPartDescriptions } from "../content/facsimile";
 import { heraldPlaybookAdditions } from "../content/herald";
 import { vaults } from "../content/martian";
+import { apertureDefs, obligationDefs } from "../content/underground";
 import { type CharacterNotTroupe, playbookKeys } from "../types";
 import { parseStaticText, parseWithCheckboxes } from "../utils";
 
@@ -44,7 +47,7 @@ export function Moves({ character }: { character: CharacterNotTroupe }) {
 	);
 }
 
-const specialMoveTitles = ["The Child", "The Royal Explorer's Club","Rites of Salt & Smoke", "The Reflection","The Family", "The Phantom", "Doll Parts", "The Offering", "The Dragon Sickness", "…Is Never Over", "The Five Vaults of Tarthor"]
+const specialMoveTitles = ["The Child", "The Royal Explorer's Club","Rites of Salt & Smoke", "The Reflection","The Family", "The Phantom", "Doll Parts", "The Offering", "The Dragon Sickness", "…Is Never Over", "The Five Vaults of Tarthor", "The Apertures of the Awakened Mind", "Defy Your Obligations", "The Aperture of the Pocket Watch"]
 
 function MoveDisplay({
 	character,
@@ -200,6 +203,12 @@ function SpecialMoveDisplay({ character, title }: { character: CharacterNotTroup
 			return <IsNeverOver character={character} />
 		case "The Five Vaults of Tarthor":
 			return <TheFiveVaultsOfTarthor character={character} />
+		case "The Apertures of the Awakened Mind":
+			return <AperturesOfTheAwakenedMind character={character} />
+		case "Defy Your Obligations":
+			return <DefyYourObligations character={character} />
+		case "The Aperture of the Pocket Watch":
+			return <TheApertureOfThePocketWatch character={character} />
 	}
 	return <div>{title} Special Display not built yet!</div>
 }
@@ -1088,4 +1097,236 @@ idx}`} className={`w-6 h-6 ${active ? "text-theme-text-accent" : show ? "text-th
 	  <div className="mx-auto"><GlassyButton onClick={confirm}>Confirm</GlassyButton></div>
     </div>
   )
+}
+
+function AperturesOfTheAwakenedMind({ character }: { character: CharacterNotTroupe }) {
+	const { gameState, updateGameState, user: { id } } = useGame()
+	const editable = id === character.playerId
+	const move = character.moves.find((m) => m.title === "The Apertures of the Awakened Mind")
+	if (!move) return null
+	const apertures = move.checks ?? Array.from({ length: 6 }, () => 0)
+
+	const unlockAperture = (idx: number, title: string) => {
+		const newApertures = [...apertures]
+		newApertures[idx] = 1
+
+		const newMove = apertureDefs.find((def) => def.title === title)
+		if (!newMove) return
+		const constructedMove = {
+			title: newMove.title,
+			checks: Array.from({ length: newMove.checkboxes ?? 0 }, () => 0),
+			lines: Array.from({ length: newMove.extraLines ?? 0 }, () => ""),
+		}
+		const movesRaw = [...character.moves, constructedMove]
+		const newMoves = movesRaw.map((m) => m.title === "The Apertures of the Awakened Mind" ? { ...m, checks: newApertures } : m)
+
+
+		updateGameState({
+			players: gameState.players.map((player) =>
+				player.id === id && player.character ? { ...player, character: { ...character, moves: newMoves } } : player
+			)
+		})
+	}
+
+	return (    <div className="flex flex-col justify-center gap-1">
+      <h3 className="text-sm font-bold text-theme-text-accent text-center">The Apertures of the Awakened Mind</h3>
+		<p className="text-left">It is difficult for you to distinguish between the real and the imaginary. The things you see, taste, and feel are not necessarily illusions: they can influence the wider world. Apertures represent your unique perspectives, and the gifts they provide. Apertures are unlocked via Defy Your Obligations.</p>
+
+		{editable && (<div><h4 className="text-sm font-bold text-theme-text-accent text-center">Apertures</h4>
+		<div className="grid grid-cols-2 gap-2 justify-start items-center">
+			{apertures.map((aperture, idx) => {
+				const title = apertureDefs[idx].title ?? `Aperture ${idx + 1}`
+				const isUnlocked = aperture === 1
+				const titleLetters = title.split("").map((letter, letterIdx) => (
+					<span key={`${title}-${letterIdx}-${letter}`} className={isUnlocked ? "wavyText" : ""}>{letter === " " ? "\u00A0" : letter}</span>
+				))
+				return <button type="button" key={`aperture-${// biome-ignore lint/suspicious/noArrayIndexKey: visual only
+idx}`} className={`w-full flex justify-start items-center gap-1 text-left text-xs ${isUnlocked ? "text-theme-text-accent" : "text-theme-text-muted hover:text-theme-text-accent"}`} onClick={() => unlockAperture(idx, title)}>{isUnlocked ? <ApertureIcon className="w-6 h-6" /> : "Unlock"}<span>{titleLetters}</span></button>
+			})}
+		</div></div>)}
+	</div>)
+}
+
+function DefyYourObligations({ character }: { character: CharacterNotTroupe }) {
+	const {
+		gameState,
+		updateGameState,
+		user: { id },
+	} = useGame();
+	const editable = id === character.playerId;
+
+	const coreMoveState = character.coreMoveState
+	if (!coreMoveState || coreMoveState.type !== "underground") return null
+	const {obligations, obligationTrack} = coreMoveState
+
+	const markObligation = (index: number, type: "active" | "crossedOut" | "inactive") => {
+		const newObligations = [...obligations]
+		if (type === "active") {
+			newObligations[index] = "1"
+		} else if (type === "crossedOut") {	
+			newObligations[index] = "0"
+		} else if (type === "inactive") {
+			newObligations[index] = "-"
+		}
+		updateGameState({
+			players: gameState.players.map((player) =>
+				player.id === id && player.character
+					? { ...player, character: { ...character, coreMoveState: { ...coreMoveState, obligations: newObligations } } }
+					: player,
+			)
+		})
+	}
+
+	const toggleObligation = (index: number, checked: boolean) => {
+		const conditions = [...character.conditions]
+		const hasConditionSpace = conditions.some((condition) => condition === "" || condition === "Guilty" || condition === "Sinful")
+		if (conditions.includes("Wicked") && checked)   {
+    toast.error("You are already Wciked. You cannot take a condition and must put on the Janus Mask.")
+    return
+  }
+		if (!hasConditionSpace && checked) {
+			toast.error("You must add a condition, but have no space. You must put on a Janus Mask to clear a condition before marking this box.")
+			return
+		}  if (checked)   {
+    if (conditions.includes("Guilty")) {
+      conditions[conditions.indexOf("Guilty")] = "Sinful"
+    } else if (conditions.includes("Sinful")) {
+      conditions[conditions.indexOf("Sinful")] = "Wicked"
+    } else if (conditions.includes("")) {
+      conditions[conditions.indexOf("")] = "Guilty"
+    }
+  }
+
+		const newObligationTrack = [...obligationTrack]
+		newObligationTrack[index] = checked ? 1 : 0
+		updateGameState({
+			players: gameState.players.map((player) =>
+				player.id === id && player.character
+					? { ...player, character: { ...character, coreMoveState: { ...coreMoveState, obligationTrack: newObligationTrack }, conditions: conditions } }
+					: player,
+			)
+		})
+	}
+
+  return (
+    <div className="flex flex-col justify-center gap-1">
+      <h3 className="text-sm font-bold text-theme-text-accent text-center">Defy Your Obligations</h3>
+	  <p className="text-left">Select three Obligations at the start of play. When you defy an Obligation, mark a box below and take the Condition Guilty. If you are already Guilty, replace it with Sinful; if you are already Sinful, replace it with Wicked; if you are already Wicked, put on the Janus Mask. Once all six boxes are marked, you can unmark them at any time to unlock an Aperture of the Awakened Mind. If you do so, cross out your selected Obligations; you don’t have access to this move again until you are able to select new ones.</p>
+	        {/* Checkboxes row  */}
+			<div className="w-full flex justify-center items-center gap-2">
+          {obligationTrack.map((track, idx) => {
+            const isChecked = track === 1
+            return (
+              <button
+                key={`obligations-checkbox-${// biome-ignore lint/suspicious/noArrayIndexKey: visual only
+idx}`}
+                type="button"
+                onClick={() => toggleObligation(idx, !isChecked)}
+                disabled={!editable}
+                className={`w-4 h-4 border rounded text-[10px] leading-[0.75rem] text-center ${
+                  isChecked
+                    ? "bg-theme-accent-primary border-theme-accent-primary text-white"
+                    : "border-theme-border-accent bg-transparent"
+                } ${editable ? "cursor-pointer hover:border-theme-accent-primary" : "cursor-default opacity-70"}`}
+                aria-label={isChecked ? "Uncheck" : "Check"}
+              >
+                {isChecked && "✓"}
+              </button>
+            )
+          })}
+        </div>
+		<div className="h-2" />
+	  <h4 className="text-sm font-bold text-theme-text-accent text-center">Obligations</h4>
+	  <div className="grid grid-cols-2 gap-2 justify-start items-center">
+		{obligations.map((obligation, idx) => {
+		const content = obligationDefs[idx] ?? ""
+		const isActive = obligation === "1"
+		const isCrossedOut = obligation === "0"
+		return (
+			<li key={`obligation-${// biome-ignore lint/suspicious/noArrayIndexKey: visual only
+idx}`} className={`w-full flex justify-start items-baseline gap-1 text-left text-sm`}>
+	<input type="checkbox" checked={isActive} disabled={!editable || isCrossedOut} onChange={() => markObligation(idx, isActive ? "inactive" : "active")} /><span className={`${isActive ? "text-theme-text-accent" : isCrossedOut ? "text-theme-text-muted line-through" : "text-theme-text-muted"}`}>{content}</span> <button type="button" disabled={!editable} onClick={() => markObligation(idx, isCrossedOut ? "active" : "crossedOut")}>✗</button></li>
+		)
+})}
+	  </div>
+
+    </div>
+  )
+}
+
+function TheApertureOfThePocketWatch({ character }: { character: CharacterNotTroupe }) {
+    const {
+      gameState,
+      updateGameState,
+      user: { id },
+    } = useGame()
+    const editable = id === character.playerId
+	const move = character.moves.find((m) => m.title === "The Aperture of the Pocket Watch")
+	if (!move) return null
+    const contentDef = playbookBases[character.playbook].moves.find((m) => m.title === move.title)
+    const content = move.text ? move.text : contentDef?.text
+
+    const toggleCheck = (index: number) => {
+      if (!editable) return
+
+      const currentChecks = move.checks ?? []
+      const newChecks = [...currentChecks]
+      newChecks[index] = newChecks[index] === 1 ? 0 : 1
+
+      updateGameState({
+        players: gameState.players.map((player) =>
+          player.id === id
+            ? {
+                ...player,
+                character: player.character
+                  ? {
+                      ...player.character,
+                      moves: character.moves.map((m) => (m.title === move.title ? { ...m, checks: newChecks } : m)),
+                    }
+                  : null,
+              }
+            : player,
+        ),
+      })
+    }
+
+    return (
+      <div className="flex flex-col justify-center gap-1">
+        <h3 className="text-sm font-bold text-theme-text-accent text-center">{move.title}</h3>
+        <div className="grid grid-cols-[.3fr_1fr] gap-1 items-center"> 			<PocketWatchIcon className="w-full h-auto aspect-square"/>
+		<div>{content &&
+          content.length > 0 &&
+          content.map((line, lineIndex) => {
+            return (
+              <p className="text-left leading-relaxed" key={`${move.title}-line-${lineIndex}`}>
+                {parseStaticText(line)}
+              </p>
+            )
+          })}</div></div>
+
+        {/* Checkboxes row  */}
+			<div className="flex gap-1 justify-center items-center">
+            {Array.from({ length: 6 }).map((_, idx) => {
+              const isChecked = (move.checks ?? [])[idx] === 1
+			  const label = ["7 o'clock", "8 o'clock", "9 o'clock", "10 o'clock", "11 o'clock", "12 o'clock"][idx]
+			  const leftPad = idx * 20
+              return (
+                <div key={`${move.title}-checkbox-${idx}`} className={`flex items-center gap-1 pl-[${leftPad}em]`}><button
+                  type="button"
+                  onClick={() => toggleCheck(idx)}
+                  disabled={!editable}
+                  className={`w-4 h-4 border rounded text-[10px] leading-[0.75rem] text-center ${
+                    isChecked
+                      ? "bg-theme-accent-primary border-theme-accent-primary text-white"
+                      : "border-theme-border-accent bg-transparent"
+                  } ${editable ? "cursor-pointer hover:border-theme-accent-primary" : "cursor-default opacity-70"}`}
+                  aria-label={isChecked ? "Uncheck" : "Check"}
+                >
+                  {isChecked && "✓"}
+                </button>				  <span className="text-xs">{label}</span></div>
+              )
+            })}
+			</div>
+      </div>
+    )
 }
