@@ -65,6 +65,7 @@ export const playbookKeys = {
   vessel: "vessel",
   informals: "informals",
   unquiet: "unquiet",
+  underground: "underground",
   facsimile: "facsimile",
   custom: "custom",
 } as const
@@ -126,6 +127,11 @@ const coreMoveStateSchema = z.discriminatedUnion("type", [
       .catch(startingVaults),
     activeAbilities: z.array(z.string()).optional().catch([]),
   }),
+  z.object({
+    type: z.literal("underground"),
+    obligations: z.array(z.string()).catch(Array.from({ length: 15 }, () => "-")),
+    obligationTrack: z.array(z.number()).catch(Array.from({ length: 6 }, () => 0)),
+  })
 ]
 )
 

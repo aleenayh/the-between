@@ -17,6 +17,7 @@ export function Questions({ character }: { character: CharacterNotTroupe }) {
       : playbookBases[character.playbook]
   const markedQuestions = character.questions
   const worshipper = character.conditions.includes("Worshipper")
+  const azureHaze = character.moves.some((move) => move.title === "The Aperture of the Azure Haze") && character.masksOfFuture[3] === 1
 
   const onToggle = 
     (checked: boolean, index: number) => {
@@ -72,6 +73,16 @@ export function Questions({ character }: { character: CharacterNotTroupe }) {
             </span>
           </label>
         </div>
+      )}
+      {azureHaze && (
+                <div className="flex items-center gap-2 text-left">
+                <input type="checkbox" checked={true} disabled={true} />
+                <label className="text-sm" htmlFor="did-you-roll-with-cinder">
+                  <span className={`text-theme-text-primary font-bold`}>
+                  Did you describe the dreamscape encroaching on the real world when answering a Paint the Scene prompt?
+                  </span>
+                </label>
+              </div>
       )}
 
       {questions.map((value, index) => {

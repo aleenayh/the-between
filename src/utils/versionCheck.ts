@@ -16,30 +16,47 @@ export function getLocalSchemaVersion(): string {
  * Any mismatch (even patch level) triggers protection
  */
 export function compareVersions(local: string, remote: string): boolean {
-	if (!local || !remote) {
-		// If either version is missing, consider it a mismatch for safety
+// Default to blocking if either version is empty or missing
+if (!local || !remote) {
+	return false;
+}
+
+// Parse semantic versions by splitting on dots
+const localParts = local.split(".").map((part) => {
+	const num = Number.parseInt(part, 10);
+	return Number.isNaN(num) ? -1 : num;
+});
+
+const remoteParts = remote.split(".").map((part) => {
+	const num = Number.parseInt(part, 10);
+	return Number.isNaN(num) ? -1 : num;
+});
+
+// If parsing failed (contains non-numeric parts), default to blocking
+if (
+	localParts.some((part) => part === -1) ||
+	remoteParts.some((part) => part === -1)
+) {
+	return false;
+}
+
+// If versions have different segment counts, default to blocking
+if (localParts.length !== remoteParts.length) {
+	return false;
+}
+
+// Compare versions segment by segment
+for (let i = 0; i < localParts.length; i++) {
+	if (localParts[i] < remoteParts[i]) {
+		// Local is older, should block
 		return false;
 	}
-	return local === remote;
+	if (localParts[i] > remoteParts[i]) {
+		// Local is newer, allow overwrite
+		return true;
+	}
 }
 
-/**
- * Check if versions match
- * Returns object with match status and version details
- */
-export function checkVersionMatch(
-	localVersion: string,
-	remoteVersion: string,
-): {
-	match: boolean;
-	localVersion: string;
-	remoteVersion: string;
-} {
-	const match = compareVersions(localVersion, remoteVersion);
-	return {
-		match,
-		localVersion,
-		remoteVersion,
-	};
+// Versions are equal, allow (no blocking needed)
+return true;
 }
-

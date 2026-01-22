@@ -12,6 +12,7 @@ import { martianPlaybook } from "./martian"
 import { motherPlaybook } from "./mother"
 import { orphanPlaybook } from "./orphan"
 import { undeniablePlaybook } from "./undeniable"
+import { undergroundPlaybook } from "./underground"
 import { unquietPlaybook } from "./unquiet"
 import { vesselPlaybook } from "./vessel"
 
@@ -29,6 +30,7 @@ export const playbookBases: Record<(typeof playbookKeys)[keyof typeof playbookKe
   [playbookKeys.vessel]: vesselPlaybook,
   [playbookKeys.informals]: informalsPlaybook,
   [playbookKeys.unquiet]: unquietPlaybook,
+  [playbookKeys.underground]: undergroundPlaybook,
   [playbookKeys.facsimile]: facsimilePlaybook,
 }
 
