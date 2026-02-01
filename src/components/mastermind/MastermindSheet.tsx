@@ -41,7 +41,7 @@ export function MastermindSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsO
           <MastermindIcon className="w-full h-full" />
         </button>
           </Tooltip.Trigger>
-          <Tooltip.Content className="z-30">
+          <Tooltip.Content className="z-30" side="right">
             <StyledTooltip>View Mastermind Conspiracy.</StyledTooltip>
           </Tooltip.Content>
         </Tooltip.Root>

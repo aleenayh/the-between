@@ -34,7 +34,7 @@ export function MysterySheet({
 				<HourglassIcon className="w-full h-full" />
 			</button>
 				</Tooltip.Trigger>
-			<Tooltip.Content className="z-30">
+			<Tooltip.Content className="z-30" side="right">
 				<StyledTooltip>View active threats and track clues.</StyledTooltip>
 			</Tooltip.Content>
 			</Tooltip.Root>

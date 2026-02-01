@@ -20,7 +20,7 @@ export function ReferenceSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsOp
         <BookIcon className="w-full h-full" />
       </button>
         </Tooltip.Trigger>
-        <Tooltip.Content className="z-30">
+        <Tooltip.Content className="z-30" side="right">
           <StyledTooltip>Game rule reference sheet.</StyledTooltip>
         </Tooltip.Content>
       </Tooltip.Root>

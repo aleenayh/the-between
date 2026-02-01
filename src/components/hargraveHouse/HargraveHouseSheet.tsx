@@ -35,7 +35,7 @@ export function HargraveHouseSheet({ isOpen, setIsOpen }: { isOpen: boolean; set
         <HouseIcon className="w-full h-full" />
       </button>
       </Tooltip.Trigger>
-      <Tooltip.Content className="z-30">
+      <Tooltip.Content className="z-30" side="right">
         <StyledTooltip>
           View Hargrave House rooms and residents.
         </StyledTooltip>

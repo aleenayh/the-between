@@ -27,7 +27,7 @@ export function SettingsPane({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen
         <CogIcon className="w-full h-full" />
       </button>
         </Tooltip.Trigger>
-        <Tooltip.Content className="z-30">
+        <Tooltip.Content className="z-30" side="right">
           <StyledTooltip>Page settings.</StyledTooltip>
         </Tooltip.Content>
       </Tooltip.Root>

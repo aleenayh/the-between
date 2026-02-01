@@ -46,7 +46,7 @@ export function NotesPane({
 			</button>
 				</Tooltip.Trigger>
 				<Tooltip.Portal>
-				<Tooltip.Content className="z-30">
+				<Tooltip.Content className="z-30" side="right">
 					<StyledTooltip>View your personal notes.</StyledTooltip>
 				</Tooltip.Content>
 				</Tooltip.Portal>
