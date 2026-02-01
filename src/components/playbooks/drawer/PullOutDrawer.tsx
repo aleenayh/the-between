@@ -1,7 +1,9 @@
 import { AnimatePresence, motion } from "framer-motion";
+import { Tooltip } from "radix-ui";
 import { useGame } from "../../../context/GameContext";
 import { CopyInvite } from "../../settings/GameInfo";
 import { Section } from "../../shared/Section";
+import { StyledTooltip } from "../../shared/Tooltip";
 import { InformalsPane } from "../informals/InformalsPane";
 import { PlaybookPane } from "../PlaybookPane";
 import { type Character, playbookKeys } from "../types";
@@ -25,14 +27,21 @@ export function PullOutCharacterOverview({
 
 	return (
 		<div className="flex flex-col justify-start items-start h-full w-full pointer-events-none">
-			<button
+			<Tooltip.Root>
+				<Tooltip.Trigger asChild>
+				<button
 				type="button"
 				aria-label="Open character overview"
-				className="block md:hidden drawerButton"
+				className="drawerButton"
 				onClick={() => setIsOpen(!isOpen)}
 			>
 				<GroupIcon className="w-full h-full" />
 			</button>
+				</Tooltip.Trigger>
+			<Tooltip.Content className="z-30" side="right">
+				<StyledTooltip>View characters.</StyledTooltip>
+			</Tooltip.Content>
+			</Tooltip.Root>
 			<AnimatePresence>
 				{isOpen && (
 					<motion.div

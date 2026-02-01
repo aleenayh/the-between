@@ -24,7 +24,7 @@ export function SafetyPane({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: 
       </button>
         </Tooltip.Trigger>
           <Tooltip.Portal>
-          <Tooltip.Content className="z-30">
+          <Tooltip.Content className="z-30" side="right">
           <StyledTooltip>Safety tools.</StyledTooltip>
         </Tooltip.Content>
         </Tooltip.Portal>
