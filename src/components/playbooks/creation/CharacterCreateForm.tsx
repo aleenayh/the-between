@@ -377,11 +377,21 @@ function SelectOrEdit({
 }) {
   const id = useId()
   const [isEditing, setIsEditing] = useState(false)
+  const [allOptions, setAllOptions] = useState(options);
   const { ref, onChange, ...rest } = register(name)
 
-  if (options.length === 0) {
+  if (allOptions.length === 0) {
     return <input {...register(name)} type="text" className="border px-2 py-1 flex-grow" />
   }
+
+  const handleBlur = (
+		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+	) => {
+		const value = e.target.value;
+		setAllOptions((prevOptions) => [...prevOptions, value]);
+		onChange(e);
+		setIsEditing(false);
+	};
 
   return (
     <div className="inline-flex items-center gap-1 flex-grow">
@@ -395,7 +405,7 @@ function SelectOrEdit({
           id={id}
           type="text"
           onChange={onChange}
-          onBlur={() => setIsEditing(false)}
+          onBlur={handleBlur}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === "Escape") {
               setIsEditing(false)
@@ -409,7 +419,7 @@ function SelectOrEdit({
           id={id}
           className="border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent flex-grow"
         >
-          {options.map((option) => (
+          {allOptions.map((option) => (
             <option key={option} value={option}>
               {option}
             </option>
@@ -434,8 +444,18 @@ function ControlledSelectOrEdit({
 }) {
   const id = useId()
   const [isEditing, setIsEditing] = useState(false)
+  const [allOptions, setAllOptions] = useState(options);
 
-  if (options.length === 0) {
+  const handleBlur = (
+		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+	) => {
+		const value = e.target.value;
+		setAllOptions((prevOptions) => [...prevOptions, value]);
+		onBlur();
+		setIsEditing(false);
+	};
+
+  if (allOptions.length === 0) {
     return <input {...register(name)} onBlur={onBlur} type="text" className="border px-2 py-1 flex-grow" />
   }
 
@@ -446,13 +466,10 @@ function ControlledSelectOrEdit({
           {...register(name)}
           id={id}
           type="text"
-          onBlur={() => {
-            setIsEditing(false)
-            onBlur()
-          }}
+          onBlur={handleBlur}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === "Escape") {
-              setIsEditing(false)
+             e.preventDefault();
             }
           }}
           className="border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent flex-grow"
@@ -464,7 +481,7 @@ function ControlledSelectOrEdit({
           id={id}
           className="border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent flex-grow"
         >
-          {options.map((option) => (
+          {allOptions.map((option) => (
             <option key={option} value={option}>
               {option}
             </option>
