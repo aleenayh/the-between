@@ -605,11 +605,9 @@ function WriteMoveModal({
 		},
 	});
 
-	const parseAspects = (lines: string[]): string[] => {
-		return lines.map((line) =>
-			line.replace(/<([^>]+)>/g, "<aspect>$1</aspect>"),
-		);
-	};
+	  const parseAspects = (lines: string[]): string[] => {
+    return lines.map((line) => line.replace(/<([^>]+)>/g, "<check>$1</check>"))
+  }
 
 	const submit = (data: {
 		title: string;
@@ -645,11 +643,7 @@ function WriteMoveModal({
 			/>
 
 			<p>
-				Write a description of your move below. To include inline check boxes
-				(like aspects), surround your text with &lt; &gt; symbols. For example:{" "}
-				<span className="italic">
-					once a day you may &lt;gain advantage on a combat-related roll&gt;
-				</span>
+				Write a description of your move below.
 			</p>
 			<textarea
 				{...register("text")}
@@ -658,9 +652,7 @@ function WriteMoveModal({
 
 			<p>
 				Optionally, moves can include some number of unlabeled check boxes or
-				editable blank lines. Define the number of each below. If you need a
-				labeled check box, instead add it to your description as an
-				&lt;aspect&gt;.
+				editable blank lines. Define the number of each below.
 			</p>
 			<div className="grid grid-cols-4 gap-2">
 				<p>Checkboxes:</p>

@@ -1,4 +1,4 @@
-import { useId, useRef, useState } from "react"
+import {  useCallback, useEffect, useId, useState } from "react"
 import { type UseFormRegister, type UseFormSetValue, type UseFormWatch, useForm } from "react-hook-form"
 import { toast } from "react-hot-toast"
 import { useGame } from "../../../context/GameContext"
@@ -95,6 +95,10 @@ export function CharacterCreateForm({ playbookKey }: { playbookKey: Exclude<play
     }
   }
 
+  const setName = useCallback((value: string) => {
+    setValue("name", value)
+  }, [setValue])
+
   const saveCharacter = (formInputs: CharacterCreateFormInputs) => {
     if (formInputs.moves.length > maxMoves) {
       toast.error(`You can only select ${maxMoves} moves, including your starting move(s).`)
@@ -150,7 +154,7 @@ export function CharacterCreateForm({ playbookKey }: { playbookKey: Exclude<play
             </div>
           </Section>
           <Section title="Choose A Name">
-            <NameSelector names={base.names} setValue={setValue} />
+            <NameSelector names={base.names} setName={setName}/>
           </Section>
 
           {/* Looks - 3 */}
@@ -245,42 +249,34 @@ type SelectOrEditFieldName = keyof Pick<CharacterCreateFormInputs, "look1" | "lo
 
 function NameSelector({
   names,
-  setValue,
+  setName,
 }: {
   names: Record<string, string[]>
-  setValue: UseFormSetValue<CharacterCreateFormInputs>
+  setName: (name: string) => void
 }) {
   const nameFields = Object.fromEntries(Object.keys(names).map((key) => [key, getRandomValue(names[key])]))
-  const { register, watch } = useForm<{ [key: string]: string }>({
+  const { register, getValues } = useForm<{ [key: string]: string }>({
     defaultValues: nameFields,
   })
 
-  const constructedName = Object.values(nameFields)
-    .map((value) => value)
-    .join(" ")
-  setValue("name", constructedName)
-
-  const containerRef = useRef<HTMLDivElement>(null)
-
-  const onBlur = () => {
-    const values = watch()
-    const constructedName = Object.values(values)
+  useEffect(() => {
+    const constructedName = Object.values(getValues())
       .map((value) => value)
       .join(" ")
-    setValue("name", constructedName)
-  }
+    setName(constructedName)
+  }, [getValues, setName])
 
-  const handleContainerBlur = (e: React.FocusEvent<HTMLDivElement>) => {
-    // Check if the new focus target is outside the container
-    if (containerRef.current && !containerRef.current.contains(e.relatedTarget as Node)) {
-      onBlur()
-    }
+  const onBlur = (fieldName: string, newValue: string) => {
+    const values = getValues()
+    const updatedValues = { ...values, [fieldName]: newValue }
+    const constructedName = Object.values(updatedValues)
+      .map((value) => value)
+      .join(" ")
+    setName(constructedName)
   }
 
   return (
     <div
-      ref={containerRef}
-      onBlurCapture={handleContainerBlur}
       className="flex flex-col gap-2 md:grid md:grid-cols-2"
     >
       {Object.keys(names).map((key) => (
@@ -440,23 +436,30 @@ function ControlledSelectOrEdit({
   register: UseFormRegister<{ [key: string]: string }>
   name: string
   options: string[]
-  onBlur: () => void
+  onBlur: (fieldName: string, newValue: string) => void
 }) {
   const id = useId()
   const [isEditing, setIsEditing] = useState(false)
   const [allOptions, setAllOptions] = useState(options);
 
   const handleBlur = (
-		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+		e: React.FocusEvent<HTMLInputElement> | React.ChangeEvent<HTMLInputElement>,
 	) => {
 		const value = e.target.value;
 		setAllOptions((prevOptions) => [...prevOptions, value]);
-		onBlur();
+		onBlur(name, value);
 		setIsEditing(false);
 	};
 
   if (allOptions.length === 0) {
-    return <input {...register(name)} onBlur={onBlur} type="text" className="border px-2 py-1 flex-grow" />
+    return (
+      <input
+        {...register(name)}
+        onBlur={(e) => onBlur(name, e.target.value)}
+        type="text"
+        className="border px-2 py-1 flex-grow"
+      />
+    )
   }
 
   return (
@@ -477,7 +480,7 @@ function ControlledSelectOrEdit({
       ) : (
         <select
           {...register(name)}
-          onChange={onBlur}
+          onChange={(e)=> onBlur(name, e.target.value)}
           id={id}
           className="border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent flex-grow"
         >
