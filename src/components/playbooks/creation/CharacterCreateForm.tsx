@@ -1,4 +1,4 @@
-import {  useEffect, useId, useState } from "react"
+import {  useCallback, useEffect, useId, useState } from "react"
 import { type UseFormRegister, type UseFormSetValue, type UseFormWatch, useForm } from "react-hook-form"
 import { toast } from "react-hot-toast"
 import { useGame } from "../../../context/GameContext"
@@ -95,6 +95,10 @@ export function CharacterCreateForm({ playbookKey }: { playbookKey: Exclude<play
     }
   }
 
+  const setName = useCallback((value: string) => {
+    setValue("name", value)
+  }, [setValue])
+
   const saveCharacter = (formInputs: CharacterCreateFormInputs) => {
     if (formInputs.moves.length > maxMoves) {
       toast.error(`You can only select ${maxMoves} moves, including your starting move(s).`)
@@ -150,7 +154,7 @@ export function CharacterCreateForm({ playbookKey }: { playbookKey: Exclude<play
             </div>
           </Section>
           <Section title="Choose A Name">
-            <NameSelector names={base.names} setName={(value) => setValue("name", value)}/>
+            <NameSelector names={base.names} setName={setName}/>
           </Section>
 
           {/* Looks - 3 */}
@@ -255,14 +259,12 @@ function NameSelector({
     defaultValues: nameFields,
   })
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: only run once on mount
   useEffect(() => {
     const constructedName = Object.values(getValues())
       .map((value) => value)
       .join(" ")
     setName(constructedName)
-    //intentionally empty - only run once
-  }, [])
+  }, [getValues, setName])
 
   const onBlur = (fieldName: string, newValue: string) => {
     const values = getValues()
