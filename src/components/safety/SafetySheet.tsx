@@ -81,12 +81,13 @@ function LinesAndVeils() {
       </div>
       <Dialog.Root>
        <Dialog.Trigger asChild>
-       <button
+       <div className="md:col-span-2 mx-auto w-2/5"><button
             type="button"
-       className="md:col-span-2 mx-auto w-3/5 bg-theme-bg-secondary text-theme-text-primary px-4 py-2 rounded-lg opacity-80 hover:opacity-100 border-2 hover:bg-theme-bg-accent hover:border border-2-theme-border border-2-accent hover:text-theme-text-accent"
+            className="gridButton"
           >
             Adjust or Remove Lines and Veils
           </button>
+          </div>
         </Dialog.Trigger>
 
         <Dialog.Portal>
@@ -231,7 +232,7 @@ function AddLineOrVeilForm() {
       </div>
       <button
         type="submit"
-       className="w-full bg-theme-bg-secondary text-theme-text-primary px-4 py-2 rounded-lg opacity-80 hover:opacity-100 border-2 hover:bg-theme-bg-accent hover:border border-2-theme-border border-2-accent hover:text-theme-text-accent"
+       className="gridButton"
       >
         Add
       </button>
@@ -245,21 +246,21 @@ function ExplainerSections() {
     <div className="w-full flex flex-col md:grid md:grid-cols-3 gap-2">
       <button
         type="button"
-        className="w-full bg-theme-bg-secondary text-theme-text-primary px-4 py-2 rounded-lg opacity-80 hover:opacity-100 border-2 hover:bg-theme-bg-accent hover:border border-2-theme-border border-2-accent hover:text-theme-text-accent"
+        className="gridButton"
         onClick={() => setView("open-door")}
       >
         Open Door Policy
       </button>
       <button
         type="button"
-        className="w-full bg-theme-bg-secondary text-theme-text-primary px-4 py-2 rounded-lg opacity-80 hover:opacity-100 border-2 hover:bg-theme-bg-accent hover:border border-2-theme-border border-2-accent hover:text-theme-text-accent"
+        className="gridButton"
         onClick={() => setView("x-card")}
       >
         X-Card
       </button>
       <button
         type="button"
-        className="w-full bg-theme-bg-secondary text-theme-text-primary px-4 py-2 rounded-lg opacity-80 hover:opacity-100 border-2 hover:bg-theme-bg-accent hover:border border-2-theme-border border-2-accent hover:text-theme-text-accent"
+        className="gridButton"
         onClick={() => setView("lines-veils")}
       >
         Lines and Veils
