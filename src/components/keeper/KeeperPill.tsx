@@ -15,7 +15,7 @@ export function KeeperPill() {
   }
 
   return (
-    <div className="w-full md:w-1/6 align-self-end rounded-lg flex flex-col gap-2 text-sm backdrop-blur-sm border-2 border-theme-border-accent">
+    <div className=    "font-[Questrial] w-full md:w-1/6 align-self-end rounded-lg flex flex-col gap-2 text-sm backdrop-blur-sm border-2 border-theme-border-accent">
       <div className="p-2 text-theme-text-primary text-sm">
         You are the Keeper.
       </div>
