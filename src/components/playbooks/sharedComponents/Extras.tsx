@@ -11,6 +11,16 @@ export function Extras({ character }: { character: CharacterNotTroupe }) {
 				<p className="text-sm text-theme-text-primary">{character.vice}</p>
 				<h3 className="text-sm font-bold text-theme-text-accent">Look:</h3>
 				<p className="text-xs text-theme-text-muted">{character.look}</p>
+				{character.pronouns && (
+					<h3 className="text-sm font-bold text-theme-text-accent">
+						Pronouns:
+					</h3>
+				)}
+				{character.pronouns && (
+					<p className="text-sm text-theme-text-secondary">
+						{character.pronouns}
+					</p>
+				)}
 			</div>
 			{character.playbook !== playbookKeys.custom && (
 				<Section title="Story" collapsible={true}>
