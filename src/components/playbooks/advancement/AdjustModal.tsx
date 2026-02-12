@@ -18,6 +18,7 @@ export function AdjustmentModal({ character }: { character: CharacterNotTroupe }
 	const { register, handleSubmit } = useForm({
 		defaultValues: {
 			name: character?.name ?? "",
+			pronouns: character?.pronouns ?? "",
 			look: character?.look ?? "",
 			vice: character?.vice ?? "",
 			abilities: character?.abilities ?? {
@@ -34,6 +35,7 @@ export function AdjustmentModal({ character }: { character: CharacterNotTroupe }
 	}
 	const onSubmit = (data: {
 		name: string;
+		pronouns: string;
 		look: string;
 		vice: string;
 		abilities: Abilities;
@@ -72,6 +74,8 @@ export function AdjustmentModal({ character }: { character: CharacterNotTroupe }
 						<label htmlFor="name">Name</label>
 						<input type="text" {...register("name")} />
 						{choosesNameLater && <LaterNameOptions characterKey={character.playbook} />}
+						<label htmlFor="pronouns">Pronouns</label>
+						<input type="text" {...register("pronouns")} />
 						<label htmlFor="look">Look</label>
 						<input type="text" {...register("look")} />
 						<label htmlFor="vice">Ritual</label>

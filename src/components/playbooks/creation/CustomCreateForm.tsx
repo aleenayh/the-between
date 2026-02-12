@@ -15,6 +15,7 @@ import type { Character } from "../types";
 type CharacterCreateFormInputs = {
 	isHerald: boolean;
 	name: string;
+	pronouns: string;
 	look: string;
 	vice: string;
 	stats: {
@@ -47,6 +48,7 @@ export function CustomCreateForm() {
 			defaultValues: {
 				isHerald: false,
 				name: "",
+				pronouns: "",
 				look: "",
 				vice: "",
 				stats: {
@@ -137,6 +139,15 @@ export function CustomCreateForm() {
 							</label>
 							<input
 								{...register("name")}
+								type="text"
+								className="border px-2 py-1 flex-grow"
+							/>
+
+<label htmlFor="pronouns" className="text-xs italic">
+								Pronouns
+							</label>
+							<input
+								{...register("pronouns")}
 								type="text"
 								className="border px-2 py-1 flex-grow"
 							/>
@@ -533,6 +544,7 @@ function constructCustomCharacter(
 ): Character {
 	const {
 		name,
+		pronouns,
 		look,
 		vice,
 		stats: { vitality, composure, reason, presence, sensitivity },
@@ -565,6 +577,7 @@ function constructCustomCharacter(
 		playbook: "custom",
 		playerId: userId,
 		name,
+		pronouns,
 		look,
 		vice,
 		abilities: {

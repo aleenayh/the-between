@@ -23,6 +23,7 @@ function getRandomValue(array: string[]): string {
 
 type CharacterCreateFormInputs = {
   isHerald: boolean;
+  pronouns: string;
   moves: string[]
   name: string
   look1: string
@@ -67,6 +68,7 @@ export function CharacterCreateForm({ playbookKey }: { playbookKey: Exclude<play
         ...(base.moves.filter((move) => base.startingMoves.includes(move.title)).map((move) => move.title) ?? ""),
       ],
       name: "",
+      pronouns: "",
       isHerald: false,
       look1: getRandomValue(base.look),
       look2: getRandomValue(base.look),
@@ -155,6 +157,17 @@ export function CharacterCreateForm({ playbookKey }: { playbookKey: Exclude<play
           </Section>
           <Section title="Choose A Name">
             <NameSelector names={base.names} setName={setName}/>
+            <div className="inline-flex items-center justify-between gap-2 w-full pr-8">
+					<label htmlFor="pronouns" className="text-sm font-bold">
+						Pronouns:
+					</label>
+					<input
+						{...register("pronouns")}
+						type="text"
+						placeholder="specify your Hunter's pronouns"
+						className="border px-4 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent flex-grow"
+					/>
+				</div>
           </Section>
 
           {/* Looks - 3 */}
@@ -502,7 +515,7 @@ function constructCharacter(
   formInputs: CharacterCreateFormInputs,
   playerId: string,
 ): Character {
-  const { name, look1, look2, look3, vitality, composure, reason, presence, sensitivity, isHerald } = formInputs
+  const { name, pronouns, look1, look2, look3, vitality, composure, reason, presence, sensitivity, isHerald } = formInputs
 
   const playbookMoves = base.moves.filter((move) => formInputs.moves.includes(move.title))
   const moves = playbookMoves.map((move) => ({
@@ -525,6 +538,7 @@ function constructCharacter(
     isHerald,
     playerId,
     name,
+    pronouns,
     look: `${look1.charAt(0).toUpperCase() + look1.slice(1)}, ${look2}, ${look3}`,
     vice: formInputs.vice,
     abilities: {

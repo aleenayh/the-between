@@ -159,6 +159,7 @@ export const characterSchema = z.object({
   playbook: z.enum(playbookKeysTuple),
   playerId: z.string(),
   name: z.string(),
+  pronouns: z.string().optional().catch(""),
   look: z.string().catch(catchWithWarning("character.look", "")),
   vice: z.string().catch(catchWithWarning("character.vice", "")),
   masksOfPast: z.array(z.number()).catch(catchWithWarning("character.masksOfPast", [0, 0, 0, 0, 0, 0, 0])),
