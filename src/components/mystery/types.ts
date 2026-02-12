@@ -9,6 +9,7 @@ export const questionSchema = z.object({
 	complexity: z.coerce
 		.number()
 		.catch(catchWithWarning("mystery.question.coplexity", 2)),
+	result: z.coerce.number().optional().catch(undefined),
 });
 
 export type Question = z.infer<typeof questionSchema>;

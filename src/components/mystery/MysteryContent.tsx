@@ -2,12 +2,13 @@ import { Tooltip } from "radix-ui";
 import { useForm } from "react-hook-form";
 import { useGame } from "../../context/GameContext";
 import { PlayerRole } from "../../context/types";
+import { AnswerQuestionDiceRollModal } from "../shared/DiceIndicator";
 import { Section } from "../shared/Section";
 import { StyledTooltip } from "../shared/Tooltip";
 import { themeElements } from "./themes";
 import type { Mystery } from "./types";
 
-export function Countdown({ mystery }: { mystery: Mystery }) {
+export function MysteryContent({ mystery }: { mystery: Mystery }) {
 	const {
 		user: { role },
 		gameState,
@@ -57,10 +58,17 @@ export function Countdown({ mystery }: { mystery: Mystery }) {
 
 	const intro = mystery.intro;
 	return (
-			<div className="flex flex-col gap-0">
-				<h1 className="text-xl text-center whitespace-nowrap text-theme-text-accent inline-flex gap-2 justify-center items-center">
-					{mystery.title}
-					{role === PlayerRole.KEEPER && (
+			<div className="flex flex-col gap-0">				
+				{intro && intro.length > 0 ? (
+					<Section title={mystery.title} collapsible leftAlign>
+						<div className="text-sm text-left">
+							{intro?.map((line) => (
+								<p key={line}>{line}</p>
+							))}
+						</div>
+					</Section>
+				) : <h4 className="my-4 text-xl whitespace-nowrap text-theme-text-accent text-left">    {mystery.title}</h4>}
+									{role === PlayerRole.KEEPER && (
 					<div className="flex gap-2 justify-center items-center">
 								<button
 									type="button"
@@ -70,17 +78,6 @@ export function Countdown({ mystery }: { mystery: Mystery }) {
 									Remove this mystery
 								</button>
 					</div>
-				)}
-				</h1>
-				
-				{intro && intro.length > 0 && (
-					<Section title="Introduction" collapsible minify leftAlign>
-						<div className="text-sm text-left">
-							{intro?.map((line) => (
-								<p key={line}>{line}</p>
-							))}
-						</div>
-					</Section>
 				)}
 				{mystery.countdownTotal > 0 && (
 					<div>
@@ -133,28 +130,39 @@ export function Countdown({ mystery }: { mystery: Mystery }) {
 				)}
 				{mystery.questions && mystery.questions.length > 0 && (
 					<div className="py-4 flex flex-col gap-2">
-						<h2 className="text-md text-center whitespace-nowrap text-theme-text-accent">
+						<h2 className="text-xl text-center whitespace-nowrap text-theme-text-accent">
 							Questions
 						</h2>
 						{mystery.questions.map((question) => (
 							<div key={question.text}>
-								<div className="flex gap-2 justify-start items-center">
+								<div className="inline-flex gap-2 justify-start items-center w-full flex-wrap text-left whitespace-break-spaces leading-none">
 									{question.text}{" "}
-									<span className="text-sm text-theme-text-muted italic">
+									<span className="text-sm text-theme-text-secondary italic whitespace-break-spaces">
 										(Complexity: {question.complexity})
 									</span>
+									{question.result && (
+										<span className="text-sm text-theme-text-secondary font-bold whitespace-break-spaces">
+											Result: {question.result}
+										</span>
+									)}
+									<AnswerQuestionDiceRollModal
+										mystery={mystery}
+										question={question}
+									/>
 								</div>
-								<div className="text-sm text-theme-text-muted text-left">
-									<span className="italic">Opportunity:</span>{" "}
-									{question.opportunity}
-								</div>
+								{question.opportunity && (
+									<div className="ml-2 border-l-2 px-4 border-theme-border text-sm leading-tight text-theme-text-secondary text-left">
+										<span className="italic">Opportunity:</span>{" "}
+										{question.opportunity}
+									</div>
+								)}
 								{role === PlayerRole.KEEPER && (
 									<div className="flex flex-col gap-2 justify-center items-center">
 										<Tooltip.Root>
 											<Tooltip.Trigger>
 												<button
 													type="button"
-													className="border border-theme-border bg-theme-bg-primary hover:bg-theme-bg-accent px-2 py-1 rounded-lg text-sm text-theme-text-muted hover:text-theme-text-primary"
+													className="border border-theme-border bg-theme-bg-primary hover:bg-theme-bg-accent px-2 py-1 rounded-lg text-sm text-theme-text-secondary hover:text-theme-text-primary"
 													onClick={() => resolveQuestion(question.text)}
 												>
 													Resolve Question
@@ -290,10 +298,7 @@ function ClueSection({
 	};
 
 	return (
-		<Section title="Clues" collapsible={true} minify={true}>
-			<h3 className="text-sm text-theme-text-primary text-center">
-				Earned Clues
-			</h3>
+		<Section title="Clues">
 			<div className="flex gap-2 text-sm text-theme-text-muted text-left justify-center items-center">
 				<div>Earned: {earnedClues?.length}</div> <div>|</div>
 				<div>

@@ -5,7 +5,7 @@ import { useGame } from "../../context/GameContext"
 import { CloseButton } from "../shared/CloseButton"
 import { Divider } from "../shared/Divider"
 import { GlassyButton } from "../shared/GlassyButton"
-import { CountdownItem } from "./Countdown"
+import { CountdownItem } from "./MysteryContent"
 import { type Mystery, MysteryTheme, type Question } from "./types"
 
 type AddMysteryFormInputs = {
