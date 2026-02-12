@@ -67,6 +67,8 @@ export const playbookKeys = {
   unquiet: "unquiet",
   underground: "underground",
   facsimile: "facsimile",
+  selkie: "selkie",
+  //volatile: "volatile",
   custom: "custom",
 } as const
 

@@ -16,6 +16,7 @@ import { ReactComponent as KeyE } from "../../assets/martian/keyE.svg";
 import { ReactComponent as KeyF } from "../../assets/martian/keyF.svg";
 import { ReactComponent as OIcon } from "../../assets/oh.svg";
 import { ReactComponent as PocketWatchIcon } from "../../assets/pocketwatch.svg";
+import { ReactComponent as SealSVG } from "../../assets/seal.svg";
 import { CloseButton } from "../../shared/CloseButton";
 import { Divider } from "../../shared/Divider";
 import { EditableLine } from "../../shared/EditableLine";
@@ -47,7 +48,7 @@ export function Moves({ character }: { character: CharacterNotTroupe }) {
 	);
 }
 
-const specialMoveTitles = ["The Child", "The Royal Explorer's Club","Rites of Salt & Smoke", "The Reflection","The Family", "The Phantom", "Doll Parts", "The Offering", "The Dragon Sickness", "…Is Never Over", "The Five Vaults of Tarthor", "The Apertures of the Awakened Mind", "Defy Your Obligations", "The Aperture of the Pocket Watch"]
+const specialMoveTitles = ["The Child", "The Royal Explorer's Club","Rites of Salt & Smoke", "The Reflection","The Family", "The Phantom", "Doll Parts", "The Offering", "The Dragon Sickness", "…Is Never Over", "The Five Vaults of Tarthor", "The Apertures of the Awakened Mind", "Defy Your Obligations", "The Aperture of the Pocket Watch", "Severed From The Sea"]
 
 function MoveDisplay({
 	character,
@@ -209,6 +210,8 @@ function SpecialMoveDisplay({ character, title }: { character: CharacterNotTroup
 			return <DefyYourObligations character={character} />
 		case "The Aperture of the Pocket Watch":
 			return <TheApertureOfThePocketWatch character={character} />
+		case "Severed From The Sea":
+			return <SeveredFromTheSea character={character} />
 	}
 	return <div>{title} Special Display not built yet!</div>
 }
@@ -1329,4 +1332,56 @@ function TheApertureOfThePocketWatch({ character }: { character: CharacterNotTro
 			</div>
       </div>
     )
+}
+
+function SeveredFromTheSea({ character }: { character: CharacterNotTroupe }) {
+	const moveState = character.moves.find((m) => m.title === "Severed From The Sea");
+	const checks = moveState?.checks ?? Array.from({ length: 12 }, () => 0);
+	const {gameState, updateGameState, user: { id }} = useGame();
+	const editable = id === character.playerId;
+	const content = playbookBases[character.playbook].moves.find((m) => m.title === "Severed From The Sea")?.text;
+
+	const contentPartA = content?.slice(0, -2)
+	const contentPartB = content?.slice(-2)
+
+	const [showCompleteButon, setShowCompleteButton] = useState(checks.every((check) => check === 1));
+
+	const toggleCheck = (index: number) => {
+		if (!editable) return;
+		const newChecks = [...checks];
+		newChecks[index] = newChecks[index] === 1 ? 0 : 1;
+		updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, moves:character.moves.map((m) => m.title === "Severed From The Sea" ? { ...m, checks: newChecks } : m) } } : player) });
+
+		if (newChecks.every((check) => check === 1)) {
+			setShowCompleteButton(true);
+		}
+	}
+
+	const completePelt = () => {
+		const scionMove =   { title: "Scion of the Ocean" }
+		const newMoves = [...character.moves.filter((m) => m.title !== "Severed From The Sea" && m.title !== "Moonlight Upon The Waves"), scionMove];
+		updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, moves: newMoves } } : player) });
+	}
+
+	return <div className="flex flex-col gap-2 text-left">
+		<h3 className="text-sm font-bold text-theme-text-accent text-center">Severed From The Sea</h3>
+		{contentPartA && contentPartA.length > 0 && contentPartA.map((line, lineIndex) => {
+			return <p className="text-left leading-relaxed" key={`${moveState?.title}-line-${lineIndex}`}>
+				{parseStaticText(line)}
+			</p>
+		})}
+<div className="relative text-theme-border-accent h-32 w-80 mx-auto flex items-center justify-center">
+	<div className="absolute z-5 flex flex-col justify-center items-center pointer-cursor w-full">{checks.map((check, index) => {
+		const side = index % 2 === 0 ? "right" : "left";
+		return <input type="checkbox" key={`${moveState?.title}-checkbox-${index}`} className={`${side === "right" ? `ml-32` : `-ml-32`}`} checked={check === 1} onChange={() => toggleCheck(index)} />
+	})}</div>
+<SealSVG className="absolute h-full w-auto mx-auto mb-4 opacity-50 pointer-events-none z-0"/>
+</div>
+{showCompleteButon && <div className="flex justify-center w-4/5 mx-auto mt-4"><GlassyButton onClick={completePelt}>Complete Pelt</GlassyButton></div>}
+{contentPartB && contentPartB.length > 0 && contentPartB.map((line, lineIndex) => {
+			return <p className="text-left leading-relaxed" key={`${moveState?.title}-line-${lineIndex}`}>
+				{parseStaticText(line)}
+			</p>
+		})}
+	</div>
 }
