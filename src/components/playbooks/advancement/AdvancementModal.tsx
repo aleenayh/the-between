@@ -285,7 +285,7 @@ function MoveSelector({
   const { gameState, updateGameState } = useGame()
   const base = playbookBases[character.playbook]
   const existingMoves = character?.moves ?? []
-  const moves = base.moves
+  const moves = base.moves.filter((m) => m.title !== "Scion of the Ocean" && m.title !== "Severed From The Sea" && m.title !== "Moonlight Upon The Waves")
   const [selectedMove, setSelectedMove] = useState<string | null>(null)
 
   const onComfirm = () => {

@@ -53,6 +53,8 @@ const extraMovesPerPlaybook: Record<playbookKey, number> = {
   [playbookKeys.custom]: 0,
   [playbookKeys.legacy]: 0,
   [playbookKeys.underground]: 0,
+  [playbookKeys.selkie]: 0,
+  //[playbookKeys.volatile]: 0, //TODO
 }
 
 export function CharacterCreateForm({ playbookKey }: { playbookKey: Exclude<playbookKey, "custom" | "informals"> }) {

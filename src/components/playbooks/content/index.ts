@@ -11,6 +11,7 @@ import { legacyPlaybook } from "./legacy"
 import { martianPlaybook } from "./martian"
 import { motherPlaybook } from "./mother"
 import { orphanPlaybook } from "./orphan"
+import { selkiePlaybook } from "./selkie"
 import { undeniablePlaybook } from "./undeniable"
 import { undergroundPlaybook } from "./underground"
 import { unquietPlaybook } from "./unquiet"
@@ -32,6 +33,8 @@ export const playbookBases: Record<(typeof playbookKeys)[keyof typeof playbookKe
   [playbookKeys.unquiet]: unquietPlaybook,
   [playbookKeys.underground]: undergroundPlaybook,
   [playbookKeys.facsimile]: facsimilePlaybook,
+  [playbookKeys.selkie]: selkiePlaybook,
+  //[playbookKeys.volatile]: volatilePlaybook,
 }
 
 export function customFieldOrFallback(
