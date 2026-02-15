@@ -135,14 +135,14 @@ export function CharacterCreateForm({ playbookKey }: { playbookKey: Exclude<play
     <form onSubmit={handleSubmit(saveCharacter)} className="flex flex-col gap-2 justify-center">
       {step === "basics" && (
         <div>
-          <h1 className="text-2xl font-bold text-center">{base.title}</h1>
+          <h1 className="text-[2rem] font-bold text-center">{base.title}</h1>
 
-          {gameState.heraldUnlocked && playbookKey !== playbookKeys.orphan &&							<div><h1 className="font-bold text-center text-theme-text-accent text-lg">        
+          {gameState.heraldUnlocked && playbookKey !== playbookKeys.orphan &&							<div><h1 className="font-bold text-center text-theme-text-accent text-[1.6rem]">        
 								( And The Herald …? )
 							</h1>
 							<p className="text-left text-sm">This game has unlocked <i>The Herald</i>. The Herald is not a complete playbook, but rather a special sheet that, once unlocked by The Informals, can be added to another playbook during character creation. Some playbooks may not be a good fit with this sheet; discuss it with your Keeper if you’re unsure. 
 							</p>
-							<div className="flex justify-center items-center gap-2"><input type="checkbox" {...register("isHerald")} /><label htmlFor="isHerald" className=        "text-left text-lg text-theme-text-accent font-[RumbleBrave] letter-spacing-widest">Yes, I am the Herald</label></div>
+							<div className="flex justify-center items-center gap-2"><input type="checkbox" {...register("isHerald")} id="isHerald" /><label htmlFor="isHerald" className=        "text-left text-[1.6rem] text-theme-text-accent font-[RumbleBrave] letter-spacing-widest">Yes, I am the Herald</label></div>
 
 							</div>}
           <Section title="Your Story" collapsible>
@@ -160,12 +160,13 @@ export function CharacterCreateForm({ playbookKey }: { playbookKey: Exclude<play
           <Section title="Choose A Name">
             <NameSelector names={base.names} setName={setName}/>
             <div className="inline-flex items-center justify-between gap-2 w-full pr-8">
-					<label htmlFor="pronouns" className="text-sm font-bold">
+					<label htmlFor="pronouns" className="font-[CinzelDecorative] text-sm text-theme-text-primary italic">
 						Pronouns:
 					</label>
 					<input
 						{...register("pronouns")}
 						type="text"
+            id="pronouns"
 						placeholder="specify your Hunter's pronouns"
 						className="border px-4 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent flex-grow"
 					/>
@@ -216,7 +217,7 @@ export function CharacterCreateForm({ playbookKey }: { playbookKey: Exclude<play
 
       {step === "moves" && (
         <div>
-          <h1 className="text-2xl font-bold text-center">{base.title}</h1>
+          <h1 className="text-[2rem] font-bold text-center">{base.title}</h1>
           <p>
             You start with {base.startingMoves.map((move) => `"${move}"`).join(" & ")}.{" "}
             {maxMoves > base.startingMoves.length ? `Select ${maxMoves - base.startingMoves.length} additional move from below.` : ""}
@@ -233,7 +234,7 @@ export function CharacterCreateForm({ playbookKey }: { playbookKey: Exclude<play
                     value={move.title}
                     onChange={(e) => checkMove(e.target.value, e.target.checked)}
                   />
-                  <h2 className="text-lg font-bold">{move.title}</h2>
+                  <h2 className="text-[1.6rem] font-bold">{move.title}</h2>
                 </div>
                 <div className="flex flex-col gap-2">
                                   {move.text.map((p) => (

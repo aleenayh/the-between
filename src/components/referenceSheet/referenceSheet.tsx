@@ -40,7 +40,7 @@ export function ReferenceSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsOp
             <h1 className="flex justify-center w-full text-theme-text-accent">
               <Logo className="w-1/4 h-auto mx-auto mb-4" />
             </h1>
-            <h1 className="text-2xl font-bold text-theme-text-accent">Reference Sheet</h1>
+            <h1 className="text-[2rem] font-bold text-theme-text-accent">Reference Sheet</h1>
             <div className="flex flex-col justify-stretch items-start text-left">
               <MovesSection />
               <PhaseSection />

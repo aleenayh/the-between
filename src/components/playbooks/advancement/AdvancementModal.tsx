@@ -424,7 +424,7 @@ function MoveWriter({
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2 justify-center text-theme-text-primary">
-      <h3 className="text-2xl font-bold text-center text-theme-text-accent">Write a Custom {apertureVersion ? "Aperture" : "Move"}</h3>
+      <h3 className="text-[2rem] font-bold text-center text-theme-text-accent">Write a Custom {apertureVersion ? "Aperture" : "Move"}</h3>
       <p>Name your {apertureVersion ? "aperture" : "move"} below: </p>
       <input
         type="text"

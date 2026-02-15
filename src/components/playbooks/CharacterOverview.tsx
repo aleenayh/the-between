@@ -40,9 +40,9 @@ export function CharacterOverview() {
 
   return (
     <div className="flex flex-col h-full w-full overflow-hidden gap-3">
-      <h1 className="text-2xl font-bold text-center text-theme-text-accent shrink-0 flex flex-col justify-evenly md:flex-row">
+      <h1 className="text-[2rem] font-bold text-center text-theme-text-accent shrink-0 flex flex-col justify-evenly md:flex-row">
         <div className="w-0 h-0 md:w-1/6" />
-        <span className="w-full md:w-2/3 text-md text-theme-text-primary flex justify-center">Character Keeper</span>
+        <span className="w-full md:w-2/3 text-theme-text-primary flex justify-center">Character Keeper</span>
         {user.role === PlayerRole.KEEPER ? <KeeperPill /> : <div className="w-0 h-0 md:w-1/6" />}
       </h1>
       {user.role === PlayerRole.KEEPER && <KeeperSummary />}
@@ -107,7 +107,7 @@ function CharacterCreationStarter({ onCollapse }: { onCollapse: () => void }) {
         </>
       ) : (
         <div className="flex flex-col gap-4 h-full">
-          <h1 className="text-2xl font-bold text-center text-theme-text-accent shrink-0">Choose a Hunter</h1>
+          <h1 className="text-[2rem] font-bold text-center text-theme-text-accent shrink-0">Choose a Hunter</h1>
           <div className="flex flex-col md:grid md:grid-cols-2 gap-2 flex-1 overflow-y-auto md:flex-none">
             {Object.values(playbookKeys).map((playbookKey) => {
               const base = playbookBases[playbookKey]

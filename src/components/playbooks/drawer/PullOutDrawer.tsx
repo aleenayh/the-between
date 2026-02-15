@@ -58,7 +58,7 @@ export function PullOutCharacterOverview({
 						>
 							X
 						</button>
-						<h1 className="text-2xl font-bold text-theme-text-accent">
+						<h1 className="text-[2rem] font-bold text-theme-text-accent">
 							Other Hunters
 						</h1>
 						{otherCharacters.length > 0 ? (

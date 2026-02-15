@@ -72,14 +72,14 @@ export function AdjustmentModal({ character }: { character: CharacterNotTroupe }
 						className="flex flex-col gap-4"
 					>
 						<label htmlFor="name">Name</label>
-						<input type="text" {...register("name")} />
+						<input type="text" {...register("name")} id="name" />
 						{choosesNameLater && <LaterNameOptions characterKey={character.playbook} />}
 						<label htmlFor="pronouns">Pronouns</label>
-						<input type="text" {...register("pronouns")} />
+						<input type="text" {...register("pronouns")} id="pronouns" />
 						<label htmlFor="look">Look</label>
-						<input type="text" {...register("look")} />
+						<input type="text" {...register("look")} id="look" />
 						<label htmlFor="vice">Ritual</label>
-						<input type="text" {...register("vice")} />
+						<input type="text" {...register("vice")} id="vice" />
 
 						<div className="flex justify-center w-full">
 							<div className="grid grid-cols-5 gap-1 justify-center items-center">
@@ -90,13 +90,13 @@ export function AdjustmentModal({ character }: { character: CharacterNotTroupe }
 									][]
 								).map(([stat, value]) => (
 									<div key={stat} className="flex flex-col-reverse md:flex-col">
-										<label htmlFor={stat} className="flex flex-col gap-1">
+										<label htmlFor={`abilities.${stat}`} className="flex flex-col gap-1">
 											<span className="text-center text-xs md:text-sm text-theme-text-muted whitespace-nowrap overflow-hidden text-ellipsis">
 												{stat}
 											</span>
 										</label>
 										<input
-											id={stat}
+											id={`abilities.${stat}`}
 											type="number"
 											defaultValue={value}
 											{...register(`abilities.${stat}`, {
@@ -111,7 +111,7 @@ export function AdjustmentModal({ character }: { character: CharacterNotTroupe }
 
 						<button
 							type="submit"
-							className="bg-theme-bg-accent text-theme-text-primary rounded-md p-2"
+							className="bg-theme-bg-secondary hover:bg-theme-bg-accent text-theme-text-primary hover:text-theme-text-accent rounded-md p-2"
 						>
 							Save Changes
 						</button>

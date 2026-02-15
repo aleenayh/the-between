@@ -40,7 +40,7 @@ export function SafetyPane({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: 
             className="absolute top-0 left-0 w-full md:w-1/2 h-screen flex flex-col justify-start items-center bg-theme-bg-primary border-r border-theme-border-accent rounded-lg p-4 z-10 transition-all ease-linear overflow-y-auto pointer-events-auto"
           >
             <CloseButton onClick={() => setIsOpen(!isOpen)} />
-            <h1 className="text-2xl font-bold text-theme-text-accent mb-6">Safety Tools</h1>
+            <h1 className="text-[2rem] font-bold text-theme-text-accent mb-6">Safety Tools</h1>
             <div className="flex flex-col gap-4 justify-start items-center h-full">
               <p className="text-balance text-sm">
                 No game is more important than the people playing it. Your game may use any safety tools you wish, but
@@ -156,8 +156,8 @@ function EditLineOrVeilForm({ type, index, text }: { type: "line" | "veil"; inde
   }
 
   const remove = (type: "line" | "veil", text: string) => {
-    const newLines = lines?.filter((line) => line !== text)
-    const newVeils = veils?.filter((veil) => veil !== text)
+    const newLines = type === "line" ? lines?.filter((line) => line !== text) : lines || [];
+		const newVeils = type === "veil" ? veils?.filter((veil) => veil !== text) : veils || [];
     updateGameState({
       safety: {
         lines: newLines,
@@ -222,12 +222,12 @@ function AddLineOrVeilForm() {
       <input type="text" placeholder="Enter line or veil..." className="w-full" {...register("text")} />
       <div className="flex gap-2 justify-center">
         <div className="flex gap-2 items-center justify-start">
-          <input type="radio" {...register("type")} value="line" />
-          <label htmlFor="type">Line</label>
+          <input type="radio" {...register("type")} value="line" id="type-line"/>
+          <label htmlFor="type-line">Line</label>
         </div>
         <div className="flex gap-2 items-center justify-start">
-          <input type="radio" {...register("type")} value="veil" />
-          <label htmlFor="type">Veil</label>
+          <input type="radio" {...register("type")} value="veil" id="type-veil" />
+          <label htmlFor="type-veil">Veil</label>
         </div>
       </div>
       <button

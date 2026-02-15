@@ -96,6 +96,7 @@ function CustomMysteryForm({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void
         <input
           type="text"
           {...register("title")}
+          id="title"
           className="border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent"
         />
                 <Divider />
@@ -104,6 +105,7 @@ function CustomMysteryForm({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void
         </label>
         <textarea
           {...register("intro")}
+          id="intro"
           className="border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent"
         />
                 
@@ -117,6 +119,7 @@ function CustomMysteryForm({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void
               className="flex flex-col items-stretch justify-center gap-2"
               // biome-ignore lint/suspicious/noArrayIndexKey: order unimportant
               key={`question-${index}`}
+              id={`questions.${index}.text`}
             >
               <div className="flex flex-col md:flex-row items-center gap-2">
               <div className="flex-grow flex gap-2 items-center w-full md:w-auto">
@@ -126,6 +129,7 @@ function CustomMysteryForm({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void
                   defaultValue={question.text}
                   {...register(`questions.${index}.text`)}
                   className="flex-grow border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent"
+                  id={`questions.${index}.text`}
                 />
               </div>
               <div className="flex gap-2 items-center w-full md:w-auto">
@@ -136,6 +140,7 @@ function CustomMysteryForm({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void
                   {...register(`questions.${index}.complexity`)}
                   min={1}
                   max={10}
+                  id={`questions.${index}.complexity`}
                   className="border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent"
                 />
               </div>
@@ -144,6 +149,7 @@ function CustomMysteryForm({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void
                 <label htmlFor={`questions.${index}.opportunity`}>Opportunity</label>
                 <input
                   type="text"
+                  id={`questions.${index}.opportunity`}
                   defaultValue={question.opportunity}
                   {...register(`questions.${index}.opportunity`)}
                   className="flex-grow border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent"
@@ -177,6 +183,7 @@ function CustomMysteryForm({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void
             <label htmlFor="theme">Select Countdown Theme</label>
             <select
               {...register("theme")}
+              id="theme"
               className="border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent"
             >
               {Object.values(MysteryTheme).map((theme) => (
@@ -191,7 +198,8 @@ function CustomMysteryForm({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void
             <input
               type="number"
               {...register("countdownTotal")}
-              min={1}
+              id="countdownTotal"
+              min={0}
               max={20}
               className="border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent"
             />
