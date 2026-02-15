@@ -19,7 +19,7 @@ export function InformalsStub() {
   
     return (
       <div className="p-4 h-full flex flex-col gap-2 overflow-y-auto text-left relative">
-        <h1 className="text-2xl font-bold text-center">The Informals</h1>
+        <h1 className="text-[2rem] font-bold text-center">The Informals</h1>
         <p>
           This is a troupe-style playbook, meaning rather than playing a single character, you switch between a number of
           different characters. There is nothing to do during character creation except review the special rules below and

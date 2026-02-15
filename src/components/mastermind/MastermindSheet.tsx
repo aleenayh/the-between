@@ -58,7 +58,7 @@ export function MastermindSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsO
                 className="absolute top-0 left-0 w-full md:w-1/2 h-screen flex flex-col justify-start items-center bg-theme-bg-primary border-r border-theme-border-accent rounded-lg p-4 z-10 transition-all ease-linear overflow-y-auto pointer-events-auto"
               >
                 <CloseButton onClick={() => setIsOpen(!isOpen)} />
-                <h1 className="text-2xl font-bold text-theme-text-accent mb-10">{mastermindContent?.title ?? mastermind?.title ??"Mastermind Conspiracy"}</h1>
+                <h1 className="text-[2rem] font-bold text-theme-text-accent mb-10">{mastermindContent?.title ?? mastermind?.title ??"Mastermind Conspiracy"}</h1>
                 {mastermind && (<MastermindContent mastermind={mastermind}/>             )}
                {role === PlayerRole.KEEPER && (
                   <Dialog.Root open={modalOpen} onOpenChange={setModalOpen}>
@@ -315,8 +315,8 @@ function CanonMastermindForm({setIsOpen}: {setIsOpen: (isOpen: boolean) => void}
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
         {masterminds.map((mastermind) => (
           <div className="flex gap-2 items-center justify-start my-4" key={`select-${mastermind.title}`}>
-          <input type="radio" {...register("title")} value={mastermind.title} />
-          <label htmlFor="title">{mastermind.label}</label>
+          <input type="radio" {...register("title")} value={mastermind.title} id={mastermind.title}/>
+          <label htmlFor={mastermind.title}>{mastermind.label}</label>
           </div>
         ))}
 
@@ -383,7 +383,7 @@ function CustomMastermindForm({setIsOpen}: {setIsOpen: (isOpen: boolean) => void
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex gap-2 w-full items-baseline"><label htmlFor="title">Title</label>
-      <input type="text" {...register("title")} className="w-full" /></div>
+      <input type="text" {...register("title")} className="w-full" id="title" /></div>
 
       <h2 className="font-bold text-center text-theme-text-accent text-lg">
 								Questions
@@ -404,6 +404,7 @@ index}`} className="flex flex-col gap-2">
 										className="w-full"
 										value={q.question}
 										{...register(`questions.${index}.question`)}
+										id={`questions.${index}.question`}
 									/>
                   </div>
                   <div className="flex gap-2 items-baseline justify-center">
@@ -413,6 +414,7 @@ index}`} className="flex flex-col gap-2">
 										className="w-full"
 										value={q.opportunity}
 										{...register(`questions.${index}.opportunity`)}
+										id={`questions.${index}.opportunity`}
 									/></div>
                                     <div className="flex gap-2 items-baseline justify-center">
                                     <label htmlFor={`questions.${index}.complexity`}>Complexity</label>
@@ -421,8 +423,9 @@ index}`} className="flex flex-col gap-2">
 										className="w-full"
 										value={q.complexity}
 										{...register(`questions.${index}.complexity`)}
+										id={`questions.${index}.complexity`}
 									/>
-                  <input type="checkbox" checked={q.isActive} {...register(`questions.${index}.isActive`)} />
+                  <input type="checkbox" checked={q.isActive} {...register(`questions.${index}.isActive`)} id={`questions.${index}.isActive`} />
                   <label htmlFor={`questions.${index}.isActive`}>Active</label>
 
                   </div>
@@ -499,11 +502,11 @@ function EditMastermindQuestionForm({question, closeModal}: {question: string, c
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
       <label htmlFor="question">Question</label>
-      <input type="text" {...register("question")} />
+      <input type="text" {...register("question")} id="question" />
       <div className="flex gap-2 items-center justify-evenly"><label htmlFor="complexity">Complexity</label>
-      <input type="number" {...register("complexity")} /></div>
+      <input type="number" {...register("complexity")} id="complexity" /></div>
       <label htmlFor="opportunity">Opportunity</label>
-      <input type="text" {...register("opportunity")} />
+      <input type="text" {...register("opportunity")} id="opportunity" />
       <button type="submit" className="w-1/3 mx-auto bg-theme-bg-secondary text-theme-text-primary px-4 py-2 rounded-lg opacity-80 hover:opacity-100 border-2 hover:bg-theme-bg-accent hover:border border-2-theme-border border-2-accent hover:text-theme-text-accent">Save</button>
     </form>
   )

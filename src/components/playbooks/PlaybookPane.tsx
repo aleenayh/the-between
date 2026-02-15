@@ -23,7 +23,7 @@ export function PlaybookPane({ character }: { character: Character }) {
 		>
 			<DiceIndicator playerId={character.playerId} />
 			<PlayerPill playerId={character.playerId} />
-			<h2 className="text-lg whitespace-normal text-balance font-bold text-theme-text-accent shrink-0 truncate mx-10">
+			<h2 className="text-[1.6rem] whitespace-normal text-balance font-bold text-theme-text-accent shrink-0 truncate mx-10">
 				{character.name}
 			</h2>
 			<div className="flex-1 overflow-y-auto overflow-x-hidden min-h-0 min-w-0 flex flex-col gap-0">

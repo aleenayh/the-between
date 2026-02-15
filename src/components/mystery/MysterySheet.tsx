@@ -55,7 +55,7 @@ export function MysterySheet({
 						<CloseButton
 						onClick={() => setIsOpen(!isOpen)}
 						/>
-						<h1 className="text-2xl font-bold text-theme-text-accent mb-4">
+						<h1 className="text-[2rem] font-bold text-theme-text-accent mb-4">
 							Threats
 						</h1>
 						<div className="w-full flex flex-col h-full overflow-hidden justify-between items-stretch">
@@ -67,7 +67,7 @@ export function MysterySheet({
 										<button
 											type="button"
 											key={mystery.title}
-											className={`rounded-lg py-0 px-2 border transition-colors ${displayedMystery === mystery.title ? "bg-theme-bg-accent text-theme-text-accent border-theme-border-accent hover:bg-theme-bg-secondary" : "bg-theme-bg-primary text-theme-text-primary border-theme-border hover:bg-theme-bg-accent hover:text-theme-text-accent hover:border-theme-border-accent"}`}
+											className={`rounded-lg py-0 px-2 border transition-colors ${displayedMystery === mystery.title ? "bg-theme-bg-accent text-theme-text-accent border-theme-border-accent" : "bg-theme-bg-primary text-theme-text-primary border-theme-border hover:bg-theme-bg-accent hover:text-theme-text-accent hover:border-theme-border-accent"}`}
 											onClick={() => setDisplayedMystery(mystery.title)}
 										>
 											<span className="text-sm whitespace-nowrap">

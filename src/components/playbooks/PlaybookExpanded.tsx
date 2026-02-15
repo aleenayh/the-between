@@ -46,7 +46,7 @@ export function PlaybookExpanded({ character }: { character: CharacterNotTroupe 
 	return (
 		<div className="border-2 border-theme-border-accent bg-theme-bg-primary rounded-lg p-4 h-full flex flex-col gap-2 overflow-hidden relative">
 			<DiceIndicator playerId={character.playerId} />
-			<h1 className="text-2xl font-bold text-center text-theme-text-accent shrink-0 whitespace-normal text-balance">
+			<h1 className=  "text-[2rem] font-bold text-center text-theme-text-accent shrink-0 whitespace-normal text-balance">
 				{character.name}
 			</h1>
 			<div className="flex-1 overflow-y-auto overflow-x-hidden min-h-0 min-w-0 flex flex-col gap-3">

@@ -100,6 +100,7 @@ export function Questions({ character }: { character: CharacterNotTroupe }) {
               checked={marked}
               disabled={!editable}
               onChange={(e) => onToggle(e.target.checked, index)}
+              id={value}
             />
             <label className="text-sm" htmlFor={value}>
               <span className={`${marked ? "text-theme-text-primary font-bold" : "text-theme-text-muted"}`}>

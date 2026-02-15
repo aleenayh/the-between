@@ -93,8 +93,9 @@ export function Masks({ character }: { character: CharacterNotTroupe }) {
                   checked={markedMasksOfPast[i] === 1}
                   disabled={!editable}
                   onChange={(e) => onToggleMaskPast(e.target.checked, i)}
+                  id={`mask-past-${mask}`}
                 />
-                <label className="text-xs" htmlFor={mask}>
+                <label className="text-xs" htmlFor={`mask-past-${mask}`}>
                   {editable && (
                     <span className={`${markedMasksOfPast[i] === 1 ? "text-theme-text-muted line-through" : ""}`}>
                       {parseStaticText(mask)} {isHerald && parseStaticText(heraldMasks[i])}

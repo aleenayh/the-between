@@ -46,7 +46,7 @@ export function SettingsPane({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen
               <Logo className="w-1/3 h-auto mx-auto mb-4" />
             </h1>
 
-            <h1 className="text-2xl font-bold text-theme-text-accent mb-10">Settings</h1>
+            <h1 className="text-[2rem] font-bold text-theme-text-accent mb-10">Settings</h1>
             <div className="flex flex-col gap-10 justify-between h-full">
               <ThemeSelector />
               <GameInfo />
@@ -78,6 +78,7 @@ function ThemeSelector() {
             value="theodora"
             name="theme"
             className="mr-2"
+            id="theodora"
             defaultChecked={initialTheme === "theodora"}
             onChange={(e) => confirmTheme(e.target.value)}
           />
@@ -89,6 +90,7 @@ function ThemeSelector() {
             value="flagg"
             name="theme"
             className="mr-2"
+            id="flagg"
             defaultChecked={initialTheme === "flagg"}
             onChange={(e) => confirmTheme(e.target.value)}
           />
@@ -100,6 +102,7 @@ function ThemeSelector() {
             value="gesod"
             name="theme"
             className="mr-2"
+            id="gesod"
             defaultChecked={initialTheme === "gesod"}
             onChange={(e) => confirmTheme(e.target.value)}
           />
@@ -111,6 +114,7 @@ function ThemeSelector() {
             value="wellington-hughes"
             name="theme"
             className="mr-2"
+            id="wellington-hughes"
             defaultChecked={initialTheme === "wellington-hughes"}
             onChange={(e) => confirmTheme(e.target.value)}
           />
@@ -122,6 +126,7 @@ function ThemeSelector() {
             value="titania"
             name="theme"
             className="mr-2"
+            id="titania"
             defaultChecked={initialTheme === "titania"}
             onChange={(e) => confirmTheme(e.target.value)}
           />
@@ -133,6 +138,7 @@ function ThemeSelector() {
             value="hearts"
             name="theme"
             className="mr-2"
+            id="hearts"
             defaultChecked={initialTheme === "hearts"}
             onChange={(e) => confirmTheme(e.target.value)}
           />
@@ -144,6 +150,7 @@ function ThemeSelector() {
             value="dark"
             name="theme"
             className="mr-2"
+            id="dark"
             defaultChecked={initialTheme === "dark"}
             onChange={(e) => confirmTheme(e.target.value)}
           />
@@ -155,6 +162,7 @@ function ThemeSelector() {
             value="light"
             name="theme"
             className="mr-2"
+            id="light"
             defaultChecked={initialTheme === "light"}
             onChange={(e) => confirmTheme(e.target.value)}
           />

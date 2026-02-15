@@ -4,6 +4,7 @@
   font-weight: 400;
   font-style: normal;
   font-display: swap;
+  font-size: 2rem;
 }
 
 @font-face {
@@ -56,8 +57,8 @@
 :root,
 [data-theme="theodora"] {
   --color-bg-primary: #010124;
-  --color-bg-secondary: #000047;
-  --color-bg-accent: #010166;
+  --color-bg-secondary: #030358;
+  --color-bg-accent: #0101a1;
 
   --color-text-primary: #d3f1ff;
   --color-text-muted: #b6c9c9;
@@ -98,13 +99,13 @@
   --overlay-color: rgba(255, 255, 255, 0.2);
 }
 [data-theme="gesod"] {
-  --color-bg-primary: #4d3c23;
+  --color-bg-primary: #4c3615;
   --color-bg-secondary: #7a5c4a;
-  --color-bg-accent: #dac27b;
+  --color-bg-accent: #fac125;
 
   --color-text-primary: #ffffff;
   --color-text-muted: #cfbbb0;
-  --color-text-accent: #f96b19;
+  --color-text-accent: #cb5816;
 
   --color-border: #b8752e;
   --color-border-accent: #b87f2e;
@@ -229,7 +230,9 @@ body {
   background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
   font-family: "Questrial", sans-serif;
-  transition: background-color 0.5s ease, color 0.5s ease;
+  transition:
+    background-color 0.5s ease,
+    color 0.5s ease;
 }
 
 html {
@@ -251,7 +254,9 @@ body {
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  transition: background-color 0.5s ease, color 0.5s ease;
+  transition:
+    background-color 0.5s ease,
+    color 0.5s ease;
   background-image: var(--background-image);
   background-repeat: repeat;
   background-size: var(--background-size);
@@ -330,7 +335,9 @@ input[type="checkbox"] {
   text-align: center;
   margin-right: 0.125rem;
   cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
 }
 
 input[type="checkbox"]:hover:not(:disabled) {
@@ -359,8 +366,9 @@ input[type="number"] {
 input[type="number"]:focus,
 input[type="number"]:hover {
   outline: none;
-  color: var(--color-text-accent);
-  background-color: var(--color-bg-accent);
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-primary);
+  border-color: var(--color-accent-primary);
 }
 
 a {
@@ -393,7 +401,9 @@ input[type="radio"] {
   text-align: center;
   margin-right: 0.125rem;
   cursor: pointer;
-  transition: background-color 0.15s ease, border-color 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
 }
 
 input[type="radio"]:checked {
@@ -413,7 +423,9 @@ textarea {
   font-size: 1rem;
   line-height: 1.5;
   cursor: text;
-  transition: background-color 0.15s ease, border-color 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
 }
 input[type="text"]::placeholder,
 input[type="textarea"]::placeholder {
@@ -461,7 +473,9 @@ input[type="textarea"]:hover {
   border: 1px solid var(--color-border);
   padding: 0.5rem;
   border-left: none;
-  transition: background-color 0.15s ease, border-color 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
   pointer-events: auto;
   cursor: pointer;
 }
@@ -601,7 +615,9 @@ input[type="textarea"]:hover {
   font-size: 15px;
   line-height: 1.5;
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease,
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
     border-color 0.2s ease;
   display: flex;
   align-items: center;
@@ -725,7 +741,9 @@ input[type="textarea"]:hover {
   font-size: 15px;
   line-height: 1.5;
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease,
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
     border-color 0.2s ease;
 }
 .informalButton:hover {
@@ -747,7 +765,9 @@ input[type="textarea"]:hover {
   font-size: 15px;
   line-height: 1.5;
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease,
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease,
     border-color 0.2s ease;
   z-index: 0;
 }
@@ -806,13 +826,30 @@ input[type="textarea"]:hover {
 }
 
 /* Cycle through 9 values to create wave effect */
-.wavyText:nth-child(9n+1) { transform: translateY(0); }
-.wavyText:nth-child(9n+2) { transform: translateY(-0.1em); }
-.wavyText:nth-child(9n+3) { transform: translateY(-0.2em); }
-.wavyText:nth-child(9n+4) { transform: translateY(-0.1em); }
-.wavyText:nth-child(9n+5) { transform: translateY(0); }
-.wavyText:nth-child(9n+6) { transform: translateY(0.1em); }
-.wavyText:nth-child(9n+7) { transform: translateY(0.2em); }
-.wavyText:nth-child(9n+8) { transform: translateY(0.1em); }
-.wavyText:nth-child(9n+9) { transform: translateY(0); }
-
+.wavyText:nth-child(9n + 1) {
+  transform: translateY(0);
+}
+.wavyText:nth-child(9n + 2) {
+  transform: translateY(-0.1em);
+}
+.wavyText:nth-child(9n + 3) {
+  transform: translateY(-0.2em);
+}
+.wavyText:nth-child(9n + 4) {
+  transform: translateY(-0.1em);
+}
+.wavyText:nth-child(9n + 5) {
+  transform: translateY(0);
+}
+.wavyText:nth-child(9n + 6) {
+  transform: translateY(0.1em);
+}
+.wavyText:nth-child(9n + 7) {
+  transform: translateY(0.2em);
+}
+.wavyText:nth-child(9n + 8) {
+  transform: translateY(0.1em);
+}
+.wavyText:nth-child(9n + 9) {
+  transform: translateY(0);
+}

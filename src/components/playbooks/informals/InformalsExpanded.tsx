@@ -43,7 +43,7 @@ export function InformalsExpanded({ troupe }: { troupe: Troupe }) {
   return (
     <div className="border-2 border-theme-border-accent bg-theme-bg-primary rounded-lg p-4 h-full flex flex-col gap-2 overflow-hidden relative">
       <DiceIndicator playerId={troupe.playerId} />
-      <h1 className="text-2xl font-bold text-center text-theme-text-accent shrink-0 whitespace-normal text-balance">
+      <h1 className="text-[2rem] font-bold text-center text-theme-text-accent shrink-0 whitespace-normal text-balance">
         {selectedActive ? pretty(selectedActive) : "The Informals"}
         
       </h1>
@@ -104,7 +104,7 @@ export function InformalsExpanded({ troupe }: { troupe: Troupe }) {
 
 <div className="flex justify-center items-center gap-2">
   {stateMembers[activeTab].patron === "" ? <MeetInformal member={activeTab} troupe={troupe}/> : 
-  <div className="flex justify-center items-center gap-2"><input type="checkbox" onChange={() => handleSetActiveMember(activeTab)} checked={selectedActive === activeTab} />
+  <div className="flex justify-center items-center gap-2"><input type="checkbox" onChange={() => handleSetActiveMember(activeTab)} checked={selectedActive === activeTab} id="check" />
   <label htmlFor="check" className=        "text-left text-lg text-theme-text-accent font-[RumbleBrave] letter-spacing-widest">I am {pretty          (activeTab)}</label></div>}
   </div>
           <div className="flex flex-col gap-2 h-full flex-grow">

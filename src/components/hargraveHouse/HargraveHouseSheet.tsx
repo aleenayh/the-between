@@ -52,7 +52,7 @@ export function HargraveHouseSheet({ isOpen, setIsOpen }: { isOpen: boolean; set
           >
            <CloseButton onClick={() => setIsOpen(!isOpen)} />
 
-            <h1 className="text-2xl font-bold text-theme-text-accent mb-10">Hargrave House</h1>
+            <h1 className=          "text-[2rem] font-bold text-theme-text-accent mb-10">Hargrave House</h1>
             <Rooms />
             <Divider />
             <Residents />
@@ -395,7 +395,7 @@ function AddResidentForm({ setIsOpen }: { setIsOpen: (open: boolean) => void }) 
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
         {availableResidents.map((resident) => (
           <div key={resident} className="flex gap-2 items-center justify-start">
-          <input type="radio" {...register("resident")} value={resident} />
+          <input type="radio" {...register("resident")} value={resident} id={resident}/>
           <label htmlFor={resident}>{residentContent[resident].title}</label>
           </div>
         ))}

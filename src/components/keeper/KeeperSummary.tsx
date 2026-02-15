@@ -22,7 +22,7 @@ export function KeeperSummary() {
               key={character.playerId}
               className="border-2 border-theme-border-accent bg-theme-bg-primary rounded-lg p-4 relative"
             >
-              <h2 className="text-lg whitespace-normal text-balance mx-auto">{character.name}</h2>
+              <h2 className="text-[1.6rem] whitespace-normal text-balance mx-auto">{character.name}</h2>
               <PlayerPill playerId={character.playerId} />
               <Conditions character={character} />
             </div>

@@ -47,7 +47,7 @@ export function ControlledSection({
 }) {
   return (
     <div className="flex flex-col gap-2 my-4 justify-center items-stretch min-w-0">
-      <h3 className={`font-bold ${leftAlign ? "text-left" : "text-center"} text-theme-text-accent ${minify ? "text-sm" : "text-lg"}`}>
+      <h3 className={`font-bold ${leftAlign ? "text-left" : "text-center"} text-theme-text-accent ${minify ? "text-sm" : ""}`}>
         <button
           type="button"
           onClick={() => {

@@ -111,7 +111,7 @@ export function CustomCreateForm() {
 			onSubmit={handleSubmit(saveCharacter)}
 			className="flex flex-col gap-2 justify-center"
 		>
-			<h1 className="text-2xl font-bold text-center">
+			<h1 className="text-[2rem] font-bold text-center">
 				Community-Created Hunter
 			</h1>
 			<AnimatePresence>
@@ -131,7 +131,7 @@ export function CustomCreateForm() {
 								canonical Hunters.
 							</p>
 							<div className="h-6" />
-							<h2 className="font-bold text-center text-theme-text-accent text-lg">
+							<h2 className="font-bold text-center text-theme-text-accent text-[1.6rem]">
 								Choose A Name
 							</h2>
 							<label htmlFor="name" className="text-xs italic">
@@ -140,6 +140,7 @@ export function CustomCreateForm() {
 							<input
 								{...register("name")}
 								type="text"
+								id="name"
 								className="border px-2 py-1 flex-grow"
 							/>
 
@@ -149,11 +150,12 @@ export function CustomCreateForm() {
 							<input
 								{...register("pronouns")}
 								type="text"
+								id="pronouns"
 								className="border px-2 py-1 flex-grow"
 							/>
 							<div className="h-6" />
 
-							<h2 className="font-bold text-center text-theme-text-accent text-lg">
+							<h2 className="font-bold text-center text-theme-text-accent text-[1.6rem]">
 								Build Your Look
 							</h2>
 							<label htmlFor="look" className="text-xs italic">
@@ -166,7 +168,7 @@ export function CustomCreateForm() {
 							/>
 							<div className="h-6" />
 
-							<h2 className="font-bold text-center text-theme-text-accent text-lg">
+							<h2 className="font-bold text-center text-theme-text-accent text-[1.6rem]">
 								Choose A Vice
 							</h2>
 							<input
@@ -177,7 +179,7 @@ export function CustomCreateForm() {
 
 							<div className="h-6" />
 
-							<h2 className="font-bold text-center text-theme-text-accent text-lg">
+							<h2 className="font-bold text-center text-theme-text-accent text-[1.6rem]">
 								Abilities
 							</h2>
 							<div className="flex justify-center w-full">
@@ -220,12 +222,12 @@ export function CustomCreateForm() {
 									))}
 								</div>
 							</div>
-							{gameState.heraldUnlocked && 							<div><h2 className="font-bold text-center text-theme-text-accent text-lg">
+							{gameState.heraldUnlocked && 							<div><h2 className="font-bold text-center text-theme-text-accent text-[1.6rem]">
 								The Herald
 							</h2>
 							<p>This game has unlocked <i>The Herald</i>. The Herald is not a standalone playbook, but rather a special sheet that, once unlocked by The Informals, can be added to another playbook during character creation. Playbooks not published by The Gauntlet may not be a good fit with the Herald; discuss it with your Keeper if you’re unsure. 
 							</p>
-							<input type="checkbox" {...register("isHerald")} /><label htmlFor="isHerald">I am the Herald</label>
+							<input type="checkbox" {...register("isHerald")} id="isHerald" /><label htmlFor="isHerald">I am the Herald</label>
 
 							</div>}
 						</motion.div>
@@ -246,7 +248,7 @@ export function CustomCreateForm() {
 								menu during play.
 							</p>
 							<div className="h-6" />
-							<h2 className="font-bold text-center text-theme-text-accent text-lg">
+							<h2 className="font-bold text-center text-theme-text-accent text-[1.6rem]">
 								Moves
 							</h2>
 							{watch("moves").map((move, index) => (
@@ -323,7 +325,7 @@ export function CustomCreateForm() {
 							transition={{ duration: 0.2 }}
 							key="questions"
 						>
-							<h2 className="font-bold text-center text-theme-text-accent text-lg">
+							<h2 className="font-bold text-center text-theme-text-accent text-[1.6rem]">
 								Questions
 							</h2>
 							{Object.values(watch("questions")).map((value, index) => (
@@ -376,7 +378,7 @@ export function CustomCreateForm() {
 							transition={{ duration: 0.2 }}
 							key="masks"
 						>
-							<h2 className="font-bold text-center text-theme-text-accent text-lg">
+							<h2 className="font-bold text-center text-theme-text-accent text-[1.6rem]">
 								Janus Masks
 							</h2>
 							<p>
@@ -386,7 +388,7 @@ export function CustomCreateForm() {
 								for each one.
 							</p>
 
-							<h3 className="font-bold text-center text-theme-text-accent text-lg">
+							<h3 className="font-bold text-center text-theme-text-accent text-[1.6rem]">
 								Masks of Past
 							</h3>
 							{Object.values(watch("masksOfPast")).map((value, index) => (
@@ -426,7 +428,7 @@ export function CustomCreateForm() {
 								+
 							</button>
 
-							<h3 className="font-bold text-center text-theme-text-accent text-lg">
+							<h3 className="font-bold text-center text-theme-text-accent text-[1.6rem]">
 								Masks of Future
 							</h3>
 							{Object.values(watch("masksOfFuture")).map((value, index) => (
@@ -455,7 +457,7 @@ export function CustomCreateForm() {
 							transition={{ duration: 0.2 }}
 							key="review"
 						>
-							<h2 className="font-bold text-center text-theme-text-accent text-lg">
+							<h2 className="font-bold text-center text-theme-text-accent text-[1.6rem]">
 								Review
 							</h2>
 							<p>
@@ -464,13 +466,13 @@ export function CustomCreateForm() {
 								starting Move cannot.
 							</p>
 							<div className="h-6" />
-							<h3 className="font-bold text-center text-theme-text-accent text-lg">
+							<h3 className="font-bold text-center text-theme-text-accent text-[1.6rem]">
 								{watch("name")}
 							</h3>
 							<p>Look: {watch("look")}</p>
 							<p>Vice: {watch("vice")}</p>
 							<AbilityBoxes stats={watch("stats")} />
-							<h3 className="font-bold text-center text-theme-text-accent text-lg">
+							<h3 className="font-bold text-center text-theme-text-accent text-[1.6rem]">
 								Moves
 							</h3>
 							<p>
@@ -645,7 +647,7 @@ function WriteMoveModal({
 			}}
 			className="flex flex-col gap-2 justify-center text-theme-text-primary"
 		>
-			<h2 className="text-2xl font-bold text-center text-theme-text-accent">
+			<h2 className="text-[2rem] font-bold text-center text-theme-text-accent">
 				Write a Custom Move
 			</h2>
 			<p>Name your move below: </p>
