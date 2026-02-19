@@ -94,7 +94,7 @@ export const Masterminds: Record<string, MastermindContent> = {
 	flagg: {
 		title: "Vice Admiral Thaddeus Flagg",
 		questions: [
-			{ question: "Who or what will Admiral Flagg sacrifice to his dark god? (Complexity: 8)",
+			{ question: "Who or what will Admiral Flagg sacrifice to his dark god?",
 				layer: "Layer One: The Mastermind Question",
 				complexity: 8,
 			},
