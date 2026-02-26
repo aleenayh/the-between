@@ -4,6 +4,7 @@ import { useState } from "react"
 import { useGame } from "../../context/GameContext"
 import { resetGameToDefaults } from "../../lib/firebase"
 import { ReactComponent as Logo } from "../assets/between-logo.svg";
+import { ManagePlayers } from "../keeper/ManagePlayers";
 import { CloseButton } from "../shared/CloseButton";
 import { Section } from "../shared/Section"
 import { StyledTooltip } from "../shared/Tooltip";
@@ -50,6 +51,7 @@ export function SettingsPane({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen
             <div className="flex flex-col gap-10 justify-between h-full">
               <ThemeSelector />
               <GameInfo />
+              <ManagePlayers />
               {DEBUG_MODE && <DebugControls />}
               <Credits />
             </div>
