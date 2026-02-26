@@ -7,6 +7,7 @@ import { PullOutCharacterOverview } from "./playbooks/drawer/PullOutDrawer";
 import { ReferenceSheet } from "./referenceSheet/referenceSheet";
 import { SafetyPane } from "./safety/SafetySheet";
 import { SettingsPane } from "./settings/SettingsPane";
+import { UnsceneSheet } from "./unscenes/unsceneSheet";
 
 export function Drawers() {
 	const [refOpen, setRefOpen] = useState(false);
@@ -17,6 +18,7 @@ export function Drawers() {
 	const [hargraveHouseOpen, setHargraveHouseOpen] = useState(false);
 	const [mastermindOpen, setMastermindOpen] = useState(false);
 	const [safetyOpen, setSafetyOpen] = useState(false);
+	const [unsceneOpen, setUnsceneOpen] = useState(false);
 	return (
 		<div className="absolute top-0 left-0 w-full h-auto flex flex-col justify-start items-start pointer-events-none">
 			<ReferenceSheet isOpen={refOpen} setIsOpen={setRefOpen} />
@@ -29,6 +31,10 @@ export function Drawers() {
 			<HargraveHouseSheet
 				isOpen={hargraveHouseOpen}
 				setIsOpen={setHargraveHouseOpen}
+			/>
+			<UnsceneSheet
+				isOpen={unsceneOpen}
+				setIsOpen={setUnsceneOpen}
 			/>
 			<NotesPane isOpen={notesOpen} setIsOpen={setNotesOpen} />
 			<SafetyPane isOpen={safetyOpen} setIsOpen={setSafetyOpen} />
