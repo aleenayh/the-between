@@ -40,6 +40,8 @@ const playerSchema = z.object({
 	]).nullable().catch(null),
 });
 
+export type Player = z.infer<typeof playerSchema>;
+
 const safetySchema = z.object({
 	lines: z.array(z.string()).optional().catch(undefined),
 	veils: z.array(z.string()).optional().catch(undefined),
