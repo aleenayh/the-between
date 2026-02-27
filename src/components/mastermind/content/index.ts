@@ -20,20 +20,6 @@ export const Masterminds: Record<string, MastermindContent> = {
 				complexity: 6,
 			}
 		],
-		servants: [
-			{title: "Mr. Higgins, an enforcer",
-				description:         ["Tweed suit. Pale, oily flesh. Only speaks in questions. Mr. Higgins is Mrs. Brathwaite’s man in London. He’s a cobbler, and spends most of his days at his shop, but when Mrs. Brathwaite needs some night work done, he can be found creeping around in dark alleys, conferring with police and prostitutes alike to find whatever—or whoever—she needs. He’s a crack shot with a pistol and maintains a loose confederation of bullies and cat’s paws in case violence is the remedy called for."],
-				quotes: ["Are you going to continue being a thorn in my employer’s side? Do you know what happens to people who cross her? What if I told you I happen when people cross her? Do you suppose I have a gun in my coat? Would you guess I’m a very good shot?"],
-			},
-						{title: "The Black Laces, a gang",
-				description:         ["A loosely-organized gang of thugs and killers in the employ of Mr. Higgins. They mostly hang around his shop, waiting for orders (and annoying the living hell out of him). Some names, if you need them: Stomper, Shins, Stitcher, Welly, Kicks, Spike, Heels. "],
-				quotes: [],
-			},
-						{title: "D.I. Fairweather, a corrupt official",
-				description:         ["Clean-shaven. Fastidiously-groomed, and dressed a bit too nice for someone living on a public servant’s pay. Always licking his lips. Detective Inspector Miles Fairweather is Mrs. Brathwaite’s man inside Scotland Yard. He loves fine things, and Mrs. Brathwaite keeps him in all the silk cravats and jeweled cufflinks he could possibly want in exchange for unerringly doing her bidding. Scotland Yard is always a nuisance to Hargrave House, but D.I. Fairweather has the power to make the Hunters’ lives miserable. "],
-				quotes: ["Last night, we dragged a body out of the river. Helpfully, there were dozens of witnesses who saw what happened, and each of them—to a person—described seeing someone on the scene who fits your description exactly."],
-			},
-		],
 		layers: [
 			{
 				title: "Layer One: The Mastermind Question",
@@ -110,13 +96,6 @@ export const Masterminds: Record<string, MastermindContent> = {
 				complexity: 6,
 			}
 
-		],
-		servants:   [
-			{
-				title: "The “crew” of Chimaera",
-				description:     ["While Admiral Flagg moves in elite social circles and spends a fair amount of time at the Royal Explorers Club, his true confidantes are the survivors of HMS Chimaera. He’s so dedicated to his crew, most now middle-aged, he lets them live in his mansion on Belgrave Square. There, they relive their glory days in the Royal Navy, tell stories of their time on Chimaera, and perform strange, ritualistic reenactments of the events surrounding the Bailey expedition. They are fiercely loyal to Flagg, and happily do his bidding, no matter how violent, criminal, or taboo. When someone needs to be taught a lesson or otherwise brought before Flagg, they will form a press-gang for the purpose, forcibly bringing the target “aboard” Chimaera. Some names (and positions), if you need them: Saxon (first mate), Patterson (second mate), Bixby (quartermaster), Rolande (parson), Hemwick (surgeon), Kreel (boatswain), Haxton (carpenter), Dumpley (cook), Nemitz (watch leader), Billy (cabin “boy”)."],
-				quotes:          ["Heave ho, stars below/Chimaera finds the way/Night falls, and so we go/star-gazing in the bay/Stars above and stars below/three heads will call us home/A sweeter milk we’ll never know/but in our dreams we’ll roam. "],
-			},
 		],
 		layers:   [
 			{ title: "Layer One: The Mastermind Question",
