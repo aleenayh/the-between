@@ -48,19 +48,19 @@ export function Questions({ character }: { character: CharacterNotTroupe }) {
       )}
       <div className="flex items-center gap-2 text-left">
         <input type="checkbox" checked={true} disabled={true} />
-        <label className="text-sm" htmlFor="did-the-Hunters-resolve-a-mystery">
+        <label className="text-sm" htmlFor="did-the-Hunters-answer-question">
           <span className={`text-theme-text-primary font-bold`}>Did the Hunters answer a Question?</span>
         </label>
       </div>
       <div className="flex items-center gap-2 text-left">
         <input type="checkbox" checked={true} disabled={true} />
-        <label className="text-sm" htmlFor="did-you-roll-with-cinder">
+        <label className="text-sm" htmlFor="did-the-Hunters-resolve-a-threat">
           <span className={`text-theme-text-primary font-bold`}>Did the Hunters resolve a Threat?</span>
         </label>
       </div>
       <div className="flex items-center gap-2 text-left">
         <input type="checkbox" checked={true} disabled={true} />
-        <label className="text-sm" htmlFor="did-you-roll-with-cinder">
+        <label className="text-sm" htmlFor="echo-in-the-night">
           <span className={`text-theme-text-primary font-bold`}>Did you experience an Echo in the Night?</span>
         </label>
       </div>

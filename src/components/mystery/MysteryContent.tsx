@@ -76,7 +76,7 @@ export function MysteryContent({ mystery }: { mystery: Mystery }) {
 									onClick={onRemove}
 									className="border border-theme-border bg-theme-bg-primary hover:bg-theme-bg-accent px-2 py-1 rounded-lg text-sm text-theme-text-muted hover:text-theme-text-primary"
 								>
-									Remove this mystery
+									Remove this threat
 								</button>
 					</div>
 				)}
@@ -172,8 +172,7 @@ export function MysteryContent({ mystery }: { mystery: Mystery }) {
 											<Tooltip.Content>
 												<StyledTooltip>
 													Resolving a Question automatically clears all clues
-													marked "explained." If the Mystery has only one
-													Question, you can skip this and instead Issue Rewards.
+													marked "explained." If the Threat only has one question, you can skip this and instead remove the Threat.
 												</StyledTooltip>
 											</Tooltip.Content>
 										</Tooltip.Root>
