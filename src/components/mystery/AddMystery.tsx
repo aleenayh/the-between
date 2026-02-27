@@ -6,7 +6,7 @@ import { CloseButton } from "../shared/CloseButton"
 import { Divider } from "../shared/Divider"
 import { GlassyButton } from "../shared/GlassyButton"
 import { CountdownItem } from "./MysteryContent"
-import { type Mystery, MysteryTheme, type Question } from "./types"
+import { generateThreatId, type Mystery, MysteryTheme, type Question } from "./types"
 
 type AddMysteryFormInputs = {
   title: string
@@ -36,7 +36,7 @@ export function AddMystery() {
             <Dialog.Title className="DialogTitle">Add Threat</Dialog.Title>
           <Dialog.Description className="hidden">Add a new threat to the game.</Dialog.Description>
 
- <CustomMysteryForm setIsOpen={setIsOpen} />
+ <CustomMysteryForm setIsOpen={setIsOpen} mystery={null} />
 
         </Dialog.Content>
       </Dialog.Portal>
@@ -44,184 +44,247 @@ export function AddMystery() {
   )
 }
 
-function CustomMysteryForm({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void }) {
-  const [numberOfQuestions, setNumberOfQuestions] = useState(1)
-  const { register, handleSubmit, watch, reset, setValue } = useForm<AddMysteryFormInputs>({
-    defaultValues: {
-      title: "",
-      questions: [
-        {
-          text: "",
-          complexity: 1,
-          opportunity: "",
-        },
-      ],
-      theme: MysteryTheme.Rose,
-      countdownTotal: 3,
-    },
-  })
-  const { gameState, updateGameState } = useGame()
+export function EditMystery({ mystery }: { mystery: Mystery }) {
+	const [isOpen, setIsOpen] = useState(false);
+	return (
+		<Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
+			<Dialog.Trigger asChild>
+				<button
+					type="button"
+					className="border border-theme-border bg-theme-bg-primary hover:bg-theme-bg-accent px-2 py-1 rounded-lg text-sm text-theme-text-secondary hover:text-theme-text-primary"
+				>
+					Edit Threat
+				</button>
+			</Dialog.Trigger>
+			<Dialog.Portal>
+				<Dialog.Overlay className="DialogOverlay" style={{ zIndex: 20 }} />
+				<Dialog.Content className="DialogContent" style={{ zIndex: 30 }}>
+					<Dialog.Close asChild>
+						<CloseButton/>
+					</Dialog.Close>
+					<Dialog.Title className="DialogTitle">Edit Mystery</Dialog.Title>
+					<Dialog.Description className="hidden">
+						Edit the questions, opportunities, introduction or countdown for{" "}
+						{mystery.title}.
+					</Dialog.Description>
 
-  const addQuestion = () => {
-    setNumberOfQuestions(numberOfQuestions + 1)
-    setValue(`questions.${numberOfQuestions}.text`, "")
-    setValue(`questions.${numberOfQuestions}.complexity`, 1)
-    setValue(`questions.${numberOfQuestions}.opportunity`, "")
-  }
-  const removeQuestion = () => {
-    setValue(`questions`, watch("questions").slice(0, -1))
-  }
+					<CustomMysteryForm setIsOpen={setIsOpen} mystery={mystery} />
+				</Dialog.Content>
+			</Dialog.Portal>
+		</Dialog.Root>
+	);
+}
 
-  const onSubmit = (data: AddMysteryFormInputs) => {
-    const newMystery: Mystery = {
-      title: data.title,
-      intro: data.intro.split("\n").filter((line) => line.trim() !== ""),
-      questions: data.questions,
-      theme: data.theme,
-      countdownTotal: data.countdownTotal,
-      countdownCurrent: 0,
-    }
-    updateGameState({
-      mysteries: [...gameState.mysteries, newMystery],
-    })
-    reset()
-    setIsOpen(false)
-  }
-  return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2 overflow-y-auto max-h-[75vh]">
-      <div className="flex flex-col gap-2">
-        <label htmlFor="title" className="text-theme-text-accent text-center font-bold">
-          Title
-        </label>
-        <input
-          type="text"
-          {...register("title")}
-          id="title"
-          className="border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent"
-        />
-                <Divider />
-                <label htmlFor="title" className="text-theme-text-accent text-center font-bold">
-          Introduction
-        </label>
-        <textarea
-          {...register("intro")}
-          id="intro"
-          className="border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent"
-        />
-                
-        <Divider />
-        <div className="flex flex-col gap-2">
-          <label htmlFor="questions" className="text-theme-text-accent text-center font-bold">
-            Questions
-          </label>
-          {watch("questions").map((question: Question, index: number) => (
-            <div
-              className="flex flex-col items-stretch justify-center gap-2"
-              // biome-ignore lint/suspicious/noArrayIndexKey: order unimportant
-              key={`question-${index}`}
-              id={`questions.${index}.text`}
-            >
-              <div className="flex flex-col md:flex-row items-center gap-2">
-              <div className="flex-grow flex gap-2 items-center w-full md:w-auto">
-                <label htmlFor={`questions.${index}.text`}>Text</label>
-                <input
-                  type="text"
-                  defaultValue={question.text}
-                  {...register(`questions.${index}.text`)}
-                  className="flex-grow border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent"
-                  id={`questions.${index}.text`}
-                />
-              </div>
-              <div className="flex gap-2 items-center w-full md:w-auto">
-                <label htmlFor={`questions.${index}.complexity`}>Complexity</label>
-                <input
-                  type="number"
-                  defaultValue={question.complexity}
-                  {...register(`questions.${index}.complexity`)}
-                  min={1}
-                  max={10}
-                  id={`questions.${index}.complexity`}
-                  className="border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent"
-                />
-              </div>
-              </div>
-              <div className="flex-1 flex gap-2 items-center w-full md:w-auto">
-                <label htmlFor={`questions.${index}.opportunity`}>Opportunity</label>
-                <input
-                  type="text"
-                  id={`questions.${index}.opportunity`}
-                  defaultValue={question.opportunity}
-                  {...register(`questions.${index}.opportunity`)}
-                  className="flex-grow border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent"
-                />
-              </div>
-            </div>
-          ))}
+function CustomMysteryForm({
+	setIsOpen,
+	mystery,
+}: {
+	setIsOpen: (isOpen: boolean) => void;
+	mystery: Mystery | null;
+}) {
+	const [numberOfQuestions, setNumberOfQuestions] = useState(mystery?.questions?.length || 1);
+	const { register, handleSubmit, watch, reset, setValue } =
+		useForm<AddMysteryFormInputs>({
+			defaultValues: {
+				title: mystery?.title || "",
+				intro: mystery?.intro?.join("\n") || "",
+				questions: mystery?.questions?.map((q) => ({
+					text: q.text,
+					complexity: q.complexity,
+					opportunity: q.opportunity,
+				})) || [
+					{
+						text: "",
+						complexity: 1,
+						opportunity: "",
+					},
+				],
+				theme: mystery?.theme || MysteryTheme.Rose,
+				countdownTotal: mystery?.countdownTotal || 3,
+			},
+		});
+	const { gameState, updateGameState } = useGame();
 
-          <div className="flex gap-2 text-sm md:text-md">
-            <button
-              type="button"
-              onClick={() => addQuestion()}
-              className="w-1/2 mx-auto bg-theme-bg-accent text-theme-text-accent p-1 md:px-4 md:py-2 rounded-lg opacity-80 hover:opacity-100"
-            >
-              Add Question
-            </button>
+	const addQuestion = () => {
+		setNumberOfQuestions(numberOfQuestions + 1);
+		setValue(`questions.${numberOfQuestions}.text`, "");
+		setValue(`questions.${numberOfQuestions}.complexity`, 1);
+		setValue(`questions.${numberOfQuestions}.opportunity`, "");
+	};
+	const removeQuestion = () => {
+		setValue(`questions`, watch("questions").slice(0, -1));
+	};
 
-            <button
-              type="button"
-              onClick={() => removeQuestion()}
-              className="w-1/2 mx-auto bg-theme-bg-accent text-theme-text-accent p-1 md:px-4 md:py-2 rounded-lg opacity-80 hover:opacity-100"
-            >
-              Remove Question
-            </button>
-          </div>
-        </div>
+	const onSubmit = (data: AddMysteryFormInputs) => {
+		const newMystery: Mystery = {
+			...mystery,
+			id: mystery?.id || generateThreatId(),
+			title: data.title,
+			intro: data.intro.split("\n").filter((line) => line.trim() !== ""),
+			questions: data.questions,
+			theme: data.theme,
+			countdownTotal: data.countdownTotal,
+			countdownCurrent: mystery?.countdownCurrent || 0,
+		};
+		if (mystery) {
+			updateGameState({
+				mysteries: gameState.mysteries.map((m) =>
+					m.id === mystery.id ? newMystery : m,
+				),
+			});
+		} else {
+			updateGameState({
+				mysteries: [...gameState.mysteries, newMystery],
+			});
+		}
+		reset();
+		setIsOpen(false);
+	};
+	return (
+		<form
+			onSubmit={handleSubmit(onSubmit)}
+			className="flex flex-col gap-2 overflow-y-auto max-h-[75vh]"
+		>
+			<div className="flex flex-col gap-2">
+				<label
+					htmlFor="title"
+					className="text-theme-text-accent text-center font-bold"
+				>
+					Title
+				</label>
+				<input
+					type="text"
+					{...register("title")}
+					required
+					className="border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent"
+				/>
+				<Divider />
+				<label
+					htmlFor="title"
+					className="text-theme-text-accent text-center font-bold"
+				>
+					Introduction
+				</label>
+				<textarea
+					{...register("intro")}
+					className="border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent"
+				/>
+				<Divider />
+				<div className="flex flex-col gap-2">
+					<label
+						htmlFor="questions"
+						className="text-theme-text-accent text-center font-bold"
+					>
+						Questions
+					</label>
+					{watch("questions").map((question: Question, index: number) => (
+						<div
+							className="flex flex-col items-center gap-2"
+							// biome-ignore lint/suspicious/noArrayIndexKey: order unimportant
+							key={`question-${index}`}
+						>
+							<div className="flex items-center gap-2 w-full">
+								<div className="flex gap-2 items-center w-full">
+									<label htmlFor={`questions.${index}.text`}>Text</label>
+									<input
+										type="text"
+										defaultValue={question.text}
+										{...register(`questions.${index}.text`)}
+										required
+										className="flex-grow border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent"
+									/>
+								</div>
+								<div className="flex gap-2 items-center w-fit">
+									<label htmlFor={`questions.${index}.complexity`}>
+										Complexity
+									</label>
+									<input
+										type="number"
+										defaultValue={question.complexity}
+										{...register(`questions.${index}.complexity`)}
+										min={1}
+										max={10}
+										className="border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent"
+									/>
+								</div>
+							</div>
+							<div className="w-full flex flex-col md:flex-row items-center gap-2">
+								<div className="flex gap-2 items-center w-full">
+									<label htmlFor={`questions.${index}.opportunity`}>
+										Opportunity
+									</label>
+									<input
+										type="text"
+										defaultValue={question.opportunity}
+										{...register(`questions.${index}.opportunity`)}
+										className="w-full flex-grow border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent"
+									/>
+								</div>
+							</div>
+						</div>
+					))}
 
-        <Divider />
-        <div className="mt-4 flex flex-col md:flex-row gap-2 items-center text-sm md:text-md">
-          <div className="flex gap-2 items-center w-full md:w-auto">
-            <label htmlFor="theme">Select Countdown Theme</label>
-            <select
-              {...register("theme")}
-              id="theme"
-              className="border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent"
-            >
-              {Object.values(MysteryTheme).map((theme) => (
-                <option key={theme} value={theme}>
-                  {theme}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="flex gap-2 items-center w-full md:w-auto">
-            <label htmlFor="countdownTotal">Countdown Total</label>
-            <input
-              type="number"
-              {...register("countdownTotal")}
-              id="countdownTotal"
-              min={0}
-              max={20}
-              className="border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent"
-            />
-          </div>
-          <p className="text-xs text-theme-text-muted italic">A threat with a countdown of 0 will have no countdown timer visible to players.</p>
-        </div>
+					<div className="flex gap-2 text-sm md:text-md">
+						<button
+							type="button"
+							onClick={() => addQuestion()}
+							className="w-1/2 mx-auto bg-theme-bg-accent text-theme-text-accent p-1 md:px-4 md:py-2 rounded-lg opacity-80 hover:opacity-100"
+						>
+							Add Question
+						</button>
 
-        <div className="hidden md:block">
-          <Divider />
-          <p className="text-center italic">Preview Countdown Timer</p>
-          <Preview type={watch("theme")} total={watch("countdownTotal")} />
-        </div>
-        <Divider />
-        <button
-          type="submit"
-          className="bg-theme-bg-accent text-theme-text-accent px-4 py-2 rounded-lg opacity-80 hover:opacity-100"
-        >
-          Add Threat
-        </button>
-      </div>
-    </form>
-  )
+						<button
+							type="button"
+							onClick={() => removeQuestion()}
+							className="w-1/2 mx-auto bg-theme-bg-accent text-theme-text-accent p-1 md:px-4 md:py-2 rounded-lg opacity-80 hover:opacity-100"
+						>
+							Remove Question
+						</button>
+					</div>
+				</div>
+
+				<Divider />
+				<div className="mt-4 flex flex-col md:flex-row gap-2 items-center text-sm md:text-md">
+					<div className="flex gap-2 items-center w-full md:w-auto">
+						<label htmlFor="theme">Select Countdown Theme</label>
+						<select
+							{...register("theme")}
+							className="border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent"
+						>
+							{Object.values(MysteryTheme).map((theme) => (
+								<option key={theme} value={theme}>
+									{theme}
+								</option>
+							))}
+						</select>
+					</div>
+					<div className="flex gap-2 items-center w-full md:w-auto">
+						<label htmlFor="countdownTotal">Countdown Total</label>
+						<input
+							type="number"
+							{...register("countdownTotal")}
+							min={0}
+							max={10}
+							className="border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent"
+						/>
+					</div>
+				</div>
+
+				<div className="hidden md:block">
+					<Divider />
+					<p className="text-center italic">Preview Countdown Timer</p>
+					<Preview type={watch("theme")} total={watch("countdownTotal")} />
+				</div>
+				<Divider />
+				<button
+					type="submit"
+					className="bg-theme-bg-accent text-theme-text-accent px-4 py-2 rounded-lg opacity-80 hover:opacity-100"
+				>
+					{mystery ? "Save Threat" : "Add Threat"}
+				</button>
+			</div>
+		</form>
+	);
 }
 
 function Preview({ type, total }: { type: MysteryTheme; total: number }) {
