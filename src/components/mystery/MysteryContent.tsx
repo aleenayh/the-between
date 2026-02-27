@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useGame } from "../../context/GameContext";
 import { PlayerRole } from "../../context/types";
 import { AnswerQuestionDiceRollModal } from "../shared/DiceIndicator";
+import { GlassyButton } from "../shared/GlassyButton";
 import { Section } from "../shared/Section";
 import { StyledTooltip } from "../shared/Tooltip";
 import { themeElements } from "./themes";
@@ -355,23 +356,14 @@ function ClueSection({
 				)}
 			</div>
 
-			<form
-				onSubmit={handleSubmit(addCustomClue)}
-				className="flex gap-2 w-full"
-			>
-				<input
-					type="text"
-					placeholder="Add custom clue..."
-					className="flex-grow"
-					{...register("customClue")}
-				/>
-				<button
-					type="submit"
-					className="bg-theme-bg-secondary text-theme-text-primary px-4 py-2 rounded-lg opacity-80 hover:opacity-100 border-2 hover:bg-theme-bg-accent hover:border border-2-theme-border border-2-accent hover:text-theme-text-accent"
-				>
-					Add
-				</button>
-			</form>
+			<form onSubmit={handleSubmit(addCustomClue)} className="flex gap-2 w-full">
+        <input type="text" placeholder="Add custom clue..." className="flex-grow" {...register("customClue")} />
+        <GlassyButton
+        onClick={handleSubmit(addCustomClue)  }
+        >
+          Add
+        </GlassyButton>
+      </form>
 		</Section>
 	);
 }

@@ -9,7 +9,6 @@ import { PencilIcon } from "../playbooks/creation/PencilIconButton"
 import { parseStaticText } from "../playbooks/utils"
 import { CloseButton } from "../shared/CloseButton"
 import { Divider } from "../shared/Divider"
-import { EditableLine } from "../shared/EditableLine"
 import { GlassyButton } from "../shared/GlassyButton"
 import { Section } from "../shared/Section"
 import { StyledTooltip } from "../shared/Tooltip"
@@ -91,24 +90,12 @@ export function MastermindSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsO
 }
 
 function MastermindContent({ mastermind }: { mastermind: Mastermind }) {
-  const { user: { role }, updateGameState } = useGame()
+  const { user: { role } } = useGame()
   const [editModalOpen, setEditModalOpen] = useState(false)
   const mastermindContent = mastermind.type === "canon" ? Masterminds[mastermind.title] : undefined
   const activeQuestion = mastermind.questions.find((q) => q.isActive)
-  const stateAddedServants = mastermind.servants
 
-  const addServant = (idx:number, servant: string) => {
-    const newServants = [...(mastermind.servants ??     [])]
-    if (idx < newServants.length) {
-      newServants[idx] = servant
-    } else {
-      newServants.push(servant)
-    }
-    updateGameState({
-      mastermind: { ...mastermind, servants: newServants },
-    })
-  }
-  return ( <div className="flex flex-col gap-2 mb-2">
+  return ( <div className="w-full flex flex-col gap-2 mb-2">
     {activeQuestion && (
       <div className="flex flex-col gap-1">
         <h2 className="text-xl font-bold text-theme-text-accent">{activeQuestion.question} 
@@ -143,34 +130,6 @@ function MastermindContent({ mastermind }: { mastermind: Mastermind }) {
           {mastermindContent.layers.map((l) => (
             <LayerSection key={l.title} layer={l.title} />
           ))}
-        </Section>
-        <Section title="Servants" collapsible={true}>
-          {mastermindContent.servants.map((s) => (
-            <div key={s.title}>
-              <h3 className="text-lg font-bold text-theme-text-accent">{s.title}</h3>
-              {s.description.map((d) => (
-                <p key={d} className="text-left leading-relaxed">
-                  {parseStaticText(d)}
-                </p>
-              ))}
-              {s.quotes.length > 0 && (
-                <h3 className="text-md font-bold text-theme-text-accent text-left">Quotes</h3>
-              )}
-              {s.quotes.map((q) => (
-                <p key={q} className="text-left leading-relaxed italic">
-                  &ldquo;{parseStaticText(q)}&rdquo;
-                </p>
-              ))}
-            </div>
-          ))}
-          <div className="flex flex-col gap-2">
-            <h2 className="text-lg font-bold text-theme-text-accent">Add a Servant</h2>
-            {stateAddedServants?.map((s, idx) => (
-              <EditableLine key={`${s}-${// biome-ignore lint/suspicious/noArrayIndexKey: order unimportant
-idx}`} editable={true} text={s} onSave={(idx, value) => addServant(idx, value)} index={idx} />
-            ))}
-            <EditableLine key={`extra-servant`} editable={true} text={""} onSave={(idx, value) => addServant(idx, value)} index={(stateAddedServants?.length ?? 0)+1} />
-            </div>
         </Section>
         </Section>
       </div>)
@@ -299,7 +258,6 @@ function CanonMastermindForm({setIsOpen}: {setIsOpen: (isOpen: boolean) => void}
         type: "canon",
         layers,
         questions,
-        servants:         [],
       },
     })
     toast.success(`Mastermind changed to ${mastermindContent.title}`)
@@ -373,7 +331,6 @@ function CustomMastermindForm({setIsOpen}: {setIsOpen: (isOpen: boolean) => void
         title: data.title,
         type: "custom",
         questions,
-        servants:         [""],
       },
     })
     toast.success(`Mastermind changed to ${data.title}`)
@@ -588,14 +545,20 @@ function ClueSection({ role }: { role: PlayerRole }) {
   }
 
   return (
-    <Section title="Clues" collapsible={true} minify={true}>
-      <h3 className="text-sm text-theme-text-primary text-center">Earned Clues</h3>
-      <div className="flex gap-2 text-sm text-theme-text-muted text-left justify-center items-center">
-        <div>Earned: {earnedClues?.length}</div> <div>|</div>
-        <div> Explained: {earnedClues?.filter((clue) => clue.explained).length}</div>
-        <div>|</div> <div> Remaining: {earnedClues?.filter((clue) => !clue.explained).length}</div>
-      </div>
-      <div className="flex flex-col justify-start items-start text-left gap-2 w-full">
+    <Section title="Clues">
+<div className="flex-1 flex gap-2 text-sm text-theme-text-muted text-left justify-center items-center">
+				<div>Earned: {earnedClues?.length}</div> <div>|</div>
+				<div>
+					{" "}
+					Explained: {earnedClues?.filter((clue) => clue.explained).length}
+				</div>
+				<div>|</div>{" "}
+				<div>
+					{" "}
+					Remaining: {earnedClues?.filter((clue) => !clue.explained).length}
+				</div>
+			</div>
+			<div className="flex flex-col justify-start items-start text-left gap-2 w-full">
         <div
           key={"header-row"}
           className="grid grid-cols-[20px_20px_20px_1fr] gap-4 text-xs whitespace-nowrap overflow-ellipsis w-full"
