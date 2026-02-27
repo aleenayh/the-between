@@ -217,7 +217,7 @@ function CustomMysteryForm({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void
           type="submit"
           className="bg-theme-bg-accent text-theme-text-accent px-4 py-2 rounded-lg opacity-80 hover:opacity-100"
         >
-          Add Mystery
+          Add Threat
         </button>
       </div>
     </form>
