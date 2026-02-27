@@ -6,6 +6,7 @@ import { AnswerQuestionDiceRollModal } from "../shared/DiceIndicator";
 import { GlassyButton } from "../shared/GlassyButton";
 import { Section } from "../shared/Section";
 import { StyledTooltip } from "../shared/Tooltip";
+import { EditMystery } from "./AddMystery";
 import { themeElements } from "./themes";
 import type { Mystery } from "./types";
 
@@ -78,6 +79,7 @@ export function MysteryContent({ mystery }: { mystery: Mystery }) {
 								>
 									Remove this threat
 								</button>
+								<EditMystery mystery={mystery} />
 					</div>
 				)}
 				{mystery.countdownTotal > 0 && (

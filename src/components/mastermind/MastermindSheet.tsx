@@ -640,7 +640,7 @@ function LayerSection({ layer }: { layer: string }) {
     <p><strong>{hasQuestion.question}</strong> (Complexity: {hasQuestion.complexity})</p>
     <p className="italic text-left text-sm">Opportunity: {hasQuestion.opportunity ?? "None"}</p>
     <p className="text-left text-sm my-2 text-theme-text-muted">Click the button below to display this question to your Hunters. This does not affect earned clues for other mastermind questions.</p>
-    <button type="button" className="w-1/3 mx-auto bg-theme-bg-secondary text-theme-text-primary px-4 py-2 rounded-lg opacity-80 hover:opacity-100 border-2 hover:bg-theme-bg-accent hover:border border-2-theme-border border-2-accent hover:text-theme-text-accent" onClick={() => updateQuestion(hasQuestion.question)}>Display this question</button></div>}
+    <button type="button" className="w-1/3 mx-auto bg-theme-bg-secondary text-theme-text-primary px-4 py-2 rounded-lg opacity-80 hover:opacity-100 border border-theme-border-accent hover:bg-theme-bg-accent hover:text-theme-text-accent hover:border-theme-text-accent" onClick={() => updateQuestion(hasQuestion.question)}>Display this question</button></div>}
               
               
               
