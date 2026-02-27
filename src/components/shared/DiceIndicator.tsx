@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Dialog, Tooltip } from "radix-ui";
 import { useEffect, useId, useState } from "react";
 import { useGame } from "../../context/GameContext";
+import { usePreferences } from "../../context/PreferencesContext";
 import { ReactComponent as DiceIcon } from "../assets/dice.svg";
 import type { Mystery, Question } from "../mystery/types";
 import { StyledTooltip } from "./Tooltip";
@@ -88,6 +89,7 @@ export function AnswerQuestionDiceRollModal({
 	question: Question;
 }) {
 	const id = useId();
+	const { prefersImmediateDice, prefersReducedMotion } = usePreferences();
 	const resetDice = (number: number) => {
 		return Array.from({ length: number }, (_, index) => ({
 			id: `${id}-${index}`,
@@ -141,7 +143,7 @@ export function AnswerQuestionDiceRollModal({
 						: m,
 				),
 			});
-		}, 1500);
+		}, prefersImmediateDice ? 0 : 1500);
 	};
 
 	const handleRoll = () => {
@@ -162,9 +164,11 @@ export function AnswerQuestionDiceRollModal({
 			}));
 
 			setDice(rolledDice);
-			setBounceValue(true);
+			if (!prefersImmediateDice && !prefersReducedMotion) {
+				setBounceValue(true);
+			}
 			calcTotal(rolledDice);
-		}, 2500);
+		}, prefersImmediateDice ? 0 : 2500);
 	};
 
 	const handleOpenChange = (open: boolean) => {
@@ -271,6 +275,7 @@ export function DieComponent({
 	id: string;
 	index: number;
 }) {
+	const { prefersReducedMotion } = usePreferences();
 	const die = dice.find((die) => die.id === `${id}-${index}`);
 	if (!die) {
 		return null;
@@ -278,10 +283,10 @@ export function DieComponent({
 	return (
 		<div
 			key={die.id}
-			className={`diceBase ${die.exclude ? "diceExcluded" : ""} ${die.isRolling ? "diceRolling" : ""}`}
+			className={`diceBase ${die.exclude ? "diceExcluded" : ""} ${die.isRolling && !prefersReducedMotion ? "diceRolling" : ""}`}
 		>
 			<AnimatePresence>
-				{die.isRolling ? (
+				{die.isRolling && !prefersReducedMotion ? (
 					<div className="diceRollingIcon" />
 				) : (
 					<motion.div
@@ -291,7 +296,7 @@ export function DieComponent({
 						transition={{ duration: 0.5 }}
 						className="text-xl font-bold"
 					>
-						{die.value}
+						{die.isRolling ? "?" : die.value}
 					</motion.div>
 				)}
 			</AnimatePresence>

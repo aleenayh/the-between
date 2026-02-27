@@ -4,12 +4,14 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "react-hot-toast"
 import { useGame } from "../../context/GameContext"
+import { usePreferences } from "../../context/PreferencesContext"
 import { PlayerRole } from "../../context/types"
 import { PencilIcon } from "../playbooks/creation/PencilIconButton"
 import { parseStaticText } from "../playbooks/utils"
 import { CloseButton } from "../shared/CloseButton"
 import { Divider } from "../shared/Divider"
 import { GlassyButton } from "../shared/GlassyButton"
+import { PullOutDrawer } from "../shared/PullOutDrawer"
 import { Section } from "../shared/Section"
 import { StyledTooltip } from "../shared/Tooltip"
 import { ReactComponent as MastermindIcon } from "./chess.svg"
@@ -46,17 +48,7 @@ export function MastermindSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsO
         </Tooltip.Root>
 
       )}
-      <AnimatePresence>
-        {isOpen && (
-          <div>
-              <motion.div
-                initial={{ left: "-100%" }}
-                animate={{ left: 0 }}
-                exit={{ left: "-100%" }}
-                transition={{ duration: 1 }}
-                className="absolute top-0 left-0 w-full md:w-1/2 h-screen flex flex-col justify-start items-center bg-theme-bg-primary border-r border-theme-border-accent rounded-lg p-4 z-10 transition-all ease-linear overflow-y-auto pointer-events-auto"
-              >
-                <CloseButton onClick={() => setIsOpen(!isOpen)} />
+      <PullOutDrawer isOpen={isOpen} setIsOpen={setIsOpen}>
                 <h1 className="text-[2rem] font-bold text-theme-text-accent mb-10">{mastermindContent?.title ?? mastermind?.title ??"Mastermind Conspiracy"}</h1>
                 {mastermind && (<MastermindContent mastermind={mastermind}/>             )}
                {role === PlayerRole.KEEPER && (
@@ -81,10 +73,7 @@ export function MastermindSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsO
                     </Dialog.Portal>
                   </Dialog.Root>
                 )}
-              </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+          </PullOutDrawer>
     </div>
   )
 }
@@ -164,6 +153,7 @@ function SwitchQuestionsCustomMastermind({ mastermind }: { mastermind: Mastermin
 }
 
 function MastermindForm({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void }) {
+  const { prefersReducedMotion } = usePreferences();
   const [formType, setFormType] = useState<"canon" | "custom">("canon")
   return (
       <div className="flex flex-col gap-2 items-center justify-start my-4 min-h-[20rem]">
@@ -200,9 +190,9 @@ function MastermindForm({ setIsOpen }: { setIsOpen: (isOpen: boolean) => void })
         <AnimatePresence>
         <motion.div
         className="w-full absolute top-0 left-0"
-        initial={{ left: formType === "canon" ? "0" : "100%" }}
-        animate={{ left: 0}}
-        exit={{ left: formType === "canon" ? "-100%" : "100%" }}
+        initial={{ left: prefersReducedMotion ? 0 : formType === "canon" ? "0" : "100%", opacity: 0 }}
+        animate={{ left: 0, opacity: 1 }}
+        exit={{ left: prefersReducedMotion ? 0 : formType === "canon" ? "-100%" : "100%", opacity: 0 }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
         key={formType}
         >

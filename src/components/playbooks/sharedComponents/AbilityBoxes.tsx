@@ -1,6 +1,7 @@
 import { Dialog } from "radix-ui"
 import { useId, useState } from "react"
 import { useGame } from "../../../context/GameContext"
+import { usePreferences } from "../../../context/PreferencesContext"
 import { CloseButton } from "../../shared/CloseButton"
 import { DieComponent, rollDie } from "../../shared/DiceIndicator"
 import type { Abilities, Abilities as AbilityType } from "../types"
@@ -53,6 +54,7 @@ type Die = {
 export function AbilityBox({ ability, value }: AbilityBoxProps) {
   const [rollType, setRollType] = useState<"regular" | "advantage" | "disadvantage">("regular")
   const id = useId()
+  const { prefersImmediateDice, prefersReducedMotion } = usePreferences();
   const resetDice = (number: number) => {
     return Array.from({ length: number }, (_, index) => ({
       id: `${id}-${index}`,
@@ -89,7 +91,7 @@ export function AbilityBox({ ability, value }: AbilityBoxProps) {
             : player,
         ),
       })
-    }, 1500)
+    }, prefersImmediateDice ? 0 : 1500)
   }
 
   const handleRoll = () => {
@@ -134,14 +136,18 @@ export function AbilityBox({ ability, value }: AbilityBoxProps) {
           }))
 
           setDice(finalDice)
-          setBounceValue(true)
+          if (!prefersImmediateDice && !prefersReducedMotion)           {
+            setBounceValue(true)
+          }
           calcTotal(finalDice)
-        }, 1200)
+        }, prefersImmediateDice ? 0 : 1200)
       } else {
-        setBounceValue(true)
+        if (!prefersImmediateDice && !prefersReducedMotion)           {
+          setBounceValue(true)
+        }
         calcTotal(rolledDice)
       }
-    }, 2500)
+    }, prefersImmediateDice ? 0 : 2500)
   }
 
   const handleOpenChange = (open: boolean) => {
