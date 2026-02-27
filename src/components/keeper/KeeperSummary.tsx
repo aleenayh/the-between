@@ -3,6 +3,7 @@ import { InformalsSummaryKeeper } from "../playbooks/informals/InformalsSummaryK
 import { Conditions } from "../playbooks/sharedComponents/Conditions"
 import { type Character, playbookKeys } from "../playbooks/types"
 import { CopyInvite } from "../settings/GameInfo"
+import { DiceIndicator } from "../shared/DiceIndicator"
 import { PlayerPill } from "../shared/PlayerPill"
 
 export function KeeperSummary() {
@@ -23,6 +24,7 @@ export function KeeperSummary() {
               className="border-2 border-theme-border-accent bg-theme-bg-primary rounded-lg p-4 relative"
             >
               <h2 className="text-[1.6rem] whitespace-normal text-balance mx-auto">{character.name}</h2>
+              <DiceIndicator playerId={character.playerId} />
               <PlayerPill playerId={character.playerId} />
               <Conditions character={character} />
             </div>

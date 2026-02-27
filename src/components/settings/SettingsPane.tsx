@@ -180,21 +180,25 @@ function PreferencesControls() {
 				<Switch.Root
 					checked={!prefersImmediateDice}
 					onCheckedChange={(checked) => saveImmediateDicePreference(!checked)}
-					className="flex gap-2 items-center data-[state=checked]:bg-theme-bg-secondary border border-theme-border-accent  h-4 w-9 rounded-full bg-theme-bg-primary p-px transition shadow-inner shadow-black/20"
+					className="flex gap-2 items-center data-[state=checked]:bg-theme-bg-primary border border-theme-border-accent  h-4 w-9 rounded-full bg-theme-bg-secondary p-px transition shadow-inner shadow-black/20"
 				>
 					<Switch.Thumb className="data-[state=checked]:translate-x-4 block h-3 w-4 rounded-full bg-theme-accent-primary shadow-sm transition" />
 				</Switch.Root>
-				<div>Roll dice instantly</div>
+				<div>Roll dice instantly: <Tooltip.Root><Tooltip.Trigger asChild><span className="font-bold text-theme-text-accent">    {prefersImmediateDice ? "ON" : "OFF"}</span></Tooltip.Trigger><Tooltip.Content className="z-30" side="right"><StyledTooltip>    {prefersImmediateDice
+      ? "Dice results are reported immediately when you click to roll."
+      : "App simulates the time it takes to roll physical dice before showing results."}</StyledTooltip></Tooltip.Content></Tooltip.Root></div>
 			</div>
 			<div className="flex gap-2 justify-start items-center">
 				<Switch.Root
 					checked={!prefersReducedMotion}
 					onCheckedChange={(checked) => saveMotionPreference(!checked)}
-					className="flex gap-2 items-center data-[state=checked]:bg-theme-bg-secondary border border-theme-border-accent  h-4 w-9 rounded-full bg-theme-bg-primary p-px transition shadow-inner shadow-black/20"
+					className="flex gap-2 items-center data-[state=checked]:bg-theme-bg-primary border border-theme-border-accent  h-4 w-9 rounded-full bg-theme-bg-secondary p-px transition shadow-inner shadow-black/20"
 				>
 					<Switch.Thumb className="data-[state=checked]:translate-x-4 block h-3 w-4 rounded-full bg-theme-accent-primary shadow-sm transition" />
 				</Switch.Root>
-				<div>Reduce motion</div>
+				<div>Reduce motion: <Tooltip.Root><Tooltip.Trigger asChild><span className="font-bold text-theme-text-accent">    {prefersReducedMotion ? "ON" : "OFF"}</span></Tooltip.Trigger><Tooltip.Content className="z-30" side="right"><StyledTooltip>    {prefersReducedMotion
+      ? "Disables animations and transitions that use motion. This includes the spin on dice rolls."
+      : "Enables all animations and transitions."}</StyledTooltip></Tooltip.Content></Tooltip.Root></div>
 			</div>
 		</div>
 	);
