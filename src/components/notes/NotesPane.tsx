@@ -1,10 +1,9 @@
-import { AnimatePresence, motion } from "framer-motion";
 import { Tooltip } from "radix-ui";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { useGame } from "../../context/GameContext";
-import { CloseButton } from "../shared/CloseButton";
 import { GlassyButton } from "../shared/GlassyButton";
+import { PullOutDrawer } from "../shared/PullOutDrawer";
 import { StyledTooltip } from "../shared/Tooltip";
 import { ReactComponent as NotesIcon } from "./quill.svg";
 
@@ -52,16 +51,10 @@ export function NotesPane({
 				</Tooltip.Portal>
 			</Tooltip.Root>
 
-			<AnimatePresence>
-				{isOpen && (
-					<motion.div
-						initial={{ left: "-100%" }}
-						animate={{ left: 0 }}
-						exit={{ left: "-100%" }}
-						transition={{ duration: 1 }}
-						className="absolute top-0 left-0 w-full md:w-1/2 h-screen flex flex-col justify-start items-center bg-theme-bg-primary border-r border-theme-border-accent rounded-lg p-4 z-10 transition-all ease-linear overflow-y-auto pointer-events-auto"
-					>
-						<CloseButton onClick={() => setIsOpen(!isOpen)} />
+			<PullOutDrawer 
+				isOpen={isOpen}
+				setIsOpen={setIsOpen}
+			>
 						<h1 className="text-[2rem] font-bold text-theme-text-accent mb-6">
 							Notes
 						</h1>
@@ -84,9 +77,7 @@ export function NotesPane({
 								devices and can be lost if you clear cache.
 							</p>
 						</div>
-					</motion.div>
-				)}
-			</AnimatePresence>
+			</PullOutDrawer>
 		</div>
 	);
 }

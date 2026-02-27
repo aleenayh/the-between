@@ -1,8 +1,7 @@
-import { AnimatePresence, motion } from "framer-motion"
 import { Tooltip } from "radix-ui";
 import { useState } from "react"
 import { ReactComponent as Logo } from "../assets/between-logo.svg";
-import { CloseButton } from "../shared/CloseButton";
+import { PullOutDrawer } from "../shared/PullOutDrawer";
 import { StyledTooltip } from "../shared/Tooltip";
 import { ReactComponent as BookIcon } from "./book.svg"
 
@@ -25,18 +24,7 @@ export function ReferenceSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsOp
         </Tooltip.Content>
       </Tooltip.Root>
 
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ left: "-100%" }}
-            animate={{ left: 0 }}
-            exit={{ left: "-100%" }}
-            transition={{ duration: 1 }}
-            className="absolute top-0 left-0 w-full md:w-1/2 h-screen flex flex-col justify-start items-center bg-theme-bg-primary border-r border-theme-border-accent rounded-lg p-4 z-10 transition-all ease-linear overflow-y-auto pointer-events-auto"
-          >
-            <CloseButton 
-            onClick={() => setIsOpen(!isOpen)}
-            />
+      <PullOutDrawer isOpen={isOpen} setIsOpen={setIsOpen}>
             <h1 className="flex justify-center w-full text-theme-text-accent">
               <Logo className="w-1/4 h-auto mx-auto mb-4" />
             </h1>
@@ -45,9 +33,7 @@ export function ReferenceSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsOp
               <MovesSection />
               <PhaseSection />
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        </PullOutDrawer>
     </div>
   )
 }

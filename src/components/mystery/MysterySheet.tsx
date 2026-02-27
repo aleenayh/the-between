@@ -3,7 +3,7 @@ import { Tooltip } from "radix-ui";
 import { useState } from "react";
 import { useGame } from "../../context/GameContext";
 import { PlayerRole } from "../../context/types";
-import { CloseButton } from "../shared/CloseButton";
+import { PullOutDrawer } from "../shared/PullOutDrawer";
 import { StyledTooltip } from "../shared/Tooltip";
 import { AddMystery } from "./AddMystery";
 import { ReactComponent as HourglassIcon } from "./hourglass.svg";
@@ -42,23 +42,11 @@ export function MysterySheet({
 				<StyledTooltip>View active threats and track clues.</StyledTooltip>
 			</Tooltip.Content>
 			</Tooltip.Root>
-
-			<AnimatePresence>
-				{isOpen && (
-					<motion.div
-						initial={{ left: "-100%" }}
-						animate={{ left: 0 }}
-						exit={{ left: "-100%" }}
-						transition={{ duration: 1 }}
-						className="absolute top-0 left-0 w-full md:w-1/2 h-screen flex flex-col justify-start items-center bg-theme-bg-primary border-r border-theme-border-accent rounded-lg p-4 z-10 transition-all ease-linear overflow-y-auto pointer-events-auto"
-					>
-						<CloseButton
-						onClick={() => setIsOpen(!isOpen)}
-						/>
-						<h1 className="text-[2rem] font-bold text-theme-text-accent mb-4">
+		<PullOutDrawer isOpen={isOpen} setIsOpen={setIsOpen}>
+			<h1 className="text-[2rem] font-bold text-theme-text-accent mb-4">
 							Threats
-						</h1>
-						<div className="w-full flex flex-col h-full overflow-hidden justify-between items-stretch">
+			</h1>
+			<div className="w-full flex flex-col h-full overflow-hidden justify-between items-stretch">
 							{/* buttons to switch views */}
 							<div className="w-full flex flex-wrap gap-1 justify-center items-center mx-auto border-b-2 border-theme-border pb-2">
 								{mysteries &&
@@ -106,10 +94,8 @@ export function MysterySheet({
 
 							{/* add mystery button - footer  */}
 							{role === PlayerRole.KEEPER && <AddMystery />}
-						</div>
-					</motion.div>
-				)}
-			</AnimatePresence>
+			</div>
+		</PullOutDrawer>
 		</div>
 	);
 }

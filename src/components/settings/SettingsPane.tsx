@@ -1,11 +1,11 @@
-import { AnimatePresence, motion } from "framer-motion"
-import { Tooltip } from "radix-ui";
+import { Switch, Tooltip } from "radix-ui";
 import { useState } from "react"
 import { useGame } from "../../context/GameContext"
+import { usePreferences } from "../../context/PreferencesContext"
 import { resetGameToDefaults } from "../../lib/firebase"
 import { ReactComponent as Logo } from "../assets/between-logo.svg";
 import { ManagePlayers } from "../keeper/ManagePlayers";
-import { CloseButton } from "../shared/CloseButton";
+import { PullOutDrawer } from "../shared/PullOutDrawer";
 import { Section } from "../shared/Section"
 import { StyledTooltip } from "../shared/Tooltip";
 import { ReactComponent as CogIcon } from "./cog.svg"
@@ -33,16 +33,7 @@ export function SettingsPane({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen
         </Tooltip.Content>
       </Tooltip.Root>
 
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ left: "-100%" }}
-            animate={{ left: 0 }}
-            exit={{ left: "-100%" }}
-            transition={{ duration: 1 }}
-            className="absolute top-0 left-0 w-full md:w-1/2 h-screen flex flex-col justify-start items-center bg-theme-bg-primary border-r border-theme-border-accent rounded-lg p-4 z-10 transition-all ease-linear overflow-y-auto pointer-events-auto"
-          >
-            <CloseButton onClick={() => setIsOpen(!isOpen)} />
+      <PullOutDrawer isOpen={isOpen} setIsOpen={setIsOpen}>
             <h1 className="flex justify-center w-full text-theme-text-accent">
               <Logo className="w-1/3 h-auto mx-auto mb-4" />
             </h1>
@@ -50,14 +41,13 @@ export function SettingsPane({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen
             <h1 className="text-[2rem] font-bold text-theme-text-accent mb-10">Settings</h1>
             <div className="flex flex-col gap-10 justify-between h-full">
               <ThemeSelector />
+              <PreferencesControls/>
               <GameInfo />
               <ManagePlayers />
               {DEBUG_MODE && <DebugControls />}
               <Credits />
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        </PullOutDrawer>
     </div>
   )
 }
@@ -174,6 +164,42 @@ function ThemeSelector() {
     </div>
   )
 }
+
+function PreferencesControls() {
+	const {
+		prefersImmediateDice,
+		saveImmediateDicePreference,
+		prefersReducedMotion,
+		saveMotionPreference,
+	} = usePreferences();
+
+	return (
+		<div>
+			<h3 className="text-lg font-bold text-theme-text-accent">Preferences</h3>
+			<div className="flex gap-2 justify-start items-center">
+				<Switch.Root
+					checked={!prefersImmediateDice}
+					onCheckedChange={(checked) => saveImmediateDicePreference(!checked)}
+					className="flex gap-2 items-center data-[state=checked]:bg-theme-bg-secondary border border-theme-border-accent  h-4 w-9 rounded-full bg-theme-bg-primary p-px transition shadow-inner shadow-black/20"
+				>
+					<Switch.Thumb className="data-[state=checked]:translate-x-4 block h-3 w-4 rounded-full bg-theme-accent-primary shadow-sm transition" />
+				</Switch.Root>
+				<div>Roll dice instantly</div>
+			</div>
+			<div className="flex gap-2 justify-start items-center">
+				<Switch.Root
+					checked={!prefersReducedMotion}
+					onCheckedChange={(checked) => saveMotionPreference(!checked)}
+					className="flex gap-2 items-center data-[state=checked]:bg-theme-bg-secondary border border-theme-border-accent  h-4 w-9 rounded-full bg-theme-bg-primary p-px transition shadow-inner shadow-black/20"
+				>
+					<Switch.Thumb className="data-[state=checked]:translate-x-4 block h-3 w-4 rounded-full bg-theme-accent-primary shadow-sm transition" />
+				</Switch.Root>
+				<div>Reduce motion</div>
+			</div>
+		</div>
+	);
+}
+
 
 function Credits() {
   return (
