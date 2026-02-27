@@ -160,7 +160,7 @@ export function MysteryContent({ mystery }: { mystery: Mystery }) {
 								{role === PlayerRole.KEEPER && (
 									<div className="flex flex-col gap-2 justify-center items-center">
 										<Tooltip.Root>
-											<Tooltip.Trigger>
+											<Tooltip.Trigger asChild>
 												<button
 													type="button"
 													className="border border-theme-border bg-theme-bg-primary hover:bg-theme-bg-accent px-2 py-1 rounded-lg text-sm text-theme-text-secondary hover:text-theme-text-primary"
