@@ -328,6 +328,7 @@ export function CustomCreateForm() {
 							<h2 className="font-bold text-center text-theme-text-accent text-[1.6rem]">
 								Questions
 							</h2>
+							<p className="text-xs text-left text-theme-text-muted">The first three questions are already added; only include playbook-specific questions below.</p>
 							{Object.values(watch("questions")).map((value, index) => (
 								<div
 									className="flex items-center justify-center"

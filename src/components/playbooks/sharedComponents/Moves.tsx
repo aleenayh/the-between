@@ -1113,6 +1113,12 @@ function AperturesOfTheAwakenedMind({ character }: { character: CharacterNotTrou
 		const newApertures = [...apertures]
 		newApertures[idx] = 1
 
+		const alreadyHasThisAperture = character.moves.some((m) => m.title === title)
+		if (alreadyHasThisAperture) {
+			toast.error("You already have this Aperture. You cannot unlock it again.")
+			return
+		}
+
 		const newMove = apertureDefs.find((def) => def.title === title)
 		if (!newMove) return
 		const constructedMove = {
@@ -1144,7 +1150,7 @@ function AperturesOfTheAwakenedMind({ character }: { character: CharacterNotTrou
 					<span key={`${title}-${letterIdx}-${letter}`} className={isUnlocked ? "wavyText" : ""}>{letter === " " ? "\u00A0" : letter}</span>
 				))
 				return <button type="button" key={`aperture-${// biome-ignore lint/suspicious/noArrayIndexKey: visual only
-idx}`} className={`w-full flex justify-start items-center gap-1 text-left text-xs ${isUnlocked ? "text-theme-text-accent" : "text-theme-text-muted hover:text-theme-text-accent"}`} onClick={() => unlockAperture(idx, title)}>{isUnlocked ? <ApertureIcon className="w-6 h-6" /> : "Unlock"}<span>{titleLetters}</span></button>
+idx}`} className={`w-full flex justify-start items-center gap-1 text-left text-xs ${isUnlocked ? "text-theme-text-accent" : "text-theme-text-muted hover:text-theme-text-accent"}`} disabled={character.moves.some((m) => m.title === title)} onClick={() => unlockAperture(idx, title)}>{isUnlocked ? <ApertureIcon className="w-6 h-6" /> : "Unlock"}<span>{titleLetters}</span></button>
 			})}
 		</div></div>)}
 	</div>)
