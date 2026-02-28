@@ -10,7 +10,7 @@ export const facsimilePlaybook: PlaybookBase = {
       "ringlets of ultra-fine copper filament", "oil-stained dress shirt, ball joint articulation points", "interchangeable faceplates featuring various painted expressions", "dough-colored wool cap", "phosphorescent blue eyes", "human hair wig", "pale milky ichor", "bonnet with taffeta ribbon", "white formal gloves", "collared moth-bitten cape", "antique gold brooch with jade cricket", "sapphire blue brocade waistcoat", "uncanny smile", "jabot with ivory cameo pendant of your Creator", "shoplifted cigar", "collapsible metal parasol", "perfume to mask the scent of wood varnish and oil", "Roman nose", "leather ankle boots with contrast quarter", "sailor shirt with frayed neckerchief", "lace manchette gloves", "bombazine skirt with crinoline and chantilly petticoat", "exposed clockwork mechanics from the neck down ",  
     ],
     vices: [
-      "cleaning and tuning up your parts" , "admiring children at play", "befriending strays", "etiquette training", "pantomime"  
+      "cleaning and tuning up your parts" , "admiring children at play", "befriending strays", "etiquette training", "panto"  
     ],
     questions: [
       "Did you attempt to blend into London society to avoid arousing suspicion of your otherness?",

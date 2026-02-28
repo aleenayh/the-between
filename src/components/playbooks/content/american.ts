@@ -164,6 +164,15 @@ export const americanPlaybook: PlaybookBase = {
 				"<strong>On a 12+</strong>, you take a memento; ask another Hunter what it is and then put it in your Personal Quarters.",
 			],
 		},
+		{ title: "Tall Tales",
+			text:   [
+				"When you tell a story from back home that is wildly unbelievable in order to charm someone, roll with Presence.","<li><strong>On a hit,</strong> they fall for your charm and do as you wish OR reveal a Clue, your choice.</li>",  "<li><strong>On a 10+,</strong> they won’t ask for anything in return.</li>", "<li><strong>On a 12+,</strong> they also give you a keepsake to remember them by; ask another Hunter what it is and then write it down in your Personal Quarters.</li>"
+			],
+		},
+		{ title: "Disguise Kit",
+			text: ["You have a trunk full of costumes, wigs, makeup, props, and other supplies to help you look like someone you are not. When you <strong>rifle through the trunk,</strong> add a costume to your Personal Quarters. You can do this up to five times. "],
+			checkboxes: 5,
+		}
 	],
 	advancements: [
 		"Increase an ability modifier by 1 (max 3)",

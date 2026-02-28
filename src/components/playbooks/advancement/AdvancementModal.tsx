@@ -930,6 +930,17 @@ function DollPartAdvancement({ character, closeModal, advancementIndex, mode }: 
     const { partName } = data
   const newAdvancements = [...character.advancements]
   newAdvancements[advancementIndex] = 1
+  const adjustedAbiliities = { ...character.abilities }
+
+  const partIsEquipped = coreMove.parts.some((p)=> p.name === partName && p.equipped)
+  if (partIsEquipped) {
+    const part = coreMove.parts.find((p)=> p.name === partName)
+    if (!part) {
+      toast.error("Error auotmatically applying your ability increase. Unequip and re-equip this part to see adjustments.")
+    } else {
+      adjustedAbiliities[part?.ability] = (adjustedAbiliities[part?.ability] ?? 0) + 1
+    }
+  }
   
   updateGameState({
     players: gameState.players.map((player) =>
@@ -938,6 +949,7 @@ function DollPartAdvancement({ character, closeModal, advancementIndex, mode }: 
             ...player,
             character: {
               ...character,
+              abilities: adjustedAbiliities,
               coreMoveState: { ...coreMove, parts: coreMove.parts.map((p) => p.name === partName ? { ...p, adjustment: p.adjustment + 1 } : p) },
               advancements: newAdvancements,
             },
