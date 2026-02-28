@@ -44,6 +44,11 @@ export const mysterySchema = z.object({
 	.default(() => generateThreatId()),
 	title: z.string().catch(catchWithWarning("mystery.title", "Mystery")),
 	intro: z.array(z.string()).optional().catch(undefined),
+	mask: z.object({
+		title: z.string().catch(catchWithWarning("mystery.mask.title", "The Mask of...")),
+		text: z.string().catch(catchWithWarning("mystery.mask.text", "")),
+		marked: z.boolean().catch(false),
+	}).optional().catch(undefined),
 	questions: z
 		.array(questionSchema)
 		.optional()

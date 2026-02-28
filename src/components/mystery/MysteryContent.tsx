@@ -57,8 +57,18 @@ export function MysteryContent({ mystery }: { mystery: Mystery }) {
 			),
 		});
 	};
-
 	const intro = mystery.intro;
+	const mask = mystery.mask;
+
+	const onToggleMask = (checked: boolean) => {
+		if (!mask) return;
+		updateGameState({
+			mysteries: gameState.mysteries.map((m) =>
+				m.id === mystery.id ? { ...m, mask: { ...mask, marked: checked } } : m,
+			),
+		});
+	};
+
 	return (
 			<div className="flex flex-col gap-0">				
 				{intro && intro.length > 0 ? (
@@ -184,7 +194,14 @@ export function MysteryContent({ mystery }: { mystery: Mystery }) {
 						))}
 					</div>
 				)}
-				<ClueSection mystery={mystery} role={role} />
+				<ClueSection mystery={mystery}/>
+				{mask && (
+					<Section title={mask.title} collapsible leftAlign>
+						<div className="pl-4 text-sm text-left flex items-center gap-2">
+							<input type="checkbox" checked={mask.marked} onChange={(e) => onToggleMask(e.target.checked)} /> <span>{mask.text}</span>
+						</div>
+					</Section>
+				)}
 			</div>
 	);
 }
@@ -215,10 +232,8 @@ export function CountdownItem({
 
 function ClueSection({
 	mystery,
-	role,
 }: {
 	mystery: Mystery;
-	role: PlayerRole;
 }) {
 	const { updateGameState, gameState } = useGame();
 	const earnedClues = mystery.clues?.filter((clue) => clue.earned);
@@ -249,29 +264,6 @@ function ClueSection({
 			),
 		});
 		reset();
-	};
-
-	const earnClue = (clue: string, checked: boolean) => {
-		const existingClue = mystery.clues?.find((c) => c.text === clue);
-		const newClues =
-			existingClue && mystery.clues
-				? mystery.clues.map((c) =>
-						c.text === clue ? { ...c, earned: checked, removed: false } : c,
-					)
-				: [
-						...(mystery.clues ?? []),
-						{ text: clue, earned: checked, explained: false, removed: false },
-					];
-		updateGameState({
-			mysteries: gameState.mysteries.map((m) =>
-				m.title === mystery.title
-					? {
-							...m,
-							clues: [...newClues],
-						}
-					: m,
-			),
-		});
 	};
 
 	const explainClue = (clue: string, checked: boolean) => {
@@ -316,9 +308,8 @@ function ClueSection({
 			<div className="flex flex-col justify-start items-start text-left gap-2 w-full">
 				<div
 					key={"header-row"}
-					className="grid grid-cols-[20px_20px_20px_1fr] gap-4 text-xs whitespace-nowrap overflow-ellipsis items-center w-full"
+					className="hidden md:grid grid-cols-[20px_20px_1fr] gap-4 text-xs whitespace-nowrap overflow-ellipsis items-center w-full"
 				>
-					<span className="text-left -rotate-45">Earned</span>
 					<span className="text-left -rotate-45">Explained</span>
 					<span className="text-left -rotate-45">Remove</span>
 					<span></span>
@@ -327,14 +318,8 @@ function ClueSection({
 					earnedClues.map((clue) => (
 						<div
 							key={clue.text}
-							className="grid grid-cols-[20px_20px_20px_1fr] gap-2 items-center w-full"
+							className="grid grid-cols-[20px_20px_1fr] gap-2 items-center w-full"
 						>
-							<input
-								type="checkbox"
-								checked={clue.earned}
-								disabled={role !== PlayerRole.KEEPER}
-								onChange={(e) => earnClue(clue.text, e.target.checked)}
-							/>
 							<input
 								type="checkbox"
 								checked={clue.explained}
@@ -358,7 +343,7 @@ function ClueSection({
 			</div>
 
 			<form onSubmit={handleSubmit(addCustomClue)} className="flex gap-2 w-full">
-        <input type="text" placeholder="Add custom clue..." className="flex-grow" {...register("customClue")} />
+        <input type="text" placeholder="Add clue..." className="flex-grow" {...register("customClue")} />
         <GlassyButton
         onClick={handleSubmit(addCustomClue)  }
         >
