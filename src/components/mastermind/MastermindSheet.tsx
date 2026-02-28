@@ -110,7 +110,7 @@ function MastermindContent({ mastermind }: { mastermind: Mastermind }) {
       </div>
     )}
     
-    <ClueSection role={role} />
+    <ClueSection />
     {role === PlayerRole.KEEPER && <div> {mastermind.type === "canon" && mastermindContent ? (
       <div className="flex flex-col gap-2 border border-theme-border-accent rounded-lg p-2">
         <Section title="Keeper Materials" collapsible={true}>
@@ -460,7 +460,7 @@ function EditMastermindQuestionForm({question, closeModal}: {question: string, c
 }
 
 //Consider DRY up with Mystery ClueSection
-function ClueSection({ role }: { role: PlayerRole }) {
+function ClueSection() {
   const { updateGameState, gameState } = useGame()
   const { register, handleSubmit, reset } = useForm<{ customClue: string }>()
   const { mastermind: mastermindState } = gameState
@@ -494,20 +494,6 @@ function ClueSection({ role }: { role: PlayerRole }) {
       },
     })
     reset()
-  }
-
-  const earnClue = (clue: string, checked: boolean) => {
-    const existingClue = activeQuestions?.clues?.find((c) => c.text === clue)
-    const newClues =
-      existingClue && activeQuestions?.clues
-        ? activeQuestions?.clues.map((c) => (c.text === clue ? { ...c, earned: checked, removed: false } : c))
-        : [...(activeQuestions?.clues ?? []), { text: clue, earned: checked, explained: false, removed: false }]
-    updateGameState({
-      mastermind: {
-        ...mastermindState,
-        questions: mastermindState.questions?.map((q) => q.question === activeQuestions?.question ? { ...q, clues: newClues } : q),
-      },
-    })
   }
 
   const explainClue = (clue: string, checked: boolean) => {
@@ -551,22 +537,15 @@ function ClueSection({ role }: { role: PlayerRole }) {
 			<div className="flex flex-col justify-start items-start text-left gap-2 w-full">
         <div
           key={"header-row"}
-          className="grid grid-cols-[20px_20px_20px_1fr] gap-4 text-xs whitespace-nowrap overflow-ellipsis w-full"
+          className="hidden md:grid grid-cols-[20px_20px_1fr] gap-4 text-xs whitespace-nowrap overflow-ellipsis w-full"
         >
-          <span className="text-left -rotate-45">Earned</span>
           <span className="text-left -rotate-45">Explained</span>
           <span className="text-left -rotate-45">Remove</span>
           <span></span>
         </div>
         {earnedClues && earnedClues.length > 0 ? (
           earnedClues.map((clue) => (
-            <div key={clue.text} className="grid grid-cols-[20px_20px__20px_1fr] gap-2 items-center w-full">
-              <input
-                type="checkbox"
-                checked={clue.earned}
-                disabled={role !== PlayerRole.KEEPER}
-                onChange={(e) => earnClue(clue.text, e.target.checked)}
-              />
+            <div key={clue.text} className="grid grid-cols-[20px__20px_1fr] gap-2 items-center w-full">
               <input
                 type="checkbox"
                 checked={clue.explained}
@@ -587,7 +566,7 @@ function ClueSection({ role }: { role: PlayerRole }) {
         )}
       </div>
       <form onSubmit={handleSubmit(addCustomClue)} className="flex gap-2 w-full">
-        <input type="text" placeholder="Add custom clue..." className="flex-grow" {...register("customClue")} />
+        <input type="text" placeholder="Add clue..." className="flex-grow" {...register("customClue")} />
         <GlassyButton
         onClick={handleSubmit(addCustomClue)  }
         >

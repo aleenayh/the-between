@@ -14,6 +14,8 @@ type AddMysteryFormInputs = {
   questions: Question[]
   theme: MysteryTheme
   countdownTotal: number
+  maskTitle: string
+  maskText: string
 }
 
 export function AddMystery() {
@@ -101,6 +103,8 @@ function CustomMysteryForm({
 				],
 				theme: mystery?.theme || MysteryTheme.Rose,
 				countdownTotal: mystery?.countdownTotal || 3,
+				maskTitle: mystery?.mask?.title || "",
+				maskText: mystery?.mask?.text || "",
 			},
 		});
 	const { gameState, updateGameState } = useGame();
@@ -125,6 +129,11 @@ function CustomMysteryForm({
 			theme: data.theme,
 			countdownTotal: data.countdownTotal,
 			countdownCurrent: mystery?.countdownCurrent || 0,
+			mask: {
+				title: data.maskTitle,
+				text: data.maskText,
+				marked: false,
+			},
 		};
 		if (mystery) {
 			updateGameState({
@@ -276,6 +285,19 @@ function CustomMysteryForm({
 					<Preview type={watch("theme")} total={watch("countdownTotal")} />
 				</div>
 				<Divider />
+				<label
+					htmlFor="mask"
+					className="text-theme-text-accent text-center font-bold"
+				>
+					Threat-Specific Mask
+				</label>
+				<input type="text" {...register("maskTitle")} placeholder="The Mask of..." className="border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent" />
+				<textarea
+					{...register("maskText")}
+					placeholder="Optional."
+					className="border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent"
+				/>
+								<Divider />
 				<button
 					type="submit"
 					className="bg-theme-bg-accent text-theme-text-accent px-4 py-2 rounded-lg opacity-80 hover:opacity-100"
