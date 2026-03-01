@@ -5,6 +5,7 @@ import { useGame } from "../../context/GameContext";
 import { type Player, PlayerRole } from "../../context/types";
 import { playbookKeys } from "../playbooks/types";
 import { CloseButton } from "../shared/CloseButton";
+import { Section } from "../shared/Section";
 
 export function ManagePlayers() {
 	const { gameState: {players}, updateGameState, user: {role, id} } = useGame();
@@ -53,7 +54,7 @@ export function ManagePlayers() {
 
 	return (
 		<div className="flex flex-col gap-2 text-theme-text-primary">
-			<h4>Remove players or characters</h4>
+			<Section title="Remove players or characters" collapsible minify>
             <p className="italic text-xs text-left text-theme-text-muted">Retiring a character here is the same as the player doing it themselves. The player will be prompted to create a new character the next time they join the game. Removing a player will prompt them to rejoin the game if they return, and make a fresh character. This Keeper tool is intended for players who unexpectedly leave the campaign. Removing characters is <strong>PERMANENT.</strong></p>
 
             <div className="flex flex-col justify-center items-start gap-2 ">
@@ -64,6 +65,7 @@ export function ManagePlayers() {
                     </div>)
                 })}
             </div>
+            </Section>
             <Dialog.Root open={retireModalOpen} onOpenChange={setRetireModalOpen}>
                 <Dialog.Portal>
                     <Dialog.Overlay className="DialogOverlay" />

@@ -119,7 +119,7 @@ export function MobileDrawerNavigation() {
 
 	return (
 		<div className="flex md:hidden">
-			<div className="flex absolute top-0 left-0 w-full h-auto flex-col justify-start items-start pointer-events-none">
+			<div className="flex absolute top-0 left-0 w-full h-full flex-col justify-start items-start pointer-events-none pb-16">
 			<ReferenceSheet isOpen={refOpen} setIsOpen={setRefOpen} />
 			<MysterySheet isOpen={mysteryOpen} setIsOpen={setMysteryOpen} />
 			<MastermindSheet isOpen={mastermindOpen} setIsOpen={setMastermindOpen} />
