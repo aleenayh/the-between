@@ -17,7 +17,7 @@ export function SafetyPane({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: 
         <button
         type="button"
         aria-label="Open settings"
-        className="drawerButton"
+        className="hidden md:block drawerButton"
         onClick={() => setIsOpen(!isOpen)}
       >
         <HeartShieldIcon className="w-full h-full" />

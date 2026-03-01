@@ -22,7 +22,7 @@ export function SettingsPane({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen
         <button
         type="button"
         aria-label="Open settings"
-        className="drawerButton"
+        className="hidden md:block drawerButton"
         onClick={() => setIsOpen(!isOpen)}
       >
         <CogIcon className="w-full h-full" />

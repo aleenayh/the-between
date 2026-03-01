@@ -35,7 +35,7 @@ export function MastermindSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsO
           <button
           type="button"
           aria-label="Open mastermind sheet"
-          className="drawerButton"
+          className="hidden md:block drawerButton"
           onClick={() => setIsOpen(!isOpen)}
           
         >

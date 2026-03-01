@@ -38,7 +38,7 @@ export function UnsceneSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen
         <button
         type="button"
         aria-label="Open Unscenes"
-        className="drawerButton"
+        className="hidden md:block drawerButton"
         onClick={() => setIsOpen(!isOpen)}
       >
         <MoonIcon className="w-full h-full p-1" />
