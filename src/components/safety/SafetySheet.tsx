@@ -232,7 +232,7 @@ function AddLineOrVeilForm() {
 function ExplainerSections() {
   const [view, setView] = useState<"none" | "open-door" | "x-card" | "lines-veils">("none")
   return (
-    <div className="w-full flex flex-col md:grid md:grid-cols-3 gap-2">
+    <div className="w-full flex flex-col md:grid md:grid-cols-3 gap-2 p-4 pb-12 md:pb-4">
       <button
         type="button"
         className="gridButton"

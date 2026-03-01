@@ -207,7 +207,7 @@ function PreferencesControls() {
 
 function Credits() {
   return (
-    <div className="flex flex-col gap-2 justify-start items-start text-left w-full text-sm">
+    <div className="flex flex-col gap-2 justify-start items-start text-left w-full text-sm pb-12 md:pb-4">
       <h3 className="text-lg font-bold text-theme-text-accent text-center w-full">About this Site</h3>
       <p>
         Site designed and maintained by <a href="https://github.com/aleenayh">Aleena Yunuba.</a> If you encounter
