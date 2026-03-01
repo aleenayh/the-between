@@ -32,7 +32,7 @@ export function MysterySheet({
 				<button
 				type="button"
 				aria-label="Open threat sheet"
-				className="drawerButton"
+				className="hidden md:block drawerButton"
 				onClick={() => setIsOpen(!isOpen)}
 			>
 				<HourglassIcon className="w-full h-full" />

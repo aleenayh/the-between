@@ -27,8 +27,8 @@ export function HargraveHouseSheet({ isOpen, setIsOpen }: { isOpen: boolean; set
       <Tooltip.Trigger asChild>
       <button
         type="button"
-        aria-label="Open settings"
-        className="drawerButton"
+        aria-label="Open Hargrave House"
+        className="hidden md:block drawerButton"
         onClick={() => setIsOpen(!isOpen)}
       >
         <HouseIcon className="w-full h-full" />

@@ -13,7 +13,7 @@ export function ReferenceSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsOp
         <button
         type="button"
         aria-label="Open reference sheet"
-        className="drawerButton"
+        className="hidden md:block drawerButton"
         onClick={() => setIsOpen(!isOpen)}
       >
         <BookIcon className="w-full h-full" />
