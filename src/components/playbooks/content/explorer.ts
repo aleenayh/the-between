@@ -94,6 +94,7 @@ export const explorerPlaybook: PlaybookBase = {
   },
   masksPastDescription:
     "The Explorer’s Mask of the Past tells the story of a young man, called the Boy, whose village was occupied for a time by the Explorer and their expeditionary forces. Mark the first unmarked box. ",
+  masksOfFutureDescription: "Mark any box you wish.",
   masksOfPast: [
     "Narrate a flashback to the time when the Explorer first arrived at your village. Was it a joyous moment? Was there something ominous about it? ",
     "Narrate a flashback that shows your friendship with the Explorer. What kind of relationship was it? Parent and child? Teacher and pupil? Master and servant? ",

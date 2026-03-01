@@ -612,8 +612,8 @@ function DollParts({character}: {character: CharacterNotTroupe}) {
 		return (
 		<div key={`part-${// biome-ignore lint/suspicious/noArrayIndexKey: unimportant
 idx}`} className="flex flex-col gap-2 text-left border border-theme-border-accent rounded-lg p-2">
-			<div className="flex justify-center items-center gap-6">
-			<h4 className="text-sm font-bold text-theme-text-accent text-center flex-1 whitespace-nowrap">{part.name}</h4>
+			<div className="flex flex-wrap justify-center items-center gap-2 md:gap-6">
+			<h4 className="text-sm font-bold text-theme-text-accent text-center flex-1 whitespace-normal md:whitespace-nowrap">{part.name}</h4>
 			{editable && (
   <button
     type="button"
