@@ -602,8 +602,9 @@ function constructCustomCharacter(
 	};
 }
 
-function WriteMoveModal({
+export function WriteMoveModal({
 	onSubmit,
+	smallTitle = false,
 }: {
 	onSubmit: (data: {
 		title: string;
@@ -611,6 +612,7 @@ function WriteMoveModal({
 		checks: number[];
 		lines: string[];
 	}) => void;
+	smallTitle?: boolean;
 }) {
 	const { register, handleSubmit } = useForm({
 		defaultValues: {
@@ -648,9 +650,11 @@ function WriteMoveModal({
 			}}
 			className="flex flex-col gap-2 justify-center text-theme-text-primary"
 		>
-			<h2 className="text-[2rem] font-bold text-center text-theme-text-accent">
+			{smallTitle ? <h2 className="text-lg font-bold text-center text-theme-text-accent">
 				Write a Custom Move
-			</h2>
+			</h2> : <h2 className="text-[2rem] font-bold text-center text-theme-text-accent">
+				Write a Custom Move
+			</h2>}
 			<p>Name your move below: </p>
 			<input
 				type="text"
