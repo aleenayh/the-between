@@ -13,6 +13,7 @@ export function PullOutDrawer({ isOpen, setIsOpen, children }: { isOpen: boolean
   return (
     <AnimatePresence>
 		{isOpen && (
+      <>
     <motion.div
       initial={{ left: transitionLeft, y: transitionTop, opacity: transitionOpacity }}
       animate={{ left: 0, y: 0, opacity: 1 }}
@@ -22,7 +23,11 @@ export function PullOutDrawer({ isOpen, setIsOpen, children }: { isOpen: boolean
     >
       <div className="hidden md:block"><CloseButton onClick={() => setIsOpen(false)} /></div>
       {children}
-    </motion.div>)}
+    </motion.div>
+
+      <button type="button" className="hidden md:block absolute top-0 left-0 z-[9] w-full h-screen pointer-events-auto" onClick={() => setIsOpen(false)} />
+      </>
+      )}
     </AnimatePresence>  
   )
 }
