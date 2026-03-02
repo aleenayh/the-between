@@ -79,7 +79,7 @@ export const legacyPlaybook: PlaybookBase = {
       text: ["During the London Night Phase, you get 1 additional Clue on the Information Move (including on a miss) so long as there are no other Hunters present. "],
     },
     {
-      title: "…In Want of Priviledge…",
+      title: "…In Want of Privilege…",
       text: ["When you leverage your family’s name in order to gain information or assistance, roll with Presence. On a 10+, the person has a history with your family and will help you for the remainder of the phase; any information they give can be in the form of a Clue, at the Keeper’s discretion, and any rolls associated with actions they help you with are taken at advantage. On a 7-9, as above, but they will require something in return; the Keeper will say what. On a 12+, they also lean in to whisper something about the Beast. Mark your Hunt with an O. The 12+ result is no longer available once The Beast is resolved."],
     },
     {
