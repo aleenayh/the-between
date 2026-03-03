@@ -163,12 +163,21 @@ export function MysteryContent({ mystery }: { mystery: Mystery }) {
 										question={question}
 									/>
 								</div>
-								{question.opportunity && (
-									<div className="ml-2 border-l-2 px-4 border-theme-border text-sm leading-tight text-theme-text-secondary text-left">
-										<span className="italic">Opportunity:</span>{" "}
-										{question.opportunity}
-									</div>
-								)}
+								{question.opportunity &&         (Array.isArray(question.opportunity) ? (
+									<div className="flex flex-col gap-3 ml-2 border-l-2 px-4 border-theme-border text-sm leading-tight text-theme-text-secondary text-left my-1">
+          {question.opportunity.map        ((opp) => (
+          <div
+            key={question.text + opp}
+          >
+            <span className="italic">Opportunity:</span> {opp}
+          </div>
+        ))}
+		  </div>
+        ) : (
+          <div className="ml-2 border-l-2 px-4 border-theme-border text-sm leading-tight text-theme-text-secondary text-left">
+            <span className="italic">Opportunity:</span> {question.opportunity}
+          </div>
+        ))}
 								{role === PlayerRole.KEEPER && (
 									<div className="flex flex-col gap-2 justify-center items-center">
 										<Tooltip.Root>

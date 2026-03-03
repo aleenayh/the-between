@@ -94,7 +94,7 @@ function CustomMysteryForm({
 				questions: mystery?.questions?.map((q) => ({
 					text: q.text,
 					complexity: q.complexity,
-					opportunity: q.opportunity,
+					opportunity: Array.isArray(q.opportunity) ? q.opportunity.join("\n") : q.opportunity,
 				})) || [
 					{
 						text: "",
@@ -125,12 +125,16 @@ function CustomMysteryForm({
 			toast.error("You entered a Mask description, but no title. Without a title, it will not be visible to Hunters.")
 			return
 		}
+		
 		const newMystery: Mystery = {
 			...mystery,
 			id: mystery?.id || generateThreatId(),
 			title: data.title,
 			intro: data.intro.split("\n").filter((line) => line.trim() !== ""),
-			questions: data.questions,
+			questions: data.questions.map(  (q) => ({
+				...q,
+				opportunity: typeof q.opportunity === "string" && q.opportunity.includes("\n") ? q.opportunity.split("\n") : q.opportunity,
+			})),
 			theme: data.theme,
 			countdownTotal: data.countdownTotal,
 			countdownCurrent: mystery?.countdownCurrent || 0,
@@ -191,6 +195,7 @@ function CustomMysteryForm({
 					>
 						Questions
 					</label>
+					<p className="text-xs italic text-theme-text-muted">Need multiple opportunities on the same question? Separate them with a line break.</p>
 					{watch("questions").map((question: Question, index: number) => (
 						<div
 							className="flex flex-col items-center gap-2"
@@ -227,8 +232,7 @@ function CustomMysteryForm({
 									<label htmlFor={`questions.${index}.opportunity`}>
 										Opportunity
 									</label>
-									<input
-										type="text"
+									<textarea
 										defaultValue={question.opportunity}
 										{...register(`questions.${index}.opportunity`)}
 										className="w-full flex-grow border px-2 py-1 rounded-lg bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent hover:text-theme-text-accent"
