@@ -195,7 +195,7 @@ export function MysteryContent({ mystery }: { mystery: Mystery }) {
 					</div>
 				)}
 				<ClueSection mystery={mystery}/>
-				{mask && (
+				{mask?.title && (
 					<Section title={mask.title} collapsible leftAlign>
 						<div className="pl-4 text-sm text-left flex items-center gap-2">
 							<input type="checkbox" checked={mask.marked} onChange={(e) => onToggleMask(e.target.checked)} /> <span>{mask.text}</span>

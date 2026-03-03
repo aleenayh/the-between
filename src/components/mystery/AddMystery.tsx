@@ -1,6 +1,7 @@
 import { Dialog } from "radix-ui"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
+import toast from "react-hot-toast"
 import { useGame } from "../../context/GameContext"
 import { CloseButton } from "../shared/CloseButton"
 import { Divider } from "../shared/Divider"
@@ -120,6 +121,10 @@ function CustomMysteryForm({
 	};
 
 	const onSubmit = (data: AddMysteryFormInputs) => {
+		if (data.maskText && !data.maskTitle) {
+			toast.error("You entered a Mask description, but no title. Without a title, it will not be visible to Hunters.")
+			return
+		}
 		const newMystery: Mystery = {
 			...mystery,
 			id: mystery?.id || generateThreatId(),
