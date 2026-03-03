@@ -8,8 +8,7 @@ export function generateThreatId(): string {
 
 export const questionSchema = z.object({
 	text: z.string(),
-	opportunity: z
-		.string()
+	opportunity: z.union([z.array(z.string()), z.string()])
 		.catch(catchWithWarning("mystery.question.opportunity", "")),
 	complexity: z.coerce
 		.number()
