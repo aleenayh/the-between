@@ -197,8 +197,8 @@ function CustomMysteryForm({
 							// biome-ignore lint/suspicious/noArrayIndexKey: order unimportant
 							key={`question-${index}`}
 						>
-							<div className="flex items-center gap-2 w-full">
-								<div className="flex gap-2 items-center w-full">
+							<div className="flex flex-wrap md:flex-nowrap items-center gap-2 w-full">
+								<div className="flex gap-2 items-center w-full flex-grow">
 									<label htmlFor={`questions.${index}.text`}>Text</label>
 									<input
 										type="text"
