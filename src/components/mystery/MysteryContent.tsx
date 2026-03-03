@@ -1,7 +1,10 @@
-import { Tooltip } from "radix-ui";
+import { Dialog, Tooltip } from "radix-ui";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { useGame } from "../../context/GameContext";
 import { PlayerRole } from "../../context/types";
+import { CloseButton } from "../shared/CloseButton";
 import { AnswerQuestionDiceRollModal } from "../shared/DiceIndicator";
 import { GlassyButton } from "../shared/GlassyButton";
 import { Section } from "../shared/Section";
@@ -16,6 +19,9 @@ export function MysteryContent({ mystery }: { mystery: Mystery }) {
 		gameState,
 		updateGameState,
 	} = useGame();
+
+	const [confirmationModalOpen, setConfirmationModalOpen] = useState(false);
+	const [questionToResolve, setQuestionToResolve] = useState<string | null>(null);
 
 	const onToggle = (checked: boolean) => {
 		updateGameState({
@@ -37,7 +43,16 @@ export function MysteryContent({ mystery }: { mystery: Mystery }) {
 		});
 	};
 
-	const resolveQuestion = (question: string) => {
+	const openConfirmationModal = (question: string) => {
+		setQuestionToResolve(question);
+		setConfirmationModalOpen(true);
+	};
+
+	const resolveQuestion = (question: string | null) => {
+		if (!question) {
+			toast.error("Something went wrong!")
+			return;
+		}
 		const newClues = mystery.clues
 			? mystery.clues.map((c) =>
 					c.explained
@@ -56,6 +71,8 @@ export function MysteryContent({ mystery }: { mystery: Mystery }) {
 					: m,
 			),
 		});
+		setConfirmationModalOpen(false);
+		setQuestionToResolve(null);
 	};
 	const intro = mystery.intro;
 	const mask = mystery.mask;
@@ -185,7 +202,7 @@ export function MysteryContent({ mystery }: { mystery: Mystery }) {
 												<button
 													type="button"
 													className="border border-theme-border bg-theme-bg-primary hover:bg-theme-bg-accent px-2 py-1 rounded-lg text-sm text-theme-text-secondary hover:text-theme-text-primary"
-													onClick={() => resolveQuestion(question.text)}
+													onClick={() => openConfirmationModal(question.text)}
 												>
 													Resolve Question
 												</button>
@@ -211,6 +228,25 @@ export function MysteryContent({ mystery }: { mystery: Mystery }) {
 						</div>
 					</Section>
 				)}
+				<Dialog.Root open={confirmationModalOpen} onOpenChange={setConfirmationModalOpen}>
+					<Dialog.Portal>
+						<Dialog.Overlay className="DialogOverlay" />
+						<Dialog.Content className="DialogContent" style={{ zIndex: 30 }}>
+							<Dialog.Close asChild>
+								<CloseButton/>
+							</Dialog.Close>
+							<Dialog.Title className="DialogTitle">Resolve Question</Dialog.Title>
+							<Dialog.Description className="DialogDescription italic">{questionToResolve}</Dialog.Description>
+							<div className="text-sm text-theme-text-muted">This will clear all clues marked "explained", listed below, as well as the question itself. Other clues will remain for use in subsequent questions.</div>
+							<ul className="flex flex-col ml-4 list-disc list-inside text-sm">
+								{mystery.clues?.filter((clue) => clue.explained).map((clue) => (
+									<li key={clue.text}>{clue.text}</li>
+								))}
+								</ul>
+								<div className="flex justify-center items-center"><button type="button" className="text-theme-text-primary bg-theme-bg-primary hover:bg-theme-bg-accent border border-theme-border-accent rounded-lg p-1" onClick={() => resolveQuestion(questionToResolve)}>Confirm</button></div>
+						</Dialog.Content>
+					</Dialog.Portal>
+				</Dialog.Root>
 			</div>
 	);
 }
