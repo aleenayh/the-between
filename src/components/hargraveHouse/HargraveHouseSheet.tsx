@@ -1,7 +1,5 @@
 import { Dialog, Tooltip,} from "radix-ui"
 import { useState } from "react"
-import { useForm } from "react-hook-form"
-import toast from "react-hot-toast"
 import { useGame } from "../../context/GameContext"
 import { type GameState, PlayerRole } from "../../context/types"
 import { playbookKeys } from "../playbooks/types"
@@ -13,11 +11,12 @@ import { PullOutDrawer } from "../shared/PullOutDrawer"
 import { RollableLine } from "../shared/RollableLine"
 import { Section } from "../shared/Section"
 import { StyledTooltip, } from "../shared/Tooltip"
+import { AddResidentForm } from "./AddResdient"
 import { residentContent } from "./content/residents"
 import { diverValues, dreamerValues, guideValues } from "./content/residents/greco"
 import { roomContent } from "./content/rooms"
 import { ReactComponent as HouseIcon } from "./house.svg"
-import type { ResidentContent, Resident as ResidentState, RoomContent } from "./types"
+import type { ResidentContent, ResidentCustomFields, Resident as ResidentState, RoomContent } from "./types"
 
 
 export function HargraveHouseSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void }) {
@@ -316,7 +315,7 @@ function Residents() {
       <h2 className="text-xl font-bold text-theme-text-accent">Residents</h2>
       {residents?.length === 0 ? <p>Hargrave House has no additional residents yet. When it does, they will appear here.</p> : <ul>
         {residents?.map((resident) => {
-          const content = residentContent[resident.key]
+          const content = resident.customFields ? resident.customFields : residentContent[resident.key]
           if (!content) return null
           return (
             <Resident key={resident.key} content={content} state={resident}/>
@@ -324,7 +323,9 @@ function Residents() {
           )}
       </ul>}
                 {role === PlayerRole.KEEPER && (
-            <Dialog.Root open={modalOpen} onOpenChange={setModalOpen}>
+            
+            <div className="w-full flex justify-center">
+              <Dialog.Root open={modalOpen} onOpenChange={setModalOpen}>
               <Dialog.Trigger asChild>
                 <GlassyButton
                   >
@@ -343,56 +344,13 @@ function Residents() {
                 </Dialog.Content>
               </Dialog.Portal>
             </Dialog.Root>
+            </div>
           )}
     </div>
   )
 }
 
-function AddResidentForm({ setIsOpen }: { setIsOpen: (open: boolean) => void }) {
-  const { gameState, updateGameState } = useGame()
-  const {register, handleSubmit, reset} = useForm<{resident: string}>({
-    defaultValues: {
-      resident: "",
-    },
-  })
-
-  const availableResidents = Object.keys(residentContent).filter((key) => !gameState.hargraveHouse.residents?.some((r) => r.key === key))
-
-  const onSubmit = (data: { resident: string }) => {
-    const content = residentContent[data.resident]
-    if (!content) {
-      toast.error("Invalid resident selected.")
-      return
-    }
-    const startingLines = content.title === "Greco, the Dream Sovereign" ? [diverValues[Math.floor(Math.random() * diverValues.length)], dreamerValues[Math.floor(Math.random() * dreamerValues.length)], guideValues[Math.floor(Math.random() * guideValues.length)]] : Array.from({ length: content.onUnlock.extraLines ?? 0 }, () => "")
-    const numberChecks = content.prompts.length + (content.onUnlock.checks ?? 0) + (content.onUnlock.inlineChecks ?? 0) + 1 //always +1 for unlock header
-    const checks =Array.from({ length: numberChecks ?? 0 }, () => 0)
-    const newResident = {
-      key: data.resident,
-      checks,
-      extraLines: startingLines,
-      unlockCheck: Array.from({ length: content.onUnlock.checks ?? 0 }, () => 0),
-    }
-    const newResidents = [...(gameState.hargraveHouse.residents ?? []), newResident]
-    updateGameState({ hargraveHouse: { ...gameState.hargraveHouse, residents: newResidents } })
-    reset()
-    setIsOpen(false)
-  }
-
-  return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
-        {availableResidents.map((resident) => (
-          <div key={resident} className="flex gap-2 items-center justify-start">
-          <input type="radio" {...register("resident")} value={resident} id={resident}/>
-          <label htmlFor={resident}>{residentContent[resident].title}</label>
-          </div>
-        ))}
-      <button type="submit" className="gridButton">Add Resident</button>
-    </form>
-  )
-}
-
-function Resident({ content, state }: { content: ResidentContent; state: ResidentState }) {
+function Resident({ content, state }: { content: ResidentContent | ResidentCustomFields; state: ResidentState }) {
   const { gameState, updateGameState, user: { role } } = useGame()
 
   const removeResident = (key: string) => {
@@ -404,7 +362,8 @@ function Resident({ content, state }: { content: ResidentContent; state: Residen
     })
   }
 
-  const { title, intro, onUnlock, prompts } = content
+  const { title, intro, prompts } = content
+  const onUnlock = "onUnlock" in content ? content.onUnlock : { title: "", text: []}
   const {checks, extraLines} = state
 
   let checkIndex = 0
@@ -451,6 +410,7 @@ function Resident({ content, state }: { content: ResidentContent; state: Residen
         return (
         <p key={prompt} className="text-sm"><input type="checkbox" checked={checks?.[index] === 1} onChange={() => setResidentCheck(index)} /> {parseStaticText(prompt)}</p>
       )})}
+      {"onUnlock" in content && <div>
       <h4 className="inline text-sm font-bold text-theme-text-accent font-[var(--header-font]"><input type="checkbox" checked={checks?.[checkIndex+1] === 1} onChange={() => setResidentCheck(checkIndex+1)} /> {onUnlock.title}: </h4>
       {onUnlock.text.map((text, index) => {
         const { elements, nextAspectIndex } = parseWithCheckboxes(text, checks ?? [], inlineCheckIndex, true, setResidentCheck)
@@ -486,6 +446,7 @@ function Resident({ content, state }: { content: ResidentContent; state: Residen
           ))}
         </div>
       )}
+      </div>}
       {role === PlayerRole.KEEPER && (
         <Tooltip.Root>
           <div className="w-1/3 mx-auto">

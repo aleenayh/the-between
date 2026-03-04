@@ -46,7 +46,7 @@ export function ControlledSection({
   leftAlign?: boolean
 }) {
   return (
-    <div className="flex flex-col gap-2 my-4 justify-center items-stretch min-w-0">
+    <div className="flex flex-col gap-2 my-4 justify-center items-stretch min-w-0 w-full">
       <h3 className={`font-bold ${leftAlign ? "text-left" : "text-center"} text-theme-text-accent ${minify ? "text-sm" : ""}`}>
         <button
           type="button"
