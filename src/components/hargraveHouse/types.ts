@@ -7,11 +7,20 @@ export type ResidentContent = {
     onUnlock: { title: string; text: string[]; checks?: number; inlineChecks?:number, extraLines?: number };
 }
 
+const residentCustomFieldsSchema = z.object({
+  title: z.string(),
+  intro: z.string(),
+  prompts: z.array(z.string()),
+})
+
+export type ResidentCustomFields = z.infer<typeof residentCustomFieldsSchema>;
+
 export const residentSchema = z.object({
     key: z.string(),
     checks: z.array(z.number()).catch([]),
     extraLines: z.array(z.string()).optional().catch(undefined),
-    unlockCheck: z.array(z.number()).catch([0])
+    unlockCheck: z.array(z.number()).catch([0]),
+    customFields: residentCustomFieldsSchema.optional().catch(undefined),
 })
 
 export type Resident = z.infer<typeof residentSchema>;
