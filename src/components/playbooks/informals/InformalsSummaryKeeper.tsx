@@ -15,7 +15,7 @@ export function InformalsSummaryKeeper({ informal }: { informal: Troupe }) {
       <h2>{activeMember ? `The Informals: ${pretty(activeMember)}` : "The Informals"}</h2>
       <div className="overflow-y-auto overflow-x-hidden min-h-0 min-w-0 flex flex-col gap-3">
         <Section title="Conditions">
-          <InformalsConditions troupe={informal} characterKey={activeMember as keyof typeof informal.members} editable={true} />
+          <InformalsConditions troupe={informal} characterKey={activeMember} editable={true} />
         </Section>
         </div>
     </div>

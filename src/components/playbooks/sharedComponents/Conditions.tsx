@@ -72,7 +72,7 @@ export function Conditions({ character }: { character: CharacterNotTroupe }) {
   )
 }
 
-export function InformalsConditions({ troupe, characterKey, editable }: { troupe: Troupe, characterKey: keyof typeof troupe.members, editable: boolean }) {
+export function InformalsConditions({ troupe, characterKey, editable }: { troupe: Troupe, characterKey: keyof typeof troupe.members | undefined, editable: boolean }) {
   const {
     updateGameState,
     gameState,
@@ -81,10 +81,13 @@ export function InformalsConditions({ troupe, characterKey, editable }: { troupe
     0: false,
     1: false,
   })
-  const character = troupe.members[characterKey]
+  const character = characterKey ? troupe.members[characterKey] : undefined
+
+  if (!character) return null
 
 
   const handleSaveCondition = (index: number, value: string) => {
+    if (!characterKey || !character) return
     const defaultConditions: string[] = ["", "", ""]
     const newConditions = [...(character.conditions ?? defaultConditions)]
     newConditions[index] = value

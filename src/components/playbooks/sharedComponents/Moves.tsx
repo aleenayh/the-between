@@ -1190,7 +1190,7 @@ function DefyYourObligations({ character }: { character: CharacterNotTroupe }) {
 		const conditions = [...character.conditions]
 		const hasConditionSpace = conditions.some((condition) => condition === "" || condition === "Guilty" || condition === "Sinful")
 		if (conditions.includes("Wicked") && checked)   {
-    toast.error("You are already Wciked. You cannot take a condition and must put on the Janus Mask.")
+    toast.error("You are already Wicked. You cannot take a condition and must put on the Janus Mask.")
     return
   }
 		if (!hasConditionSpace && checked) {

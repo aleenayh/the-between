@@ -50,7 +50,7 @@ export function InformalsExpanded({ troupe }: { troupe: Troupe }) {
       {activeMemberDetails ? 
       <div className="overflow-y-auto overflow-x-hidden min-h-0 min-w-0 flex flex-col gap-3">
         <Section title="Conditions">
-          <InformalsConditions troupe={troupe} characterKey={selectedActive as keyof typeof troupe.members} editable={true} />
+          <InformalsConditions troupe={troupe} characterKey={selectedActive} editable={true} />
         </Section>
 
         <AbilityBoxes stats={adjustedForMask(activeMemberDetails.abilities, troupe.masksOfFuture)} />
@@ -271,15 +271,16 @@ function MeetInformal({ member, troupe }: { member: keyof typeof members, troupe
     })
   }
   return (
-    <div>
+    <div className="w-full flex flex-col gap-2">
       <p className="text-xs italic text-left">You are the Hargrave House Informals, a group of people in London who assist the Hunters with their investigations. You don’t know each other, and you don’t live in Hargrave House, but you are each in the employ of a resident of the house, and provide them with valuable skills and street-level knowledge they can’t get anywhere else. Let’s meet each of you in turn…</p>
       <h4 className="text-md font-bold text-center text-theme-text-accent shrink-0 whitespace-normal text-balance">Meet     {details.name}</h4>
-      <div key="extras">
+      <div key="extras" className="w-full flex flex-col">
         <div className="flex gap-2 justify-start items-center"><h3 className="text-lg font-bold text-center text-theme-text-accent shrink-0 whitespace-normal text-balance">Look:</h3> <p className="text-left text-sm text-theme-text-primary whitespace-normal ">{details.look}</p></div>
         <div className="flex gap-2 justify-start items-center"><h3 className="text-lg font-bold text-center text-theme-text-accent shrink-0 whitespace-normal text-balance">Vice:</h3> <p className="text-left text-sm text-theme-text-primary whitespace-normal ">{details.vice}</p></div>
 
         <p className="text-balance text-sm text-theme-text-primary whitespace-normal">Decide which of the other Hunters is {pretty(member)}'s Patron and add them to the line below. Then, ask the player of that Hunter for something that Hunter gave {pretty(member)} and add it to your Personal Quarters.</p>
-        <div className="flex gap-2 justify-stretch items-center"><h3 className="text-lg font-bold text-center text-theme-text-accent shrink-0 whitespace-normal text-balance">Patron:</h3> <div className="flex-grow w-full flex justify-start"><EditableLine editable={true} index={0} text={troupe.members[member].patron} onSave={(_index, value) => handleSetPatron(member, value)} /></div></div>
+        <div className="flex gap-2 justify-stretch items-center"><h3 className="text-lg font-bold text-center text-theme-text-accent shrink-0 whitespace-normal text-balance">Patron:</h3> 
+        <div className="flex-grow w-full flex justify-start"><EditableLine editable={true} index={0} text={troupe.members[member].patron} onSave={(_index, value) => handleSetPatron(member, value)} /></div></div>
       </div>
     </div>
   )
