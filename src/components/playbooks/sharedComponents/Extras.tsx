@@ -1,6 +1,7 @@
 import { Section } from "../../shared/Section";
 import { playbookBases } from "../content";
 import { type CharacterNotTroupe, playbookKeys } from "../types";
+import { parseStaticText } from "../utils";
 
 export function Extras({ character }: { character: CharacterNotTroupe }) {
 	const base = playbookBases[character.playbook];
@@ -26,7 +27,7 @@ export function Extras({ character }: { character: CharacterNotTroupe }) {
 				<Section title="Story" collapsible={true}>
 					<div className="flex flex-col gap-2 text-sm text-theme-text-muted">
 						{base.intro.map((intro) => (
-							<p key={intro}>{intro}</p>
+							<p key={intro}>{parseStaticText(intro)}</p>
 						))}
 					</div>
 				</Section>

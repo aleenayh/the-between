@@ -847,6 +847,7 @@ lineIndex}`}>
         })}
 		</div>
 
+<p className="text-left leading-relaxed">You can answer the first Question of The Wyrm Threat while it is inactive (“<span className="italic font-bold">How can the Wyrm be propitiated?</span>”). Items in your Hoard count as Clues toward answering it, and you may attempt to Answer a Question when you have at least three items (half the Complexity). If you answer it successfully, you can pursue the Opportunity even though the Threat isn’t active. If you attempt to answer it and get a miss, the Wyrm awakens fully and you flee London in terror; retire this character and tell the Keeper to put The Wyrm in play. </p>
 
 
       <Divider/>

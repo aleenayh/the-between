@@ -45,7 +45,7 @@ export function UnsceneSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen
       </button>
         </Tooltip.Trigger>
         <Tooltip.Content className="z-30" side="right">
-          <StyledTooltip>London Unscenes.</StyledTooltip>
+          <StyledTooltip>View London Unscenes.</StyledTooltip>
         </Tooltip.Content>
       </Tooltip.Root>
 
