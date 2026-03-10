@@ -3,6 +3,7 @@ import { Tooltip } from "radix-ui";
 import { useState } from "react";
 import { useGame } from "../../context/GameContext";
 import { PlayerRole } from "../../context/types";
+import { InteriorMastermindSheet } from "../mastermind/MastermindSheet";
 import { PullOutDrawer } from "../shared/PullOutDrawer";
 import { StyledTooltip } from "../shared/Tooltip";
 import { AddMystery } from "./AddMystery";
@@ -63,6 +64,16 @@ export function MysterySheet({
 											</span>
 										</button>
 									))}
+									        {(gameState.mastermind || role === PlayerRole.KEEPER )&& (
+          <button
+            type="button"
+            key="mastermindButton"
+            className={`block md:hidden rounded-lg py-0 px-2 border transition-colors ${displayedMystery === "mastermind" ? "bg-theme-bg-accent text-theme-text-accent border-theme-border-accent" : "bg-theme-bg-primary text-theme-text-primary border-theme-border hover:bg-theme-bg-accent hover:text-theme-text-accent hover:border-theme-border-accent"}`}
+            onClick={() => setDisplayedMystery("mastermind")}
+          >
+            <span className="text-sm whitespace-nowrap">Mastermind Conspiracy</span>
+          </button>
+        )}
 							</div>
 							{/* mystery content */}
 							<AnimatePresence>
@@ -89,6 +100,20 @@ export function MysterySheet({
 									) : (
 										<div>No active mysteries</div>
 									)}
+									{displayedMystery === "mastermind" &&
+									<motion.div
+									className="absolute transition-all w-full"
+									key="mastermind"
+									initial={{ opacity: 0 }}
+									animate={{ opacity: 1 }}
+									exit={{ opacity: 0 }}
+									transition={{
+										duration: 0.5,
+										ease: "linear",
+									}}
+								>
+									<InteriorMastermindSheet mastermind={gameState.mastermind} />
+								</motion.div>}
 								</div>
 							</AnimatePresence>
 

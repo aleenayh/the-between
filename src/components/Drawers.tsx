@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ReactComponent as Logo } from "./assets/between-logo.svg";
 import { HargraveHouseSheet } from "./hargraveHouse/HargraveHouseSheet";
-import {ReactComponent as MastermindIcon} from "./mastermind/chess.svg"
+import {ReactComponent as HouseIcon} from "./hargraveHouse/house.svg"
 import { MastermindSheet } from "./mastermind/MastermindSheet";
 import {ReactComponent as HourglassIcon} from "./mystery/hourglass.svg"
 import {ReactComponent as MoonIcon} from "./mystery/icons/moon.svg"
@@ -18,11 +18,11 @@ import {ReactComponent as CogIcon} from "./settings/cog.svg"
 import { SettingsPane } from "./settings/SettingsPane";
 import { UnsceneSheet } from "./unscenes/unsceneSheet";
 
-const tabKeys = ["reference", "mystery", "mastermind", "hunters", "home", "unscene", "notes", "safety", "settings"];
+const tabKeys = ["reference","notes", "hargraveHouse", "hunters", "home", "mystery", "unscene",  "safety", "settings"];
 const icons: Record<typeof tabKeys[number], React.ReactNode> = {
 	reference: <BookIcon className="w-full h-full" />,
 	mystery: <HourglassIcon className="w-full h-full" />,
-	mastermind: <MastermindIcon className="w-full h-full" />,
+	hargraveHouse: <HouseIcon className="w-full h-full" />,
 	hunters: <HunterIcon className="w-full h-full" />,
 	home: <Logo className="w-full h-full" />,
 	unscene: <MoonIcon className="w-full h-full" />,
@@ -73,14 +73,12 @@ export function MobileDrawerNavigation() {
 	const [settingsOpen, setSettingsOpen] = useState(false);
 	const [notesOpen, setNotesOpen] = useState(false);
 	const [hargraveHouseOpen, setHargraveHouseOpen] = useState(false);
-	const [mastermindOpen, setMastermindOpen] = useState(false);
 	const [safetyOpen, setSafetyOpen] = useState(false);
 	const [unsceneOpen, setUnsceneOpen] = useState(false);
 
 	const closeAllExcept = (key: typeof tabKeys[number] | null) => {
 		setRefOpen(false);
 		setMysteryOpen(false);
-		setMastermindOpen(false);
 		setHuntersOpen(false);
 		setHargraveHouseOpen(false);
 		setUnsceneOpen(false);
@@ -94,8 +92,8 @@ export function MobileDrawerNavigation() {
 			case "mystery":
 				setMysteryOpen(true);
 				break;
-			case "mastermind":
-				setMastermindOpen(true);
+				case "hargraveHouse":
+				setHargraveHouseOpen(true);
 				break;
 			case "hunters":
 				setHuntersOpen(true);
@@ -122,7 +120,6 @@ export function MobileDrawerNavigation() {
 			<div className="flex absolute top-0 left-0 w-full h-full flex-col justify-start items-start pointer-events-none pb-16">
 			<ReferenceSheet isOpen={refOpen} setIsOpen={setRefOpen} />
 			<MysterySheet isOpen={mysteryOpen} setIsOpen={setMysteryOpen} />
-			<MastermindSheet isOpen={mastermindOpen} setIsOpen={setMastermindOpen} />
 			<PullOutCharacterOverview
 				isOpen={huntersOpen}
 				setIsOpen={setHuntersOpen}

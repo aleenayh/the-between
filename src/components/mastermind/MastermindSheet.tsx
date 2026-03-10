@@ -24,9 +24,8 @@ export function MastermindSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsO
     user: { role },
   } = useGame()
   const mastermind = gameState.mastermind
-  const [modalOpen, setModalOpen] = useState(false)
   if (!mastermind && role !== PlayerRole.KEEPER) return null
-  const mastermindContent = Masterminds[mastermind?.title as keyof typeof Masterminds]
+  
   return (
     <div className="flex flex-col justify-start items-start h-full w-full pointer-events-none">
       {(mastermind || role === PlayerRole.KEEPER) && (
@@ -49,7 +48,19 @@ export function MastermindSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsO
 
       )}
       <PullOutDrawer isOpen={isOpen} setIsOpen={setIsOpen}>
-                <h1 className="text-[2rem] font-bold text-theme-text-accent mb-10">{mastermindContent?.title ?? mastermind?.title ??"Mastermind Conspiracy"}</h1>
+        <InteriorMastermindSheet mastermind={mastermind} />
+          </PullOutDrawer>
+    </div>
+  )
+}
+
+export function InteriorMastermindSheet({mastermind}: {mastermind: Mastermind | null}) {
+  const [modalOpen, setModalOpen] = useState(false)
+  const { user: { role } } = useGame()
+  const mastermindContent = Masterminds[mastermind?.title as keyof typeof Masterminds]
+
+  return <div className="w-full flex flex-col gap-2 mb-2">
+    <h1 className="text-[2rem] font-bold text-theme-text-accent mb-10">{mastermindContent?.title ?? mastermind?.title ??"Mastermind Conspiracy"}</h1>
                 {mastermind && (<MastermindContent mastermind={mastermind}/>             )}
                {role === PlayerRole.KEEPER && (
                   <Dialog.Root open={modalOpen} onOpenChange={setModalOpen}>
@@ -73,9 +84,7 @@ export function MastermindSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsO
                     </Dialog.Portal>
                   </Dialog.Root>
                 )}
-          </PullOutDrawer>
-    </div>
-  )
+  </div>
 }
 
 function MastermindContent({ mastermind }: { mastermind: Mastermind }) {
