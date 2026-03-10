@@ -39,13 +39,14 @@ export function InformalsExpanded({ troupe }: { troupe: Troupe }) {
     })
   }
 
+  const someInformalUnassignedPatron = Object.keys(members).some((member) => troupe.members[member].patron === "")
+
 
   return (
     <div className="border-2 border-theme-border-accent bg-theme-bg-primary rounded-lg p-4 h-full flex flex-col gap-2 overflow-hidden relative">
       <DiceIndicator playerId={troupe.playerId} />
       <h1 className="text-[2rem] font-bold text-center text-theme-text-accent shrink-0 whitespace-normal text-balance">
         {selectedActive ? pretty(selectedActive) : "The Informals"}
-        
       </h1>
       {activeMemberDetails ? 
       <div className="overflow-y-auto overflow-x-hidden min-h-0 min-w-0 flex flex-col gap-3">
@@ -56,6 +57,10 @@ export function InformalsExpanded({ troupe }: { troupe: Troupe }) {
         <AbilityBoxes stats={adjustedForMask(activeMemberDetails.abilities, troupe.masksOfFuture)} />
         </div>
       : <h2 className="text-lg font-bold text-center text-theme-text-accent shrink-0 whitespace-normal text-balance">Who will you be today?</h2>}
+
+      {someInformalUnassignedPatron && <div className="text-left flex flex-col gap-2"><p className="text-xs italic">You are the Hargrave House Informals, a group of people in London who assist the Hunters with their investigations. You don’t know each other, and you don’t live in Hargrave House, but you are each in the employ of a resident of the house, and provide them with valuable skills and street-level knowledge they can’t get anywhere else. Let’s meet each of you in turn…</p>
+      
+      <p className="text-sm">Informals in need of a patron: <span className="font-bold text-theme-text-accent">{Object.keys(members).filter((member) => troupe.members[member].patron === "").map((member) => pretty(member)).join(", ")}</span></p></div>}
 
 
         <div className="flex flex-wrap gap-1 justify-center items-stretch text-md max-w-fit">
@@ -272,7 +277,6 @@ function MeetInformal({ member, troupe }: { member: keyof typeof members, troupe
   }
   return (
     <div className="w-full flex flex-col gap-2">
-      <p className="text-xs italic text-left">You are the Hargrave House Informals, a group of people in London who assist the Hunters with their investigations. You don’t know each other, and you don’t live in Hargrave House, but you are each in the employ of a resident of the house, and provide them with valuable skills and street-level knowledge they can’t get anywhere else. Let’s meet each of you in turn…</p>
       <h4 className="text-md font-bold text-center text-theme-text-accent shrink-0 whitespace-normal text-balance">Meet     {details.name}</h4>
       <div key="extras" className="w-full flex flex-col">
         <div className="flex gap-2 justify-start items-center"><h3 className="text-lg font-bold text-center text-theme-text-accent shrink-0 whitespace-normal text-balance">Look:</h3> <p className="text-left text-sm text-theme-text-primary whitespace-normal ">{details.look}</p></div>
