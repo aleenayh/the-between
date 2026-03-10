@@ -193,7 +193,7 @@ const localSchemaVersion = getLocalSchemaVersion();
     if (updates.players) {
       for (const player of updates.players) {
         if (player.id === userInfo.id && player.role !== userInfo.role) {
-          localStorage.setItem("playerRole", player.role)
+          localStorage.setItem(`playerRole_${gameHash}`, player.role)
           setUserInfo({ ...userInfo, role: player.role })
         }
       }
