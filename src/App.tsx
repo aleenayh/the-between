@@ -14,8 +14,8 @@ function App() {
 	const searchParams = new URLSearchParams(window.location.search);
 	const initialGameHash = searchParams.get("gameHash");
 	// Get saved user info if returning to a game via URL
-	const savedName = localStorage.getItem("playerName") || "";
-	const savedRole = localStorage.getItem("playerRole") as PlayerRole | null;
+	const savedName = localStorage.getItem(`playerName_${initialGameHash}`) || "";
+	const savedRole = localStorage.getItem(`playerRole_${initialGameHash}`) as PlayerRole | null;
 	const [gameHash, setGameHash] = useState<string | null>(initialGameHash);
 	const [startingState, setStartingState] = useState<GameState | null>(null);
 	const [userName, setUserName] = useState<string | null>(savedName ?? null);
@@ -24,7 +24,7 @@ function App() {
 		savedName ? nameToPlayerId(savedName) : null,
 	);
 
-	const savedTheme = localStorage.getItem("theme") || "forest";
+	const savedTheme = localStorage.getItem("theme") || "theodora";
 	document.documentElement.setAttribute("data-theme", savedTheme);
 
 	if (!gameHash || !userName || !userId) {

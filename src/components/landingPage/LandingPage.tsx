@@ -61,7 +61,7 @@ export function LandingPage({
 			setError("Please enter your name");
 			return;
 		}
-		localStorage.setItem("playerName", playerName.trim());
+		localStorage.setItem(`playerName_${gameHashInput.trim()}`, playerName.trim());
 		setError(null);
 		setStep(gameHashInput.trim() ? "join-from-query" : "choose");
 	};
@@ -176,7 +176,7 @@ export function LandingPage({
 	}) => {
 		// Update their name to match the existing player
 		setPlayerName(existingPlayer.name);
-		localStorage.setItem("playerName", existingPlayer.name);
+		localStorage.setItem(`playerName_${pendingGameHash}`, existingPlayer.name);
 
 		if (pendingGameHash) {
 			setUserId(existingPlayer.id);
