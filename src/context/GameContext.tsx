@@ -225,6 +225,12 @@ const localSchemaVersion = getLocalSchemaVersion();
 		const userAlreadyExists = gameState.players.some(
 			(player) => player.id === userInfo.id,
 		);
+		const player = gameState.players.find((player) => player.id === userInfo.id);
+		if (player && userInfo.role !== player.role) {
+			//the game state has the definitive role 
+			setUserInfo({ ...userInfo, role: player.role })
+			localStorage.setItem(`playerRole_${gameHash}`, player.role)
+		}
 		if (userAlreadyExists) return;
 
 		const newPlayer = {
@@ -244,7 +250,7 @@ const localSchemaVersion = getLocalSchemaVersion();
 		firebaseUpdateState({ players: updatedPlayers }).catch((error) => {
 			console.error("Failed to add player to Firebase:", error);
 		});
-	}, [firebaseInitialized, gameState.players, userInfo, firebaseUpdateState]);
+	}, [firebaseInitialized, gameState.players, userInfo, firebaseUpdateState, gameHash]);
 
 	// Context value
 	const value: GameContextValue = {
