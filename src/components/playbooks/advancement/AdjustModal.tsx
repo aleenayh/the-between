@@ -78,7 +78,7 @@ export function AdjustmentModal({ character }: { character: CharacterNotTroupe }
 						<input type="text" {...register("pronouns")} id="pronouns" />
 						<label htmlFor="look">Look</label>
 						<input type="text" {...register("look")} id="look" />
-						<label htmlFor="vice">Ritual</label>
+						<label htmlFor="vice">Vice</label>
 						<input type="text" {...register("vice")} id="vice" />
 
 						<div className="flex justify-center w-full">
