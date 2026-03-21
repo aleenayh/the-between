@@ -154,10 +154,10 @@ function checkGuiledDoorDisabled(gameState: GameState) {
     if (!character) continue
     const playbook = playbookBases[character.playbook as playbookKey]
     //some playbooks don't have the Gilded door
-    if (!playbook.masksOfFuture.includes("<strong>The Gilded Door:</strong>")) continue
+    if (!playbook.masksOfFuture.includes("<strong>The Gilded Door</strong>")) continue
 
     //if they do, find the index of it
-    const index = playbook.masksOfFuture.findIndex((mask) => mask.includes("<strong>The Gilded Door:</strong>"))
+    const index = playbook.masksOfFuture.findIndex((mask) => mask.includes("<strong>The Gilded Door</strong>"))
     const marked = character.masksOfFuture[index] === 1
     if (!marked) continue
     return true
