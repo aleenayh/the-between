@@ -13,7 +13,7 @@ export const apertureDefs: PlaybookMove[] = [
 "<strong>The Gilded Door</strong>: The favor will involve someone of influence.",
 "<strong>The Moss-Covered Gate</strong>: The favor will involve a dangerous game.",
 "<strong>The Cosmic Passage</strong>: The favor will involve an object of power.",
-"<strong>The Darkened Passage</strong>: The favor will hasten a dark future for all of London.",
+"<strong>The Darkened Threshold</strong>: The favor will hasten a dark future for all of London.",
     ],
     checkboxes: 0,
     extraLines: 0,
