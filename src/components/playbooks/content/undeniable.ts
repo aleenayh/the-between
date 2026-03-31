@@ -135,7 +135,7 @@ export const undeniablePlaybook: PlaybookBase = {
     {
       title: "Taketh Away",
       text: [
-        "When you destroy a Side Character—physically, spiritually, or socially—describe how it makes you feel, scar your Reflection, and roll with Vitality.<strong>On a 10+,</strong> choose two. <strong>On a 7-9,</strong> choose one. If the Side Character is a worshipper, there is no need to roll; choose three.",
+        "When you destroy a Side Character—physically, spiritually, or socially—describe how it makes you feel, scar your Reflection, and roll with Vitality. <strong>On a 10+,</strong> choose two. <strong>On a 7-9,</strong> choose one. If the Side Character is a worshipper, there is no need to roll; choose three.",
         "<li>Clear any Conditions you wish, including Most-Beloved.</li>",
         "<li>Your next roll is taken with advantage. </li>",
         "<li>You may take something from your victim and add it to your Personal Quarters.</li>",
