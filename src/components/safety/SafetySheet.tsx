@@ -192,10 +192,14 @@ function AddLineOrVeilForm() {
   const addLineVeil = (formInput: { text: string; type: "line" | "veil" }) => {
     const newLines = formInput.type === "line" ? [...(lines || []), formInput.text] : lines
     const newVeils = formInput.type === "veil" ? [...(veils || []), formInput.text] : veils
+    const safety = 
+      {...newLines ? { lines: newLines } : {}, 
+      ...newVeils ? { veils: newVeils } : {}}
     updateGameState({
+      ...gameState,
       safety: {
-        lines: newLines,
-        veils: newVeils,
+        ...gameState.safety,
+        ...safety,
       },
     })
     toast.success(`${formInput.type === "line" ? "Line" : "Veil"} added: ${formInput.text}`)
