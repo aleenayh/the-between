@@ -54,12 +54,12 @@ export const apertureDefs: PlaybookMove[] = [
 "<li>You must give the entity an item from your Personal Quarters.</li>",
     ],
     },
-        { title: "The Aperture of the Jabberwocky’s Maw",
+        { title: "The Aperture of the Jabberwock’s Maw",
     text:     [
         "The Hunters have a new Question & Opportunity", 
 
-"<strong>Question:</strong> Why must we beware the Jabberwocky? (Complexity: 4)", 
-"<strong>Opportunity:</strong> Tell the Keeper to read Struggle: The Jabberwocky",
+"<strong>Question:</strong> Why must we beware the Jabberwock? (Complexity: 4)", 
+"<strong>Opportunity:</strong> Tell the Keeper to read Struggle: The Jabberwock",
 
 'Only Clues gathered during the Vulnerable Move can be applied to this Question; so long as all Hunters in the Vulnerable Move scene agree, note the Clue below:'
     ],
