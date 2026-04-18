@@ -94,6 +94,7 @@ export const unscenes: Record<string, UnsceneContent> = {
             "<strong>Paint the Scene:</strong> As the Taylors and the Davenports enter the dining room, what do we see that shows the Taylors have made their best efforts to impress, and how do we know the Davenports are a rung above them in terms of wealth and prestige?",
             "Mrs. Taylor and Mrs. Davenport hate one another, how do they subtly lash out over the course of dinner without drawing attention or causing a scene?",
             "Maude and the Davenports’ son Alexander both chafe under the expectations of their parents. As the meal draws to a close, how do we see this expressed in their conversation or petty acts of rebellion?",
+            "Mr. Davenport and Mr. Taylor withdraw into Taylor’s study for port and cigars. Alone, how do they expose the vices they hide from society to one another?"
         ],
     },
     "Brown’s Hotel": {
