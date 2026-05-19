@@ -1254,8 +1254,8 @@ idx}`}
 		const isCrossedOut = obligation === "0"
 		return (
 			<li key={`obligation-${// biome-ignore lint/suspicious/noArrayIndexKey: visual only
-idx}`} className={`w-full flex justify-start items-baseline gap-1 text-left text-sm`}>
-	<input type="checkbox" checked={isActive} disabled={!editable || isCrossedOut} onChange={() => markObligation(idx, isActive ? "inactive" : "active")} /><span className={`${isActive ? "text-theme-text-accent" : isCrossedOut ? "text-theme-text-muted line-through" : "text-theme-text-muted"}`}>{content}</span> <button type="button" disabled={!editable} onClick={() => markObligation(idx, isCrossedOut ? "active" : "crossedOut")}>✗</button></li>
+idx}`} className={`w-full flex justify-evenly items-baseline gap-1 text-left text-sm`}>
+	<input type="checkbox" checked={isActive} disabled={!editable || isCrossedOut} onChange={() => markObligation(idx, isActive ? "inactive" : "active")} /><span className={`${isActive ? "text-theme-text-accent" : isCrossedOut ? "text-theme-text-muted line-through" : "text-theme-text-muted"} grow`}>{content}</span> <button className={`${editable ? "block" : "hidden"}`}type="button" disabled={!editable} onClick={() => markObligation(idx, isCrossedOut ? "active" : "crossedOut")}>✗</button></li>
 		)
 })}
 	  </div>
