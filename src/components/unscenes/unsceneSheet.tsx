@@ -1,5 +1,5 @@
 import { Tooltip } from "radix-ui";
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useGame } from "../../context/GameContext";
 import type { GameState } from "../../context/types";
 import { ReactComponent as MoonIcon } from "../mystery/icons/moon.svg"
