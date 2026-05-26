@@ -91,12 +91,13 @@ function MastermindContent({ mastermind }: { mastermind: Mastermind }) {
   const { user: { role } } = useGame()
   const [editModalOpen, setEditModalOpen] = useState(false)
   const mastermindContent = mastermind.type === "canon" ? Masterminds[mastermind.title] : undefined
-  const activeQuestion = mastermind.questions.find((q) => q.isActive)
+  const activeQuestions = mastermind.questions.filter((q) => q.isActive)
 
   return ( <div className="w-full flex flex-col gap-2 mb-2">
-    {activeQuestion && (
-      <div className="flex flex-col gap-1">
-        <h2 className="text-xl font-bold text-theme-text-accent">{activeQuestion.question} 
+    {activeQuestions && activeQuestions.length > 0 && (
+      activeQuestions.map((q) => (
+        <div className="flex flex-col gap-1" key={q.question}>
+        <h2 className="text-xl font-bold text-theme-text-accent">{q.question} 
           {role === PlayerRole.KEEPER && <Dialog.Root open={editModalOpen} onOpenChange={setEditModalOpen}>
             <Dialog.Trigger asChild>
               <button type="button" className="text-xs text-theme-text-accent hover:text-theme-text-primary mx-2"><PencilIcon /></button>
@@ -109,14 +110,14 @@ function MastermindContent({ mastermind }: { mastermind: Mastermind }) {
                 </Dialog.Close>
                 <Dialog.Title className="DialogTitle">Edit Question</Dialog.Title>
                 <Dialog.Description className="DialogDescription">Edit the question, complexity, or opportunity for the active layer. Adjustments here do not affect earned clues attached to the question.</Dialog.Description>
-              <EditMastermindQuestionForm question={activeQuestion.question} closeModal={() => setEditModalOpen(false)} />
+              <EditMastermindQuestionForm question={q.question} closeModal={() => setEditModalOpen(false)} />
               </Dialog.Content>
             </Dialog.Portal>
             </Dialog.Root>}
         </h2>
-        <p className="text-xs text-theme-text-muted">(Complexity: {activeQuestion.complexity})</p>
-        {activeQuestion.opportunity !== "" && (<p className="text-sm text-theme-text-muted italic text-left">Opportunity: {activeQuestion.opportunity}</p>)}
-      </div>
+        <p className="text-xs text-theme-text-muted">(Complexity: {q.complexity})</p>
+        {q.opportunity !== "" && (<p className="text-sm text-theme-text-muted italic text-left">Opportunity: {q.opportunity}</p>)}
+      </div>))
     )}
     
     <ClueSection />
@@ -271,7 +272,7 @@ function CanonMastermindForm({setIsOpen}: {setIsOpen: (isOpen: boolean) => void}
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
         {masterminds.map((mastermind) => (
-          <div className="flex gap-2 items-center justify-start my-4" key={`select-${mastermind.title}`}>
+          <div className="flex gap-2 items-center justify-start" key={`select-${mastermind.title}`}>
           <input type="radio" {...register("title")} value={mastermind.title} id={mastermind.title}/>
           <label htmlFor={mastermind.title}>{mastermind.label}</label>
           </div>
@@ -591,14 +592,15 @@ function LayerSection({ layer }: { layer: string }) {
   const { mastermind: mastermindState } = gameState
   if (!mastermindState || mastermindState.type !== "canon") return null
   const mastermindContent = Masterminds[mastermindState.title as keyof typeof Masterminds]
-  const hasQuestion = mastermindContent.questions.find((q) => q.layer === layer)
+  const hasQuestion = mastermindContent.questions.filter((q) => q.layer === layer)
   const stateLayer = mastermindState.layers?.find((l) => l.title === layer)
 
-  const updateQuestion = (newQuestion: string) => {
+  const updateQuestion = (newQuestions: string[]) => {
+    const updatedQuestions = mastermindState.questions.map((q) => newQuestions.includes(q.question) ? { ...q, isActive: true } : {...q, isActive: false})
       updateGameState({
         mastermind: {
           ...mastermindState,
-          questions: mastermindState.questions.map((q) => q.question === newQuestion ? { ...q, isActive: true } : {...q, isActive: false}),
+          questions: updatedQuestions,
       },
     })
   }
@@ -623,12 +625,14 @@ function LayerSection({ layer }: { layer: string }) {
   return (
 <Section title={l.title} collapsible minify leftAlign key={l.title}>
 
-  {hasQuestion && hasQuestion.question !== mastermindState.questions.find((q) => q.isActive)?.question && <div className="bg-theme-bg-secondary border border-theme-border-accent rounded-lg p-2">
-    <p className="text-left text-sm my-2 text-theme-text-muted">This layer comes with a new question:</p>
-    <p><strong>{hasQuestion.question}</strong> (Complexity: {hasQuestion.complexity})</p>
-    <p className="italic text-left text-sm">Opportunity: {hasQuestion.opportunity ?? "None"}</p>
-    <p className="text-left text-sm my-2 text-theme-text-muted">Click the button below to display this question to your Hunters. This does not affect earned clues for other mastermind questions.</p>
-    <button type="button" className="w-1/3 mx-auto bg-theme-bg-secondary text-theme-text-primary px-4 py-2 rounded-lg opacity-80 hover:opacity-100 border border-theme-border-accent hover:bg-theme-bg-accent hover:text-theme-text-accent hover:border-theme-text-accent" onClick={() => updateQuestion(hasQuestion.question)}>Display this question</button></div>}
+  {hasQuestion && hasQuestion.length > 0 && hasQuestion[0].question !== mastermindState.questions.find((q) => q.isActive)?.question && <div className="bg-theme-bg-secondary border border-theme-border-accent rounded-lg p-2">
+    <p className="text-left text-sm my-2 text-theme-text-muted">This layer comes with {hasQuestion.length > 1 ? `${hasQuestion.length} new questions:` : 'a new question:'}</p>
+    {hasQuestion.map((q) => (
+      <div key={q.question}><p><strong>{q.question}</strong> (Complexity: {q.complexity})</p>
+    <p className="italic text-left text-sm">Opportunity: {q.opportunity ?? "None"}</p></div>
+  ))}
+    <p className="text-left text-sm my-2 text-theme-text-muted">Click the button below to display {hasQuestion.length > 1 ? 'these questions' : 'this question'} to your Hunters. This does not affect earned clues for other mastermind questions.</p>
+    <button type="button" className="w-1/3 mx-auto bg-theme-bg-secondary text-theme-text-primary px-4 py-2 rounded-lg opacity-80 hover:opacity-100 border border-theme-border-accent hover:bg-theme-bg-accent hover:text-theme-text-accent hover:border-theme-text-accent" onClick={() => updateQuestion(hasQuestion.map((q) => q.question))}>Display {hasQuestion.length > 1 ? 'these questions' : 'this question'}</button></div>}
               
               
               

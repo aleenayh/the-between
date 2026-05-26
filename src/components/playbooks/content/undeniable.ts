@@ -100,7 +100,7 @@ export const undeniablePlaybook: PlaybookBase = {
   masksOfFuture: [
     "<strong>The Gilded Door</strong>: Take the following Condition: Most-Beloved. Increase your Presence by 1. Tell the other Hunters they can no longer choose The Gilded Door on their own playbook (this does not count as being marked for them). Most-Beloved can only be cleared via Taketh Away.",
     "<strong>The Moss-Covered Gate</strong>: Narrate a scene in which you express private regret for the harm you have caused. ",
-    "<strong>The Darkened Threshold</strong>: Whenever you gaze upon the masterwork in an attempt to uncover something hidden in the world, roll with Sensitivity. <li><strong>On a 10+,</strong> the masterwork reveals a Clue or a Mastermind Clue, your choice.</li> <li><strong>On a 7-9,</strong> as above, but you also scar your Reflection.</li> ",
+    "<strong>The Darkened Threshold</strong>: Once per session, when you <strong>gaze upon the masterwork in an attempt to uncover something hidden in the world</strong>, roll with Sensitivity. <li><strong>On a 10+,</strong> the masterwork reveals a Clue or a Mastermind Clue, your choice.</li> <li><strong>On a 7-9,</strong> as above, but you also scar your Reflection.</li> ",
     "<strong>The Cosmic Passage</strong>: Narrate a scene during which people treat you like you’re nothing special. ",
     "<strong>The Blood-Soaked Portal</strong>: Narrate a scene in which you are physically destroyed. This character is now retired. ",
   ],
