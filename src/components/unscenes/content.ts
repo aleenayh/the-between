@@ -229,3 +229,52 @@ export const unscenes: Record<string, UnsceneContent> = {
       ],
     }
 }
+
+export const venusianUnscenes: Record<string, UnsceneContent> = {
+  "Visitors Among Us": {
+    title: "Visitors Among Us",
+    intro:
+      "For the first few days London could not stop talking about the arrival of visitors from another world. But now a kind of normalcy has settled and tonight we see how ordinary people are coming to accept the presence of the Venusians.",
+    prompts: [
+      "<strong>Paint the Scene:</strong> A member of Gesod’s entourage, flanked by two robotic soldiers, walks the streets of London. Are the locals excited, curious, or fearful, and how do we know this?",
+      "Adora is a seamstress who specializes in fashion for highborn ladies. What Venusian elements do we see her incorporating into her latest designs?",
+      "Rufus and Joseph, a pair of middle-aged factory workers, spend most of their evenings sitting on the front step and discussing current events together. What do they think of the Venusian arrival?",
+      "Chadwick is a writer for the tabloid The Illustrated Police News, and is working late on an article. What completely unfounded plot will he accuse the Venusians of in his piece?",
+    ],
+  },
+  "Life on Venus": {
+    title: "Life on Venus",
+    intro:
+      "As night falls in London across the void of space, through thick, yellow clouds, day breaks on Venus. In one village, one of the countless that dot this alien planet, the residents emerge from their humble dwellings to greet another day.",
+    prompts: [
+      "In poor light the figures could be mistaken for humans. What alien feature marks them as beings from another world?",
+      "<strong>Paint the Scene:</strong> What signs do we see showing this village is under the occupation of Gesod’s Empire?",
+      "Most of these villagers toil in fields of alien wheat to provide food for the Empire. One of them is brutally punished by a robotic soldier for failing to work quickly enough. Do their fellow villagers react with open anger, or do they do their best to ignore this?",
+      "As the cloud-dimmed sun begins to set, a few villagers secretly meet to engage in a local custom banned under Gesod’s rule. What is it?",
+    ],
+  },
+  "The Fall of Taraxes": {
+    title: "A Night at the Grand Guignol, <i>The Fall of Taraxes</i>",
+    intro:
+      "Every class of people in London is represented in the audience at the Theatre Grand Guignol. They have come tonight to see a play written in honor of the visiting Venusians, a dramatization of the conflict between Gesod and his brother Taraxes as they struggled for the throne. ",
+    prompts: [
+      "<strong>Paint the Scene:</strong> As the limelights pop to life and the crimson curtain is raised, how has the scene been set to depict the landscape of Venus on the stage?",
+      "Describe Act I, in which Taraxes delivers an impassioned speech against Gesod to his assembled forces. In what ways does the performance go out of its way to depict this as foolish and misguided?",
+      "Describe Act II, in which Taraxes’s plan is defeated. What masterstroke does Gesod leverage against his brother, demonstrating his cunning? ",
+      "Describe Act III, in which Taraxes is put to death in a public execution. Make it bloody.",
+    ],
+  },
+}
+
+export const conflagration: Record<string, UnsceneContent> = {
+  "The Conflagration of London": {
+    title: "The Conflagration of London",
+    intro: "A seasoned hunter knows that not every hunt goes according to plan, and thus a contingency must always be at the ready. Unbeknownst to the rest of his family, Sir Alexander Wellington-Hughes III and his youngest son, Thaddeus, have installed a network of explosives beneath several places across London—prescribed to flush out the monstrous corruption that infects the city's institutions. As the sun sets, London burns bright while the city skyline fills with acrid smoke accompanied by the echoes of explosions and screams. ",
+    prompts: [
+        "Clerkenhall Workhouse on Coppice Row, an institution notorious for its squalid conditions, is congested with smoke and panic. Despite the chaos and the opportunity it allows for individuals to escape, how do we see the laborers band together to save one another instead?",
+        "The parish at Westminster Abbey pray for salvation as the fires eat away at the centuries-old church. What monstrous entities descend on the scene—either to take advantage of the disaster, or to help deliver the flock from a fiery end? ",
+        "As the city continues to burn, the Halls of Parliament erupt in bureaucratic arguments over how best to react to the ongoing catastrophe. What loss does the city suffer as its leaders bicker over how best to serve it? ",
+        "<strong>Paint the Scene:</strong> No neighbourhood is safe in London, not even Belgrave Square. Flames get their fill of the classical-style homes that neighbour Hargrave House. As they descend upon the Gothic-revival building, describe how your Hunter’s room is transformed by the fire. ",
+    ],
+  },
+}

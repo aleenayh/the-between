@@ -1,17 +1,20 @@
 import { Tooltip } from "radix-ui";
 import { useState } from "react"
 import { useGame } from "../../context/GameContext";
+import type { GameState } from "../../context/types";
 import { ReactComponent as MoonIcon } from "../mystery/icons/moon.svg"
 import { parseStaticText } from "../playbooks/utils";
 import { PullOutDrawer } from "../shared/PullOutDrawer";
 import { Section } from "../shared/Section";
 import { StyledTooltip } from "../shared/Tooltip";
-import { unscenes } from "./content";
+import { conflagration, unscenes as unscenesContent, venusianUnscenes } from "./content";
 
 export function UnsceneSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void }) {
     const {gameState, updateGameState} = useGame();  
     const unscenesUsed = gameState.unscenesUsed;
-    const allUnscenes = Object.keys(unscenes);
+    const { withVenusian, withConflagration } = mastermindUnscenes(gameState)
+    const allUnscenes = withVenusian ? [...Object.keys(venusianUnscenes), ...Object.keys(unscenesContent)] : withConflagration ? [ ...Object.keys(conflagration),...Object.keys(unscenesContent),] : Object.keys(unscenesContent);
+    const content = { ...conflagration,...venusianUnscenes, ...unscenesContent }
     const [selectedUnscene, setSelectedUnscene] = useState<string | null>(null);
 
     const markCompleted = (unsceneKey: string) => {
@@ -55,11 +58,11 @@ export function UnsceneSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen
             {/* content for selected unscene */}
             {selectedUnscene ? (
                 <div className="flex flex-col gap-2 text-sm text-left py-4">
-                    <h4 className="text-lg font-bold text-theme-text-accent text-center">{parseStaticText(unscenes[selectedUnscene].title)}</h4>
-                    <div>{parseStaticText(unscenes[selectedUnscene].intro)}</div>
+                    <h4 className="text-lg font-bold text-theme-text-accent text-center">{parseStaticText(content[selectedUnscene].title)}</h4>
+                    <div>{parseStaticText(content[selectedUnscene].intro)}</div>
                     <div className="flex flex-col gap-2 text-sm justify-center items-center">
                         <ol>
-                            {unscenes[selectedUnscene].prompts.map((prompt) => (
+                            {content[selectedUnscene].prompts.map((prompt) => (
                                 <li key={prompt}>{parseStaticText(prompt)}</li>
                             ))}
                         </ol>
@@ -84,7 +87,7 @@ export function UnsceneSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen
                   checked={selectedUnscene === unsceneKey}
                   onChange={() => setSelectedUnscene(unsceneKey)}
                 />
-                <label htmlFor={unsceneKey} className={`text-md ${selectedUnscene === unsceneKey ? "text-theme-text-accent" : used ? "text-theme-text-muted line-through" : "text-theme-text-primary"}`}>{parseStaticText(unscenes[unsceneKey].title)}</label>
+                <label htmlFor={unsceneKey} className={`text-md ${selectedUnscene === unsceneKey ? "text-theme-text-accent" : used ? "text-theme-text-muted line-through" : "text-theme-text-primary"}`}>{parseStaticText(content[unsceneKey].title)}</label>
                 </div>
               )
             })}
@@ -93,4 +96,13 @@ export function UnsceneSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen
         </PullOutDrawer>
     </div>
   )
+}
+
+function mastermindUnscenes(gameState: GameState):{withVenusian: boolean, withConflagration: boolean} {
+  if (!gameState.mastermind) return { withVenusian: false, withConflagration: false }
+  const mastermind = gameState.mastermind
+  const withVenusian = mastermind.title === "gesod"
+  //HACK. Don't love the hard coded question but not sure it's worth the restructure to tie layers in to state.
+  const withConflagration = mastermind.title === "wellingtonHughes" && mastermind.questions.some((q) => q.isActive && q.question === "Where is Loren's charity ball going to be held?")
+  return { withVenusian, withConflagration }
 }
