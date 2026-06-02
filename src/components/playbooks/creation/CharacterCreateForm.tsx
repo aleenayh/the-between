@@ -406,7 +406,7 @@ function SelectOrEdit({
 	};
 
   return (
-    <div className="inline-flex items-center gap-1 flex-grow">
+    <div><div className="hidden md:inline-flex items-center gap-1 flex-grow">
       {isEditing ? (
         <input
           {...rest}
@@ -439,6 +439,8 @@ function SelectOrEdit({
         </select>
       )}
       <PencilIconButton isEditing={isEditing} setIsEditing={setIsEditing} />
+    </div>
+    <MobileSelectOrEdit options={allOptions} name={name} register={register} />
     </div>
   )
 }
@@ -509,6 +511,65 @@ function ControlledSelectOrEdit({
       )}
       <PencilIconButton isEditing={isEditing} setIsEditing={setIsEditing} />
     </div>
+  )
+}
+
+function MobileSelectOrEdit({
+  options,
+  name,
+  register,
+}: {
+  options: string[]
+  name: SelectOrEditFieldName
+  register: UseFormRegister<CharacterCreateFormInputs>
+}) {
+  const [allOptions, setAllOptions] = useState(options);
+  const [selectedOptions, setSelectedOptions] = useState<string>(options[0] ?? "")
+  const { onChange} = register(name)
+
+  const handleBlur = (
+		e: React.FocusEvent<HTMLInputElement> | React.ChangeEvent<HTMLInputElement>,
+	) => {
+		const value = e.target.value;
+		setAllOptions((prevOptions) => [...prevOptions, value]);
+    setSelectedOptions(value);
+	};
+
+  const handleChange = (value: string) => {
+    setSelectedOptions(value);
+    onChange({ target: { value } } as React.ChangeEvent<HTMLInputElement>);
+  }
+
+  return(
+        <div className="sm:hidden flex flex-col gap-1 w-full">
+        <p className="text-sm text-theme-text-muted mb-1">Select one or write your own:</p>
+
+        {allOptions.map((option) => {
+          const isSelected = selectedOptions === option
+          return (
+            <button
+              key={option}
+              type="button"
+              onClick={() => handleChange(option)}
+              className={`flex items-start gap-2 px-2 py-1.5 rounded-lg text-left transition-colors ${
+                isSelected
+                  ? "bg-theme-bg-accent text-theme-text-accent"
+                  : "bg-theme-bg-secondary text-theme-text-primary hover:bg-theme-bg-accent/50"
+              }`}
+            >
+              <span className="w-5 h-5 flex-shrink-0 flex items-center justify-center">{isSelected && "✓"}</span>
+              <span className="whitespace-normal">{option}</span>
+            </button>
+          )
+        })}
+        <input
+        {...register(name)}
+        onBlur={handleBlur}
+        type="text"
+        className="border px-2 py-1 flex-grow"
+      />
+
+      </div>
   )
 }
 
