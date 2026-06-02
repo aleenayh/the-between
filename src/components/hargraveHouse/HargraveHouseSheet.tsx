@@ -363,7 +363,6 @@ function Resident({ content, state }: { content: ResidentContent | ResidentCusto
   }
 
   const { title, intro, prompts } = content
-  const onUnlock = "onUnlock" in content ? content.onUnlock : { title: "", text: []}
   const {checks, extraLines} = state
 
   let checkIndex = 0
@@ -410,43 +409,46 @@ function Resident({ content, state }: { content: ResidentContent | ResidentCusto
         return (
         <p key={prompt} className="text-sm"><input type="checkbox" checked={checks?.[index] === 1} onChange={() => setResidentCheck(index)} /> {parseStaticText(prompt)}</p>
       )})}
-      {"onUnlock" in content && <div>
-      <h4 className="inline text-sm font-bold text-theme-text-accent font-[var(--header-font]"><input type="checkbox" checked={checks?.[checkIndex+1] === 1} onChange={() => setResidentCheck(checkIndex+1)} /> {onUnlock.title}: </h4>
-      {onUnlock.text.map((text, index) => {
-        const { elements, nextAspectIndex } = parseWithCheckboxes(text, checks ?? [], inlineCheckIndex, true, setResidentCheck)
-        inlineCheckIndex = nextAspectIndex
-        return (
-          <div key={text} className="text-sm flex flex-col gap-2">
-            {index === 1 && title === "Greco, the Dream Sovereign" && <DreamDivingLines/>}
-            <span className="inline">{elements}</span>
+      {"onUnlock" in content ? content.onUnlock.map((onUnlock) => {
+        return (<div key={content.title}>
+        <h4 className="inline text-sm font-bold text-theme-text-accent font-[var(--header-font]"><input type="checkbox" checked={checks?.[checkIndex+1] === 1} onChange={() => setResidentCheck(checkIndex+1)} /> {onUnlock.title}: </h4>
+        {onUnlock.text.map((text, index) => {
+          const { elements, nextAspectIndex } = parseWithCheckboxes(text, checks ?? [], inlineCheckIndex, true, setResidentCheck)
+          inlineCheckIndex = nextAspectIndex
+          return (
+            <div key={text} className="text-sm flex flex-col gap-2">
+              {index === 1 && title === "Greco, the Dream Sovereign" && <DreamDivingLines/>}
+              <span className="inline">{elements}</span>
+            </div>
+          ) 
+        })}
+        {onUnlock.checks && (
+          <div className="flex gap-3 w-full justify-center items-start">
+            {Array.from({ length: onUnlock.checks }).map((_, index) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: order unimportant
+              <input type="checkbox" key={index} className="text-sm text-theme-text-accent" />
+            ))}
           </div>
-        ) 
-      })}
-      {onUnlock.checks && (
-        <div className="flex gap-3 w-full justify-center items-start">
-          {Array.from({ length: onUnlock.checks }).map((_, index) => (
-            // biome-ignore lint/suspicious/noArrayIndexKey: order unimportant
-            <input type="checkbox" key={index} className="text-sm text-theme-text-accent" />
-          ))}
+        )}
+        {onUnlock.extraLines && title !== "Greco, the Dream Sovereign" && (
+          <div className="text-sm flex flex-col justify-start items-stretch gap-2">
+            {Array.from({ length: onUnlock.extraLines }).map((_, index) => (
+              <EditableLine
+                key={`extra-line-${
+                  // biome-ignore lint/suspicious/noArrayIndexKey: order unimportant
+                  index
+                }`}
+                text={extraLines?.[index] ?? ""}
+                onSave={(index, value) => saveExtraLine(index, value)}
+                index={index}
+                editable={true}
+              />
+            ))}
+          </div>
+        )}
         </div>
-      )}
-      {onUnlock.extraLines && title !== "Greco, the Dream Sovereign" && (
-        <div className="text-sm flex flex-col justify-start items-stretch gap-2">
-          {Array.from({ length: onUnlock.extraLines }).map((_, index) => (
-            <EditableLine
-              key={`extra-line-${
-                // biome-ignore lint/suspicious/noArrayIndexKey: order unimportant
-                index
-              }`}
-              text={extraLines?.[index] ?? ""}
-              onSave={(index, value) => saveExtraLine(index, value)}
-              index={index}
-              editable={true}
-            />
-          ))}
-        </div>
-      )}
-      </div>}
+        )
+      }) : null}
       {role === PlayerRole.KEEPER && (
         <Tooltip.Root>
           <div className="w-1/3 mx-auto">

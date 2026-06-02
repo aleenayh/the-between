@@ -278,3 +278,16 @@ export const conflagration: Record<string, UnsceneContent> = {
     ],
   },
 }
+
+export const royalSociety: Record<string, UnsceneContent> = {
+  "The Symposium at Somerset House": {
+    title: "The Symposium at Somerset House",
+    intro: "The auditorium at Somerset House is already befogged with pipe and cigar smoke as the great and the good of Britain’s scientific elite make stentorious chatter. Amidst a sea of tweed and antique gowns Millicent’s feminine dress, as plain and practical as it is, stands out like a looming iceberg.",
+    prompts: [
+        "Prof. Randolph Beauclaire gives a long-winded but surprisingly informative lecture about a newly discovered scientific principle. What is the subject of his lecture, and what practical applications of it appeal to you?", 
+        "Dr. Eckhart Stroud is a leading eugenicist. His bigoted rant has the veneer of scientific enquiry in spite of its vacuity. How does he demonstrate his obvious prejudice, and what about his words cause you concern?", 
+        "Col. Mortimer Farnaby delivers a chilling tale about the experiences he faced plunging into the heart of darkness in distant lands. What awful tales of encounters with blighted creatures does he tell, and what parallels do you see with a current Threat you face? As a group, define a Clue for the Threat as it relates to the tale.",
+        "Millicent Bryan finally presents her paper as many of the assembled members of the Society drift off to other locales or sleep. Her insight is clearly incisive, even if it is mostly ignored by her peers. How does Millicent display an unusually perceptive insight on London, and what new matter does she bring to your attention? This counts as a Mastermind Clue.",
+    ],
+  },
+}

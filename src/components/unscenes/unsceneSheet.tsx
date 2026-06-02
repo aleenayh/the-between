@@ -7,14 +7,15 @@ import { parseStaticText } from "../playbooks/utils";
 import { PullOutDrawer } from "../shared/PullOutDrawer";
 import { Section } from "../shared/Section";
 import { StyledTooltip } from "../shared/Tooltip";
-import { conflagration, unscenes as unscenesContent, venusianUnscenes } from "./content";
+import { conflagration, royalSociety, unscenes as unscenesContent, venusianUnscenes } from "./content";
 
 export function UnsceneSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void }) {
     const {gameState, updateGameState} = useGame();  
     const unscenesUsed = gameState.unscenesUsed;
-    const { withVenusian, withConflagration } = mastermindUnscenes(gameState)
-    const allUnscenes = withVenusian ? [...Object.keys(venusianUnscenes), ...Object.keys(unscenesContent)] : withConflagration ? [ ...Object.keys(conflagration),...Object.keys(unscenesContent),] : Object.keys(unscenesContent);
-    const content = { ...conflagration,...venusianUnscenes, ...unscenesContent }
+    const { withVenusian, withConflagration, withRoyalSociety } = specialUnscenes(gameState)
+    const allUnscenes = [...(withVenusian ? Object.keys(venusianUnscenes) : []), ...(withConflagration ? Object.keys(conflagration) : []), ...(withRoyalSociety ? Object.keys(royalSociety) : []), ...Object.keys(unscenesContent)]
+    
+    const content = { ...conflagration,...venusianUnscenes, ...royalSociety, ...unscenesContent }
     const [selectedUnscene, setSelectedUnscene] = useState<string | null>(null);
 
     const markCompleted = (unsceneKey: string) => {
@@ -98,11 +99,13 @@ export function UnsceneSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen
   )
 }
 
-function mastermindUnscenes(gameState: GameState):{withVenusian: boolean, withConflagration: boolean} {
-  if (!gameState.mastermind) return { withVenusian: false, withConflagration: false }
+function specialUnscenes(gameState: GameState):{withVenusian: boolean, withConflagration: boolean, withRoyalSociety: boolean} {
+  const millieChecks =  gameState.hargraveHouse.residents?.find((r) => r.key === "millicent")?.checks ??   []
+  const millie = (millieChecks[millieChecks.length - 1] ?? 0) >= 1
+  if (!gameState.mastermind) return { withVenusian: false, withConflagration: false, withRoyalSociety: millie }
   const mastermind = gameState.mastermind
   const withVenusian = mastermind.title === "gesod"
   //HACK. Don't love the hard coded question but not sure it's worth the restructure to tie layers in to state.
   const withConflagration = mastermind.title === "wellingtonHughes" && mastermind.questions.some((q) => q.isActive && q.question === "Where is Loren's charity ball going to be held?")
-  return { withVenusian, withConflagration }
+  return { withVenusian, withConflagration, withRoyalSociety: millie }
 }

@@ -78,14 +78,14 @@ export function AddResidentForm({ setIsOpen }: { setIsOpen: (open: boolean) => v
             toast.error("Invalid resident selected.")
             return
           }
-          const startingLines = content.title === "Greco, the Dream Sovereign" ? [diverValues[Math.floor(Math.random() * diverValues.length)], dreamerValues[Math.floor(Math.random() * dreamerValues.length)], guideValues[Math.floor(Math.random() * guideValues.length)]] : Array.from({ length: content.onUnlock.extraLines ?? 0 }, () => "")
-          const numberChecks = content.prompts.length + (content.onUnlock.checks ?? 0) + (content.onUnlock.inlineChecks ?? 0) + 1 //always +1 for unlock header
+          const startingLines = content.title === "Greco, the Dream Sovereign" ? [diverValues[Math.floor(Math.random() * diverValues.length)], dreamerValues[Math.floor(Math.random() * dreamerValues.length)], guideValues[Math.floor(Math.random() * guideValues.length)]] : Array.from({ length: content.onUnlock?.[0]?.extraLines ?? 0 }, () => "")
+          const numberChecks = content.prompts.length + (content.onUnlock?.[0]?.checks ?? 0) + (content.onUnlock?.[0]?.inlineChecks ?? 0) + 1 //always +1 for unlock header
           const checks =Array.from({ length: numberChecks ?? 0 }, () => 0)
           const newResident = {
             key: data.resident,
             checks,
             extraLines: startingLines,
-            unlockCheck: Array.from({ length: content.onUnlock.checks ?? 0 }, () => 0),
+            unlockCheck: Array.from({ length: content.onUnlock?.[0]?.checks ?? 0 }, () => 0),
           }
           const newResidents = [...(gameState.hargraveHouse.residents ?? []), newResident]
           updateGameState({ hargraveHouse: { ...gameState.hargraveHouse, residents: newResidents } })
@@ -94,7 +94,7 @@ export function AddResidentForm({ setIsOpen }: { setIsOpen: (open: boolean) => v
         }
       
         return (
-            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
+            <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2 py-10">
               {availableResidents.map((resident) => (
                 <div key={resident} className="flex gap-2 items-center justify-start">
                   <input type="radio" {...register("resident")} value={resident} id={resident} />

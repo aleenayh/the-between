@@ -4,7 +4,7 @@ export type ResidentContent = {
     title: string;
     intro: string;
     prompts: string[];
-    onUnlock: { title: string; text: string[]; checks?: number; inlineChecks?:number, extraLines?: number };
+    onUnlock: Array<{ title: string; text: string[]; checks?: number; inlineChecks?:number, extraLines?: number }>;
 }
 
 const residentCustomFieldsSchema = z.object({
