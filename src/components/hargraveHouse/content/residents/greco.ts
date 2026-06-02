@@ -35,7 +35,7 @@ export const diverValues = [
         "Frame a scene with the Hunter standing before Greco, who is seated upon a throne, presiding over a court of mist and madness. <strong>Paint the Scene:</strong> Greco’s courtiers are Lost Ones, condemned to endlessly petition their dream sovereign for a place in his gossamer realm. Describe one; based on their appearance and mannerisms at court, how do they suffer in the real world? ",
         "Frame a scene with Greco and the Hunter crawling through the root system of an impossibly vast and ancient tree. <strong>Paint the Scene:</strong> How do we know this tree is God? ",
     ],
-    onUnlock: {
+    onUnlock: [{
         title: "A Society of Dreamers",
         text:         ["The consultations with Greco have led to an increased interest in dream explorations. Among the books in the vast, weird library of Hargrave House is a Norwegian tome called Et Samfunn av Drømmere, or A Society of Dreamers. The book details a ritual that allows a person, the Diver, to enter the dreams of a sleeping individual, the Dreamer; the actions of the Diver are controlled by other individuals present during the ritual, called Guides. Roll for each section below in order to detail the ritual.",
             "In game terms, a Hunter can declare during the Dusk Phase that they wish to dive into the dreams of a Side Character during a London Night Phase. So long as at least one other Hunter is willing to participate as a Guide, and the Hunters are able to meet the ritual requirements, the dive takes place and lasts the entirety of the Night Phase. ",  
@@ -71,5 +71,5 @@ export const diverValues = [
         inlineChecks: 5,
         extraLines:3,
         
-    }
+    }]
 }
