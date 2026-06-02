@@ -215,7 +215,7 @@ function Credits() {
       </p>
 
       <p>
-        The Between is a creation of Jason Cordova distributed by{" "}
+        <span translate="no">The Between</span>{" "}is a creation of Jason Cordova distributed by{" "}
         <a href="https://www.gauntlet-rpg.com/">The Gauntlet</a>. Please{" "}
         <a href="https://discord.com/invite/ScVrPDgfeg">join the Gauntlet on Discord</a> for the latest game updates.
       </p>

@@ -164,7 +164,7 @@ export function AbilityBox({ ability, value }: AbilityBoxProps) {
       <Dialog.Trigger asChild>
         <div className="flex flex-col gap-1 rounded-lg border border-theme-border-accent p-1 bg-theme-bg-secondary justify-center items-center min-w-[10%] cursor-pointer">
           <h4 className="text-theme-text-muted truncate max-w-full whitespace-nowrap overflow-hidden text-ellipsis">
-            {ability.slice(0, 4)}
+            <abbr title={ability}>{ability.slice(0, 4)}</abbr>
           </h4>
           <div className="text-center text-lg font-bold bg-transparent">{value}</div>
         </div>
