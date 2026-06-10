@@ -180,6 +180,7 @@ export function CharacterCreateForm({ playbookKey }: { playbookKey: Exclude<play
 
           <Section title="Choose A Vice">
             <SelectOrEdit name="vice" options={base.vices} register={register} />
+            <div className="inline-flex md:hidden"><MobileSelectOrEdit options={base.vices} name="vice" register={register} /></div>
           </Section>
 
                           {playbookKey !== playbookKeys.facsimile && (
@@ -345,14 +346,14 @@ function LookSelector({
   return (
     <>
       {/* Desktop: 3 separate selects */}
-      <div className="hidden sm:flex flex-col gap-2 justify-stretch items-stretch">
+      <div className="hidden md:flex flex-col gap-2 justify-stretch items-stretch">
         <SelectOrEdit name="look1" options={options} register={register} />
         <SelectOrEdit name="look2" options={options} register={register} />
         <SelectOrEdit name="look3" options={options} register={register} />
       </div>
 
       {/* Mobile: checklist with exactly 3 selections */}
-      <div className="sm:hidden flex flex-col gap-1 w-full">
+      <div className="md:hidden flex flex-col gap-1 w-full">
         <p className="text-sm text-theme-text-muted mb-1">Select 3 ({selectedLooks.length}/3)</p>
 
         {options.map((option) => {
@@ -406,7 +407,7 @@ function SelectOrEdit({
 	};
 
   return (
-    <div><div className="hidden md:inline-flex items-center gap-1 flex-grow">
+      <div className="hidden md:inline-flex items-center gap-1 flex-grow">
       {isEditing ? (
         <input
           {...rest}
@@ -439,8 +440,6 @@ function SelectOrEdit({
         </select>
       )}
       <PencilIconButton isEditing={isEditing} setIsEditing={setIsEditing} />
-    </div>
-    <MobileSelectOrEdit options={allOptions} name={name} register={register} />
     </div>
   )
 }
@@ -541,7 +540,7 @@ function MobileSelectOrEdit({
   }
 
   return(
-        <div className="sm:hidden flex flex-col gap-1 w-full">
+        <div className="md:hidden flex flex-col gap-1 w-full">
         <p className="text-sm text-theme-text-muted mb-1">Select one or write your own:</p>
 
         {allOptions.map((option) => {
