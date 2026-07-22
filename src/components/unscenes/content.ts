@@ -291,3 +291,73 @@ export const royalSociety: Record<string, UnsceneContent> = {
     ],
   },
 }
+
+export const reverieUnscenes: Record<string, UnsceneContent> = {
+    "Seeing Red": {
+        title: "Seeing Red",
+        intro: "",
+        prompts: [
+            "An obvious act of cannibalism.",
+            "A mutilated body beneath the floorboards.",
+            "A wolf stalking in the background.",
+            "A person removes their own face, revealing something bestial underneath.",
+        ],
+    },
+    "White as Snow": {
+        title: "White as Snow",
+        intro: "",
+        prompts: [
+            "Seven identical objects or people.",
+            "A beautiful person surrounded by evidence of decay.",
+            "A poisoned gift offered with sincere affection.",
+            "Someone watching through a window who should be dead.",
+        ],
+    },
+    "Bluebeard": {
+        title: "Bluebeard",
+        intro: "",
+        prompts: [
+            "A key stained with blood.",
+            "A locked room everyone has been warned about.",
+            "Evidence of previous victims.",
+            "A spouse or lover asking one question too many.",
+        ],
+    },
+    "Four-And-Twenty Blackbirds": {
+        title: "Four-And-Twenty Blackbirds",
+        intro: "",
+        prompts: [
+            "Black birds emerge from somewhere they should not be able to fit.",
+            "A pie is opened to reveal something still alive.",
+            "Someone loses an eye during an otherwise cheerful gathering.",
+            "A song or nursery rhyme is being used to conceal a threat.",
+        ],
+        },
+    "The Green Prince": {
+        title: "The Green Prince",
+        intro: "",
+        prompts: [
+            "A bargain nobody remembers making.",
+            "Something unusual in a pond.",
+            "A person treated as disgusting despite speaking wisdom.",
+            "An unexpected transformation during a meal.",
+        ],
+    },
+    "The Golden Cage": {
+        title: "The Golden Cage",
+        intro: "",
+        prompts: [
+            "A beloved pet is being treated exactly like a person.",
+            "Someone is fed by hand despite being fully capable of feeding themselves.",
+            "Every door stands open, yet nobody leaves.",
+            "Someone begs not to be loved anymore.",
+        ],
+    },
+
+
+}
+
+export const reverieIntro: string[] = [
+    "The strange and horrifying dream realm the Queen of Hearts calls Reverie will begin to bleed into the real world, and will continue to do so even if the Queen of Hearts is defeated. Once unlocked, the Keeper can decide that any Unscene is a Reverie Unscene. After introducing the Unscene, the Keeper will then pick a Reverie (or write their own!) and reveal it to the players. Each Reverie has four short prompts; throughout the Unscene, the players should collectively incorporate all four prompts into their answers. The prompts do not need to appear immediately, nor must they appear in the order listed. However, by the end of the Unscene, all four should have appeared somewhere in the fiction. Note that these prompts will make the Unscenes seem strange and fantastical. That’s the point: a Reverie should feel like a fairy tale, nursery rhyme, dream, myth, or recurring nightmare imposing itself upon reality.",
+"Any prompt left unresolved becomes a Lingering. The Keeper may later invoke a Lingering as a reaction. The Lingering can be a complication on a die roll, a Danger, a Condition, a Clue, or simply a strange, unsettling detail in a future scene. If the Lingering is implicated in a die roll, such rolls are made at disadvantage, and can stack with other sources of disadvantage for double disadvantage (or, in the case where other sources of advantage and disadvantage cancel each other out, cause the roll to be made at regular disadvantage)."
+]

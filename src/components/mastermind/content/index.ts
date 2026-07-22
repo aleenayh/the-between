@@ -369,5 +369,56 @@ export const Masterminds: Record<string, MastermindContent> = {
 		] },
 		{ title: "Layer Five: The Confrontation", text: ["This layer is unlocked after the Hunters successfully answer the Mastermind Question, or The Whereabouts of the Wellington-Hughes is resolved, whichever comes first. Follow the instructions on the associated Confrontation sheet."] }
 		],
+	},
+	queenOfHearts: {
+		title: "The Queen of Hearts",
+		questions: [{
+			question: "How does the Queen of Hearts intend to alter the royal line of succession?",
+			complexity: 8,
+			layer: "Layer One: The Mastermind Question",
+		},
+	{
+		layer: "Layer Five: The Confrontation",
+		question: "[Keeper, replace this with your question!]",
+		complexity: 6,
+	}],
+	layers: [
+		{
+			title: "Layer One: The Mastermind Question",
+			text: [
+				"This layer is unlocked at the end of the first Night Phase. Immediately read the following:",
+				"Before we move into the Dawn, I want to tell you about one more person doing dark work tonight. A grand ballroom stretches endlessly beneath a crimson sky. Chandeliers hang from nothing at all. Hundreds of dancers move in perfect silence through the hall: noblewomen in pearl-white gowns, soldiers with ribbons pinned to their uniforms, widows in black lace, debutantes with flushed cheeks and hungry eyes. Every face is beautiful. Every smile is exhausted.",	
+				"Beyond the ballroom windows lies no London any of you recognize. The city outside has softened into dream: silver rivers winding through gardens of ivory roses, cathedral spires tangled in thorn-vines, palace rooftops drowned beneath moonlit fog. Somewhere far below, church bells ring underwater.",
+				"At the center of the ballroom sits the Queen of Hearts.Her gown spills across the marble steps beneath her throne like fresh blood. Jewels glitter at her throat, unable to conceal the thin execution scar circling her neck. Around her lounge pale courtiers in powdered wigs and half-buttoned uniforms. Servants drift silently through the crowd carrying silver platters laden with sugared fruits, oysters, and still-beating animal hearts.",
+				"A young man kneels trembling before the Queen. Though dressed in royal clothing, he wears no crown. His face shifts subtly each time you look at him: now Crown Prince Edward, now a younger version of King Henry VIII, now a frightened little boy standing alone in an enormous palace corridor.",
+				"The Queen lifts his chin gently. “You were born into the wrong story,” she whispers. Behind her, an immense mirror reflects not the ballroom, but Buckingham Palace draped in black mourning cloth.",
+				"Hargrave House does not yet know it, but we do: the Queen of Hearts intends to reshape the future of the British Crown. As players, we have our own Question to answer: How does the Queen of Hearts intend to alter the royal line of succession? (Complexity: 8). Hargrave House will immediately confront her once we’ve successfully answered it.",
+				"In addition to the above, Unscenes can be Reverie Unscenes during a London Night Phase (see: Reverie Unscenes in the Unscene tab). "
+			],
+		},
+		{ title: "Layer Two: The History of Mary I", text: ["This layer is unlocked after the second Threat is introduced. You now have a new Keeper reaction: Reveal History. Whenever you do it, mark a box below and reveal the information in whatever way makes sense in the scene."], checkList: [
+			"1515: King Henry threatens to strip his queen consort of her titles or worse if she fails to bear him a living boy. Catherine, through blood magic, finally births a healthy child: a vile cherub, pale as death, with eyes welling with blood and a wolfish grin. Thus the Queen of Hearts, Mary I, is born. ",
+
+"1516-1547: Mary is raised in captivity, with only her dreams to provide sanctuary. She is used as a political pawn, with her maidenhood offered to the highest bidder. Her father marries her off to a succession of foreign princes, but each man winds up exsanguinated. ",
+
+"1553: Mary takes the crown for herself. Her reign is soaked in blood as she persecutes her enemies and satisfies her dark desires. Mary is a physical manifestation of her father’s domestic monstrosity. ",
+
+"1558: Mary’s rule is unpopular and her half-sister Elizabeth I, the Virgin Queen, declares that the cure for her apparent vampirism would be for Mary to be “off with her head.” Elizabeth captures Mary and executes her. ",
+
+"Present: Mary lurks in the public mind. Children sing “Mary, Mary quite contrary” in the workhouses. Field nurses curse “Bloody Mary” at the sight of gushing wounds. Mary did not pass through the Blood-Soaked Portal at her execution: she escaped into her dreams, where she reigns supreme." 
+		] },
+		{ title: "Layer Three: A Threat Becomes a Servant",
+			text: ["This layer is unlocked after the fourth Threat is introduced.  Anytime thereafter, you can narrate a scene showing the Queen of Hearts breaking through the veil between worlds. She chooses an active Threat to become her champion, the Knave of Hearts. This Threat is now a Servant of the Mastermind. Note the Threat in the Servants section and tell the Hunters the Threat can no longer be resolved (it also ceases to be “active” for purposes of presenting new Threats, though it is still a danger in London). "],
+			addServant:true
+		},
+		{ title: "Layer Four: Reverend Haresby’s Tea Party",
+			text: [
+				"This Layer is unlocked after the Hunters have successfully resolved three Threats and all boxes from Layer Two have been marked, or if the Hunters get a miss on an attempt to answer the Mastermind Question. Anytime thereafter, you may do Struggle: Reverend Haresby’s Tea Party. The Struggle happens outside the normal phase structure. After the Struggle is complete, the players must immediately attempt to answer the Mastermind Question (this will be the second attempt if Layer Four was originally unlocked by getting a miss on an attempt to answer the Mastermind Question). This event is considered resolved after the end of the Struggle and the Mastermind Question is attempted; immediately go to the Dawn Phase."
+],
+		},
+		{ title: "Layer Five: The Confrontation",
+			text: ["This layer is unlocked after the Hunters successfully answer the Mastermind Question, or Struggle: Reverend Haresby’s Tea Party is resolved, whichever comes first. Follow the instructions on the associated Confrontation sheet. "],
+		}
+	],
 	}
 } as const;
