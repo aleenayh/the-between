@@ -7,12 +7,12 @@ import { parseStaticText } from "../playbooks/utils";
 import { PullOutDrawer } from "../shared/PullOutDrawer";
 import { Section } from "../shared/Section";
 import { StyledTooltip } from "../shared/Tooltip";
-import { conflagration, royalSociety, unscenes as unscenesContent, venusianUnscenes } from "./content";
+import { conflagration, reverieIntro, reverieUnscenes, royalSociety, unscenes as unscenesContent, venusianUnscenes } from "./content";
 
 export function UnsceneSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen: (open: boolean) => void }) {
     const {gameState, updateGameState} = useGame();  
     const unscenesUsed = gameState.unscenesUsed;
-    const { withVenusian, withConflagration, withRoyalSociety } = specialUnscenes(gameState)
+    const { withVenusian, withConflagration, withRoyalSociety, withReverie } = specialUnscenes(gameState)
     const allUnscenes = [...(withVenusian ? Object.keys(venusianUnscenes) : []), ...(withConflagration ? Object.keys(conflagration) : []), ...(withRoyalSociety ? Object.keys(royalSociety) : []), ...Object.keys(unscenesContent)]
     
     const content = { ...conflagration,...venusianUnscenes, ...royalSociety, ...unscenesContent }
@@ -94,18 +94,50 @@ export function UnsceneSheet({ isOpen, setIsOpen }: { isOpen: boolean; setIsOpen
             })}
             </div>
             </Section>
+            {withReverie && <ReverieSection markCompleted={markCompleted} />}
         </PullOutDrawer>
     </div>
   )
 }
 
-function specialUnscenes(gameState: GameState):{withVenusian: boolean, withConflagration: boolean, withRoyalSociety: boolean} {
+function ReverieSection({ markCompleted }: { markCompleted: (unsceneKey: string) => void }) {
+  const {gameState} = useGame();
+  return (
+    <div>
+      <h2 className="text-xl font-bold text-theme-text-accent text-center">Reverie Unscenes</h2>
+      <p className="text-sm italic text-left flex flex-col gap-4">{reverieIntro.map((p)=> <span key={`reverie-intro-${p}`}>{p}</span>)}</p>
+      <div className="grid grid-cols-2 gap-2 text-sm justify-center">
+        {Object.entries(reverieUnscenes).map(([unsceneKey, unscene]) =>     {
+          const used = gameState.unscenesUsed?.includes(unsceneKey)
+      return (
+        <div key={unsceneKey} className={`w-full p-2 flex flex-col gap-2 text-sm justify-start items-center border border-theme-border-accent rounded-md`}>
+          <div className=        {`w-full flex gap-2 justify-start items-center`}>
+            <h3 className={`text-md font-bold text-theme-text-accent text-left flex-1 ${used ? "line-through" : ""}`}>{parseStaticText(unscene.title)}</h3>{" "}
+            <div className="w-1/2"><button type="button" className="gridButton" onClick={() => markCompleted(unsceneKey)}>
+              {used ? "Restore" : "Complete"}
+            </button></div>
+          </div>
+          <ol className={`text-left ${used ? "line-through" : ""}`}>
+            {unscene.prompts.map((prompt) => (
+              <li key={prompt}>{parseStaticText(prompt)}</li>
+            ))}
+          </ol>
+        </div>
+      )
+    })}
+      </div>
+    </div>
+  )
+}
+
+function specialUnscenes(gameState: GameState):{withVenusian: boolean, withConflagration: boolean, withRoyalSociety: boolean, withReverie: boolean} {
   const millieChecks =  gameState.hargraveHouse.residents?.find((r) => r.key === "millicent")?.checks ??   []
   const millie = (millieChecks[millieChecks.length - 1] ?? 0) >= 1
-  if (!gameState.mastermind) return { withVenusian: false, withConflagration: false, withRoyalSociety: millie }
+  if (!gameState.mastermind) return { withVenusian: false, withConflagration: false, withRoyalSociety: millie, withReverie: false }
   const mastermind = gameState.mastermind
   const withVenusian = mastermind.title === "gesod"
+  const withReverie = mastermind.title === "queenOfHearts"
   //HACK. Don't love the hard coded question but not sure it's worth the restructure to tie layers in to state.
   const withConflagration = mastermind.title === "wellingtonHughes" && mastermind.questions.some((q) => q.isActive && q.question === "Where is Loren's charity ball going to be held?")
-  return { withVenusian, withConflagration, withRoyalSociety: millie }
+  return { withVenusian, withConflagration, withRoyalSociety: millie, withReverie }
 }
