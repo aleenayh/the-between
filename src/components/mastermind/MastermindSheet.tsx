@@ -7,7 +7,7 @@ import { useGame } from "../../context/GameContext"
 import { usePreferences } from "../../context/PreferencesContext"
 import { PlayerRole } from "../../context/types"
 import { PencilIcon } from "../playbooks/creation/PencilIconButton"
-import { parseStaticText } from "../playbooks/utils"
+import { cleanBlockToSingleString, parseStaticText } from "../playbooks/utils"
 import { CloseButton } from "../shared/CloseButton"
 import { Divider } from "../shared/Divider"
 import { GlassyButton } from "../shared/GlassyButton"
@@ -320,8 +320,8 @@ function CustomMastermindForm({setIsOpen}: {setIsOpen: (isOpen: boolean) => void
 
   const onSubmit = (data: CustomMastermindFormInputs) => {
     const questions = data.questions.map    ((q) => ({
-      question: q.question,
-      opportunity: q.opportunity ?? "",
+      question: cleanBlockToSingleString      (q.question),
+      opportunity: cleanBlockToSingleString      (q.opportunity ?? ""),
       complexity: q.complexity,
       clues: [],
       isActive: q.isActive,
