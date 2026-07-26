@@ -2,7 +2,6 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Dialog } from "radix-ui";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { custom } from "zod";
 import { useGame } from "../../../context/GameContext";
 import { PlayerRole } from "../../../context/types";
 import { CloseButton } from "../../shared/CloseButton";
