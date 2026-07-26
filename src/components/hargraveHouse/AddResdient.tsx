@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import { useGame } from "../../context/GameContext"
 import { usePreferences } from "../../context/PreferencesContext"
+import { cleanBlockToSingleString, cleanBlockToStringArrays } from "../playbooks/utils"
 import { residentContent } from "./content/residents"
 import { diverValues, dreamerValues, guideValues } from "./content/residents/greco"
 import type { ResidentCustomFields } from "./types"
@@ -121,10 +122,13 @@ export function AddResidentForm({ setIsOpen }: { setIsOpen: (open: boolean) => v
     const onSubmit = (data: ResidentCustomFields) => {
         const numberChecks = data.prompts.length
         const checks = Array.from({ length: numberChecks }, () => 0)
+        const cleanData = {
+          title: data.title, intro: cleanBlockToSingleString(data.intro), prompts: cleanBlockToStringArrays(data.prompts)
+        }
         const newResident = {
             key: data.title,
             checks,
-            customFields: data,
+            customFields: cleanData,
             unlockCheck:             [0]
         }
         const newResidents = [...(gameState.hargraveHouse.residents ?? []), newResident]

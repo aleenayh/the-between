@@ -12,7 +12,7 @@ import { banes } from "../content/dodger"
 import { obligationDefs } from "../content/underground"
 import { orderAbilities } from "../sharedComponents/AbilityBoxes"
 import type { Abilities, CharacterNotTroupe, playbookKey } from "../types"
-import { parseStaticText } from "../utils"
+import { cleanBlockToStringArrays, parseStaticText } from "../utils"
 
 type AdvancementSteps = "select-advancement" | "adjust-stats" | "select-move" | "write-custom-move" | "unmark-pq-items" | "unlock-rec" | "unmark-rec" | "doll-part" | "unlock-adaptor-key" | "custom-adaptor" | "unmark-hunterslife" | "unmark-reflection" | "unlock-energy" | "unmark-wyrmbane" | "unmark-mask" | "unlock-vault-key" | "change-all" | "new-aperture" | "new-obligation"
 
@@ -396,7 +396,7 @@ function MoveWriter({
   const onSubmit = (data: { title: string; text: string; numberChecks: number; numberLines: number }) => {
     const newMove = {
       title: data.title,
-      text: parseAspects(data.text.split("\n")),
+      text: parseAspects(cleanBlockToStringArrays(data.text)),
       checks: Array.from({ length: data.numberChecks }, () => 0),
       lines: Array.from({ length: data.numberLines }, () => ""),
     }
@@ -441,8 +441,7 @@ function MoveWriter({
       />
 
       <p>
-        Optionally, {apertureVersion ? "apertures" : "moves"} can include some number of unlabeled check boxes or editable blank lines. Define the number of
-        each below.
+        Optionally, {apertureVersion ? "apertures" : "moves"} can include some number of unlabeled check boxes or editable blank lines. Define the number of each below.
       </p>
       <div className="grid grid-cols-4 gap-2">
         <p>Checkboxes:</p>

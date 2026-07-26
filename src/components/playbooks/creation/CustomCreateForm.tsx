@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Dialog } from "radix-ui";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { custom } from "zod";
 import { useGame } from "../../../context/GameContext";
 import { PlayerRole } from "../../../context/types";
 import { CloseButton } from "../../shared/CloseButton";
@@ -10,6 +11,7 @@ import { GlassyButton } from "../../shared/GlassyButton";
 import { heraldPlaybookAdditions } from "../content/herald";
 import { AbilityBoxes } from "../sharedComponents/AbilityBoxes";
 import type { Character } from "../types";
+import { cleanBlockToStringArrays } from "../utils";
 
 
 type CharacterCreateFormInputs = {
@@ -598,7 +600,11 @@ function constructCustomCharacter(
 		experience: 0,
 		personalQuarters: [{text: "", marked: false}],
 		questions: Array.from({ length: questions.length }, () => 0),
-		customTextFields,
+		customTextFields: {
+			questionDefinitions: cleanBlockToStringArrays(customTextFields.questionDefinitions),
+			masksOfFutureDefinitions: cleanBlockToStringArrays(customTextFields.masksOfFutureDefinitions),
+			masksOfPastDefinitions: cleanBlockToStringArrays(customTextFields.masksOfPastDefinitions)
+		},
 	};
 }
 
@@ -635,7 +641,7 @@ export function WriteMoveModal({
 	}) => {
 		const newMove = {
 			title: data.title,
-			text: parseAspects(data.text.split("\n")),
+			text: parseAspects(cleanBlockToStringArrays(data.text)),
 			checks: Array.from({ length: data.numberChecks }, () => 0),
 			lines: Array.from({ length: data.numberLines }, () => ""),
 		};

@@ -3,6 +3,7 @@ import { useState } from "react"
 import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import { useGame } from "../../context/GameContext"
+import { cleanBlockToSingleString, cleanBlockToStringArrays } from "../playbooks/utils"
 import { CloseButton } from "../shared/CloseButton"
 import { Divider } from "../shared/Divider"
 import { GlassyButton } from "../shared/GlassyButton"
@@ -130,10 +131,10 @@ function CustomMysteryForm({
 			...mystery,
 			id: mystery?.id || generateThreatId(),
 			title: data.title,
-			intro: data.intro.split("\n").filter((line) => line.trim() !== ""),
+			intro: cleanBlockToStringArrays  (data.intro),
 			questions: data.questions.map(  (q) => ({
 				...q,
-				opportunity: typeof q.opportunity === "string" && q.opportunity.includes("\n") ? q.opportunity.split("\n") : q.opportunity,
+				opportunity: typeof q.opportunity === "string" && q.opportunity.includes("\n\n") ? cleanBlockToStringArrays(q.opportunity) : cleanBlockToSingleString(Array.isArray    (q.opportunity) ? q.opportunity.join("\n\n") : q.opportunity),
 			})),
 			theme: data.theme,
 			countdownTotal: data.countdownTotal,
