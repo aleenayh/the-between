@@ -136,7 +136,7 @@ export function MobileDrawerNavigation() {
 			<SafetyPane isOpen={safetyOpen} setIsOpen={setSafetyOpen} />
 			<SettingsPane isOpen={settingsOpen} setIsOpen={setSettingsOpen} />
 		</div>
-		<div className="absolute bottom-0 left-0 mx-0 w-full h-auto flex justify-stretch items-center whitespace-nowrap isolate z-10">
+		<div className="mt-auto mx-0 w-full h-auto flex justify-stretch items-center whitespace-nowrap isolate z-10">
 		{tabKeys.map((tab) => (
 			<button
 				type="button"
