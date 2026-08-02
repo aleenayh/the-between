@@ -136,11 +136,11 @@ export function MobileDrawerNavigation() {
 			<SafetyPane isOpen={safetyOpen} setIsOpen={setSafetyOpen} />
 			<SettingsPane isOpen={settingsOpen} setIsOpen={setSettingsOpen} />
 		</div>
-		<div className="absolute bottom-0 left-0 mx-0 w-full h-auto flex justify-stretch items-center whitespace-nowrap isolate z-10">
+		<div className="sticky bottom-0 left-0 w-full h-auto flex justify-stretch items-center whitespace-nowrap isolate z-10 -mx-4">
 		{tabKeys.map((tab) => (
 			<button
 				type="button"
-				className={`mobileNavButton ${tab === "home" ?     "flex-1 scale-125 z-[15]": "scale-100 z-10"}`}
+				className={`mobileNavButton ${tab === "home" ?     "grow scale-125 z-[15]": "scale-100 z-10"}`}
 				onClick={() => closeAllExcept(tab)}
 				key={tab}
 			>
