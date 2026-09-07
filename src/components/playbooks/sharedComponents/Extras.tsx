@@ -2,6 +2,7 @@ import { Section } from "../../shared/Section";
 import { playbookBases } from "../content";
 import { type CharacterNotTroupe, playbookKeys } from "../types";
 import { parseStaticText } from "../utils";
+import { Portrait } from "./Portrait";
 
 export function Extras({ character }: { character: CharacterNotTroupe }) {
 	const base = playbookBases[character.playbook];
@@ -29,6 +30,7 @@ export function Extras({ character }: { character: CharacterNotTroupe }) {
 						{base.intro.map((intro) => (
 							<p key={intro}>{parseStaticText(intro)}</p>
 						))}
+						<div className="float-left clear-none flex justify-center"><Portrait character={character} /></div>
 					</div>
 				</Section>
 			)}
