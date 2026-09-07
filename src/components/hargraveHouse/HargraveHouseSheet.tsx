@@ -11,7 +11,7 @@ import { PullOutDrawer } from "../shared/PullOutDrawer"
 import { RollableLine } from "../shared/RollableLine"
 import { Section } from "../shared/Section"
 import { StyledTooltip, } from "../shared/Tooltip"
-import { AddResidentForm } from "./AddResdient"
+import { AddResidentForm, CustomResidentForm } from "./AddResdient"
 import { residentContent } from "./content/residents"
 import { diverValues, dreamerValues, guideValues } from "./content/residents/greco"
 import { roomContent } from "./content/rooms"
@@ -352,6 +352,7 @@ function Residents() {
 
 function Resident({ content, state }: { content: ResidentContent | ResidentCustomFields; state: ResidentState }) {
   const { gameState, updateGameState, user: { role } } = useGame()
+  const [editModalOpen, setEditModalOpen] = useState(false)
 
   const removeResident = (key: string) => {
     const newResidents = gameState.hargraveHouse.residents?.filter((r) => r.key !== key)
@@ -409,7 +410,7 @@ function Resident({ content, state }: { content: ResidentContent | ResidentCusto
         return (
         <p key={prompt} className="text-sm"><input type="checkbox" checked={checks?.[index] === 1} onChange={() => setResidentCheck(index)} /> {parseStaticText(prompt)}</p>
       )})}
-      {"onUnlock" in content ? content.onUnlock.map((onUnlock) => {
+      {"onUnlock" in content ? content.onUnlock?.map((onUnlock) => {
         return (<div key={content.title}>
         <h4 className="inline text-sm font-bold text-theme-text-accent font-[var(--header-font]"><input type="checkbox" checked={checks?.[checkIndex+1] === 1} onChange={() => setResidentCheck(checkIndex+1)} /> {onUnlock.title}: </h4>
         {onUnlock.text.map((text, index) => {
@@ -422,7 +423,7 @@ function Resident({ content, state }: { content: ResidentContent | ResidentCusto
             </div>
           ) 
         })}
-        {onUnlock.checks && (
+        {"checks" in onUnlock && onUnlock.checks && (
           <div className="flex gap-3 w-full justify-center items-start">
             {Array.from({ length: onUnlock.checks }).map((_, index) => (
               // biome-ignore lint/suspicious/noArrayIndexKey: order unimportant
@@ -430,7 +431,7 @@ function Resident({ content, state }: { content: ResidentContent | ResidentCusto
             ))}
           </div>
         )}
-        {onUnlock.extraLines && title !== "Greco, the Dream Sovereign" && (
+        {"extraLines" in onUnlock && onUnlock.extraLines && title !== "Greco, the Dream Sovereign" && (
           <div className="text-sm flex flex-col justify-start items-stretch gap-2">
             {Array.from({ length: onUnlock.extraLines }).map((_, index) => (
               <EditableLine
@@ -450,10 +451,33 @@ function Resident({ content, state }: { content: ResidentContent | ResidentCusto
         )
       }) : null}
       {role === PlayerRole.KEEPER && (
+        <div className="w-full flex justify-evenly items-center">
+                  {state.customFields && (
+                    <div className="w-1/3 mx-auto">
+          <Dialog.Root open={editModalOpen} onOpenChange={setEditModalOpen}>
+            <Dialog.Trigger asChild>
+              <button type="button" className="gridButton">
+                Edit Resident
+              </button>
+            </Dialog.Trigger>
+            <Dialog.Portal>
+              <Dialog.Overlay className="DialogOverlay" />
+              <Dialog.Content className="DialogContent">
+                <Dialog.Close className="DialogClose">X</Dialog.Close>
+                <Dialog.Title className="DialogTitle">Edit Resident</Dialog.Title>
+                <Dialog.Description className="DialogDescription">Edit the resident's information.</Dialog.Description>
+                <CustomResidentForm triggerClose={ () => setEditModalOpen(false)} resident={state} />
+              </Dialog.Content>
+            </Dialog.Portal>
+          </Dialog.Root>
+          </div>
+        )}
+        <Dialog.Root>
         <Tooltip.Root>
+          <Dialog.Trigger asChild>
           <div className="w-1/3 mx-auto">
             <Tooltip.Trigger asChild>
-              <button type="button" className="gridButton" onClick={() => removeResident(state.key)}>
+              <button type="button" className="gridButton">
                 Remove Resident
               </button>
             </Tooltip.Trigger>
@@ -464,7 +488,25 @@ function Resident({ content, state }: { content: ResidentContent | ResidentCusto
               </StyledTooltip>
             </Tooltip.Content>
           </div>
+          </Dialog.Trigger>
         </Tooltip.Root>
+        <Dialog.Portal>
+        <Dialog.Overlay className="DialogOverlay" />
+          <Dialog.Content className="DialogContent">
+            <Dialog.Close className="DialogClose">X</Dialog.Close>
+            <Dialog.Title className="DialogTitle">Remove         {state.key}</Dialog.Title>
+            <Dialog.Description className="DialogDescription">
+              Remove the resident from the game. Do this if all benefits are exhausted and your players no longer need
+              to see it.
+            </Dialog.Description>
+
+            <button type="button" className="gridButton" onClick={() => removeResident(state.key)}>
+              Remove Resident
+            </button>
+          </Dialog.Content>
+        </Dialog.Portal>
+        </Dialog.Root>
+        </div>
       )}
     </Section>
   </div>
