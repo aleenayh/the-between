@@ -192,7 +192,8 @@ export const characterSchema = z.object({
   questions: z.array(z.number()).catch(catchWithWarning("character.questions", [0, 0, 0, 0, 0])),
   customTextFields: customTextFieldsSchema.optional().catch({}),
   isHerald: z.boolean().catch(catchWithWarning("character.isHerald", false)),
-  coreMoveState: coreMoveStateSchema.optional  ().catch(undefined)
+  coreMoveState: coreMoveStateSchema.optional  ().catch(undefined),
+  portraitUrl: z.string().optional().catch(undefined),
 })
 
 export type CharacterNotTroupe = z.infer<typeof characterSchema>

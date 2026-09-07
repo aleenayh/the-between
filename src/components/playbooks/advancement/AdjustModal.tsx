@@ -28,6 +28,7 @@ export function AdjustmentModal({ character }: { character: CharacterNotTroupe }
 				presence: 0,
 				sensitivity: 0,
 			},
+			portraitUrl: character?.portraitUrl ?? "",
 		},
 	});
 	if (!character) {
@@ -39,6 +40,7 @@ export function AdjustmentModal({ character }: { character: CharacterNotTroupe }
 		look: string;
 		vice: string;
 		abilities: Abilities;
+		portraitUrl: string | undefined;
 	}) => {
 		updateGameState({
 			players: gameState.players.map((player) =>
@@ -108,6 +110,10 @@ export function AdjustmentModal({ character }: { character: CharacterNotTroupe }
 								))}
 							</div>
 						</div>
+
+						<label htmlFor="portraitUrl">Portrait</label>
+						<p className="text-xs text-theme-text-muted">Enter a URL to display an image of your character. Optional. Displays in 3:2 aspect ratio.</p>
+						<input type="text" {...register("portraitUrl")} id="portraitUrl" />
 
 						<button
 							type="submit"
