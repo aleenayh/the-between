@@ -7,7 +7,7 @@ import { usePreferences } from "../../context/PreferencesContext"
 import { cleanBlockToSingleString, cleanBlockToStringArrays } from "../playbooks/utils"
 import { residentContent } from "./content/residents"
 import { diverValues, dreamerValues, guideValues } from "./content/residents/greco"
-import type { ResidentCustomFields } from "./types"
+import type { Resident, ResidentCustomFields } from "./types"
 
 export function AddResidentForm({ setIsOpen }: { setIsOpen: (open: boolean) => void }) {
     const [formType, setFormType] = useState<"custom" | "standard">("standard")
@@ -55,7 +55,7 @@ export function AddResidentForm({ setIsOpen }: { setIsOpen: (open: boolean) => v
         key={formType}
         >
           {formType === "standard" && <CoreResidentForm triggerClose={()=> setIsOpen(false)} />}
-      {formType === "custom" && <CustomResidentForm triggerClose={()=> setIsOpen(false)} />}
+      {formType === "custom" && <CustomResidentForm triggerClose={()=> setIsOpen(false)} resident=        {undefined}/>}
         </motion.div>
         </AnimatePresence>
         </div>
@@ -108,13 +108,14 @@ export function AddResidentForm({ setIsOpen }: { setIsOpen: (open: boolean) => v
             </form>
     )}
   
-  function CustomResidentForm({ triggerClose }: { triggerClose: () => void }) {
+  export function CustomResidentForm({ triggerClose, resident }: { triggerClose: () => void, resident?: Resident }) {
     const [numberOfPrompts, setNumberOfPrompts] = useState(4)
     const { register, handleSubmit, reset, setValue, watch } = useForm<ResidentCustomFields>({
       defaultValues: {
-        title: "",
-        intro: "",
-        prompts: Array.from({ length: numberOfPrompts }, () => ""),
+        title: resident?.customFields?.title ?? "",
+        intro: resident?.customFields?.intro ?? "",
+        prompts: resident?.customFields?.prompts ?? Array.from({ length: numberOfPrompts }, () => ""),
+        onUnlock: resident?.customFields?.onUnlock ?? []
       },
     })
     const { gameState, updateGameState } = useGame()
@@ -123,7 +124,8 @@ export function AddResidentForm({ setIsOpen }: { setIsOpen: (open: boolean) => v
         const numberChecks = data.prompts.length
         const checks = Array.from({ length: numberChecks }, () => 0)
         const cleanData = {
-          title: data.title, intro: cleanBlockToSingleString(data.intro), prompts: cleanBlockToStringArrays(data.prompts)
+          title: data.title, intro: cleanBlockToSingleString(data.intro), prompts: cleanBlockToStringArrays(data.prompts),
+          onUnlock:           data.onUnlock?.map((onUnlock) => ({ title: onUnlock.title, text: cleanBlockToStringArrays(onUnlock.text) })) ?? []
         }
         const newResident = {
             key: data.title,
@@ -131,7 +133,8 @@ export function AddResidentForm({ setIsOpen }: { setIsOpen: (open: boolean) => v
             customFields: cleanData,
             unlockCheck:             [0]
         }
-        const newResidents = [...(gameState.hargraveHouse.residents ?? []), newResident]
+        const oldResidents = resident ? gameState.hargraveHouse.residents?.filter((r) => r.key !== resident.key) : gameState.hargraveHouse.residents
+        const newResidents = [...(oldResidents ?? []), newResident]
         updateGameState({ hargraveHouse: { ...gameState.hargraveHouse, residents: newResidents } })
         reset()
         triggerClose()
@@ -179,6 +182,12 @@ export function AddResidentForm({ setIsOpen }: { setIsOpen: (open: boolean) => v
             <button type="button" onClick={addPrompt} className="w-1/2 mx-auto bg-theme-bg-accent text-theme-text-accent p-1 md:px-4 md:py-2 rounded-lg opacity-80 hover:opacity-100">Add Prompt</button>
             <button type="button" onClick={removePrompt} className="w-1/2 mx-auto bg-theme-bg-accent text-theme-text-accent p-1 md:px-4 md:py-2 rounded-lg opacity-80 hover:opacity-100">Remove Prompt</button>
         </div>
+        <h4 className="text-sm font-bold text-theme-text-accent">Extra Benefit</h4>
+        <p className="text-xs italic text-theme-text-muted text-left">A special move, phase, or ability that is unlocked after visiting thsi resident a certain number of times. Optional.</p>
+        <label htmlFor="onUnlock.0.title">Title</label>
+        <input type="text" {...register("onUnlock.0.title")} />
+        <label htmlFor="onUnlock.0.text">Description</label>
+        <textarea {...register("onUnlock.0.text")} />
         <button type="submit" className="gridButton mb-10">
             Add Resident
         </button>

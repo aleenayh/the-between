@@ -8,9 +8,15 @@ export type ResidentContent = {
 }
 
 const residentCustomFieldsSchema = z.object({
-  title: z.string(),
-  intro: z.string(),
-  prompts: z.array(z.string()),
+  title: z.string().catch(""),
+  intro: z.string().catch(""),
+  prompts: z.array(z.string().catch("")).catch(  []),
+  onUnlock: z.array  (
+    z.object({
+      title: z.string().catch(""),
+      text: z.array(z.string().catch("")).catch([]),
+    }),
+  ).optional().catch(undefined),
 })
 
 export type ResidentCustomFields = z.infer<typeof residentCustomFieldsSchema>;

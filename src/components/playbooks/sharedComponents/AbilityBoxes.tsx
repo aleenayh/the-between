@@ -173,7 +173,7 @@ export function AbilityBox({ ability, value }: AbilityBoxProps) {
         <Dialog.Overlay className="DialogOverlay" />
         <Dialog.Content className="DialogContent">
           <Dialog.Close asChild>
-<CloseButton onClick={() => handleOpenChange(false)}/>
+            <CloseButton onClick={() => handleOpenChange(false)}/>
           </Dialog.Close>
           <Dialog.Title className="DialogTitle">Roll {ability.charAt(0).toUpperCase() + ability.slice(1)}</Dialog.Title>
           <Dialog.Description className="hidden">Roll with {ability}</Dialog.Description>
