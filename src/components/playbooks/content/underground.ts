@@ -81,7 +81,7 @@ export const undergroundPlaybook: PlaybookBase = {
     "a thin circlet crown crafted from a metal not known to man", "a wellington top hat made finely with beaver and silk", "straw canotier with periwinkle grosgrain ribbon", "a hijab that smells of old Teeta’s kitchen", "missing patches of hair", "shaved right eyebrow", "adoring eyes", "perpetually flushed cheeks", "porcelain skin", "a gap-toothed grin", "monocle and pipe", "Bedfordshire bobbin lace collar beautified with butterflies and bees", "pink puffy sleeves", "high-necked wool sweater", "a too-tight whale-boned corset", "an exuberance of trims and furls", "box-pleated skirts", "shredded blue gown", "stolen nurse’s apron", "hidden scars", "striped stockings", "shoes that are ripping at the toes", "single breasted overcoat with a rabbit fur collar", "cane with a flamingo pommel", "a luxurious three-wheeled rolling chaise Bath chair"
   ],
   vices: [
-"croquette", "dolls", "armchair psycho-analysis", "exploring forgotten places", "hookah"
+"croquet", "dolls", "armchair psycho-analysis", "exploring forgotten places", "hookah"
   ],
   questions: [
     "Did you live by your own Convictions?",
