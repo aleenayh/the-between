@@ -180,7 +180,6 @@ export function CharacterCreateForm({ playbookKey }: { playbookKey: Exclude<play
 
           <Section title="Choose A Vice">
             <SelectOrEdit name="vice" options={base.vices} register={register} />
-            <div className="inline-flex md:hidden"><MobileSelectOrEdit options={base.vices} name="vice" register={register} /></div>
           </Section>
 
                           {playbookKey !== playbookKeys.facsimile && (
@@ -407,7 +406,13 @@ function SelectOrEdit({
 	};
 
   return (
-      <div className="hidden md:inline-flex items-center gap-1 flex-grow">
+      <div className="w-full flex flex-grow">
+                          {name === "vice" && (
+        <div className="inline-flex md:hidden">
+          <MobileSelectOrEdit options={options} name="vice" register={register} />
+        </div>
+      )}
+<div className="hidden md:inline-flex items-center gap-1 flex-grow">
       {isEditing ? (
         <input
           {...rest}
@@ -440,6 +445,7 @@ function SelectOrEdit({
         </select>
       )}
       <PencilIconButton isEditing={isEditing} setIsEditing={setIsEditing} />
+    </div>
     </div>
   )
 }
