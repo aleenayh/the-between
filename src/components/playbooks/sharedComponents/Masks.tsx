@@ -3,7 +3,7 @@ import { useGame } from "../../../context/GameContext"
 import type { GameState } from "../../../context/types"
 import { customFieldOrFallback, playbookBases } from "../content"
 import { heraldPlaybookAdditions } from "../content/herald"
-import { type CharacterNotTroupe, type CoreMoveState, type playbookKey, playbookKeys } from "../types"
+import { type Abilities, type CharacterNotTroupe, type CoreMoveState, type playbookKey, playbookKeys } from "../types"
 import { parseStaticText } from "../utils"
 
 export function Masks({ character }: { character: CharacterNotTroupe }) {
@@ -42,6 +42,7 @@ export function Masks({ character }: { character: CharacterNotTroupe }) {
   const onToggleMaskFuture = useCallback(
     (checked: boolean, index: number) => {
       const coreMoveUpdate = checkCoreMoveUpdate(character, "future", index)
+      const abilities = checkAbilityUpdate(character, index)
       const newMasksOfFuture = [...character.masksOfFuture]
       newMasksOfFuture[index] = checked ? 1 : 0
       updateGameState({
@@ -51,6 +52,7 @@ export function Masks({ character }: { character: CharacterNotTroupe }) {
                 ...player,
                 character: {
                   ...character,
+                  abilities,
                   masksOfFuture: newMasksOfFuture,
                   ...(coreMoveUpdate ? { coreMoveState: coreMoveUpdate } : {}),
                 },
@@ -202,4 +204,23 @@ function checkCoreMoveUpdate(character: CharacterNotTroupe, type: "past" | "futu
         return null
     }
   }
+}
+
+function checkAbilityUpdate(character:CharacterNotTroupe, index:number):Abilities {
+  if (character.playbook !== "volatile") return character.abilities;
+  const abilities = {...character.abilities}
+  switch (index) {
+    case 1: 
+    abilities.presence -= 1;
+    return abilities;
+    case 2: 
+    abilities.vitality -= 1;
+    return abilities;
+    case 3:
+      abilities.composure -= 2;
+      abilities.sensitivity += 1;
+      abilities.reason += 1;
+      return abilities;
+  }
+  return abilities;
 }
