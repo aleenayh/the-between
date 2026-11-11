@@ -54,7 +54,7 @@ const extraMovesPerPlaybook: Record<playbookKey, number> = {
   [playbookKeys.legacy]: 0,
   [playbookKeys.underground]: 0,
   [playbookKeys.selkie]: 0,
-  //[playbookKeys.volatile]: 0, //TODO
+  [playbookKeys.volatile]: 1, 
 }
 
 export function CharacterCreateForm({ playbookKey }: { playbookKey: Exclude<playbookKey, "custom" | "informals"> }) {
@@ -640,7 +640,7 @@ const constructMoves = (moves:PlaybookBase["moves"]) => {
 }
 
 function hasCustomMoveState(playbookKey: playbookKey) {
-  return playbookKey === playbookKeys.facsimile || playbookKey === playbookKeys.dodger || playbookKey === playbookKeys.legacy || playbookKey === playbookKeys.martian || playbookKey === playbookKeys.underground;
+  return playbookKey === playbookKeys.facsimile || playbookKey === playbookKeys.dodger || playbookKey === playbookKeys.legacy || playbookKey === playbookKeys.martian || playbookKey === playbookKeys.underground || playbookKey === playbookKeys.volatile;
 }
 
 const coreMoveState = (playbookKey: playbookKey): {coreMoveState:CoreMoveState} | undefined => {
@@ -654,5 +654,24 @@ const coreMoveState = (playbookKey: playbookKey): {coreMoveState:CoreMoveState} 
     return { coreMoveState: { type: "martian" as const, keys: 1, vaults: startingVaults, activeAbilities: [] } }
   } else if (playbookKey === playbookKeys.underground) {
     return { coreMoveState: { type: "underground" as const, obligations: Array.from({ length: 15 }, () => "-"), obligationTrack: Array.from({ length: 6 }, () => 0) } }
+  } else if (playbookKey === playbookKeys.volatile) {
+    return {
+      coreMoveState: {type: "volatile" as const,
+        elixirs:         [],
+        aspects: [
+          "You can see and hear beyond normal human limitations.","You have the strength of a bull.","You can only be seen if someone is knowingly looking at you.", "","","","","",""
+        ],
+        complications: [
+          "Something about you draws unwanted attention.",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ],
+        reagent: [0,0,0],
+      }
+    }
   }
 }

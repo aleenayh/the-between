@@ -6,6 +6,8 @@ import {ReactComponent as AdaptorKey } from "../../assets/adaptor.svg";
 import { ReactComponent as ApertureIcon } from "../../assets/aperture.svg";
 import { ReactComponent as BabySVG } from "../../assets/baby.svg";
 import { ReactComponent as DragonIcon } from "../../assets/dragon.svg";
+import { ReactComponent as ElixirEmptyIcon } from "../../assets/elixir-empty.svg";
+import { ReactComponent as ElixirFullIcon } from "../../assets/elixir-full.svg";
 import { ReactComponent as XIcon } from "../../assets/ex.svg";
 import { ReactComponent as LockIcon } from "../../assets/lock.svg";
 import { ReactComponent as KeyA } from "../../assets/martian/keyA.svg";
@@ -21,6 +23,7 @@ import { CloseButton } from "../../shared/CloseButton";
 import { Divider } from "../../shared/Divider";
 import { EditableLine } from "../../shared/EditableLine";
 import { GlassyButton } from "../../shared/GlassyButton";
+import { Section } from "../../shared/Section";
 import { playbookBases } from "../content";
 import { banes as baneText, boons as boonText } from "../content/dodger";
 import { dollPartDescriptions } from "../content/facsimile";
@@ -48,7 +51,7 @@ export function Moves({ character }: { character: CharacterNotTroupe }) {
 	);
 }
 
-const specialMoveTitles = ["The Child", "The Royal Explorer's Club","Rites of Salt & Smoke", "The Reflection","The Family", "The Phantom", "Doll Parts", "The Offering", "The Dragon Sickness", "…Is Never Over", "The Five Vaults of Tarthor", "The Apertures of the Awakened Mind", "Defy Your Obligations", "The Aperture of the Pocket Watch", "Severed From The Sea"]
+const specialMoveTitles = ["The Child", "The Royal Explorer's Club","Rites of Salt & Smoke", "The Reflection","The Family", "The Phantom", "Doll Parts", "The Offering", "The Dragon Sickness", "…Is Never Over", "The Five Vaults of Tarthor", "The Apertures of the Awakened Mind", "Defy Your Obligations", "The Aperture of the Pocket Watch", "Severed From The Sea", "Odd Chemistry", "Ex Tempore"]
 
 function MoveDisplay({
 	character,
@@ -212,6 +215,10 @@ function SpecialMoveDisplay({ character, title }: { character: CharacterNotTroup
 			return <TheApertureOfThePocketWatch character={character} />
 		case "Severed From The Sea":
 			return <SeveredFromTheSea character={character} />
+		case "Odd Chemistry":
+			return <OddChemistry character={character}/>
+		case "Ex Tempore":
+			return <ExTempore character={character}/>
 	}
 	return <div>{title} Special Display not built yet!</div>
 }
@@ -1391,4 +1398,313 @@ function SeveredFromTheSea({ character }: { character: CharacterNotTroupe }) {
 			</p>
 		})}
 	</div>
+}
+
+function OddChemistry({character}:{character:CharacterNotTroupe}) {
+	const {gameState, updateGameState, user:{id}} = useGame();
+	const editable = character.playerId === id;
+	const characterState = gameState.players.find((p)=> p.id === character.playerId && p.character)?.character
+	if (characterState?.playbook !== "volatile") return;
+	const moveState = characterState.coreMoveState
+	if (moveState?.type !== "volatile") return;
+	const {aspects, complications, reagent} = moveState
+	
+	//core move state:
+//aspect list;
+//complication list;
+//reagent boxes (3)
+//elixirs (6) - character, aspect, complication, 3 boxes
+
+const toggleReagent = (index: number) => {
+	const newReagent = reagent.map((
+  r,
+  reagentIndex,
+)=> reagentIndex === index ? 1 : r)
+		updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, coreMoveState: {...moveState, reagent: newReagent } } } : player) });
+}
+
+return (
+  <div className="flex flex-col gap-2 text-left">
+    <h3 className="text-sm font-bold text-theme-text-accent text-center">Odd Chemistry</h3>
+    <p>
+      You have the tools and inputs needed to create Elixirs. Whenever you take a few hours to do so, mark Reagent below
+      and roll with Reason or Sensitivity, your choice. If you have a Condition that would make the delicate process of
+      creating chemicals difficult, the Keeper can force you to roll with Composure (in addition to rolling at
+      disadvantage, as normal). On a 10+, you create an Elixir; pick an Aspect from the list below and write it on an
+      empty Elixir space. On a 7-9, as above, but the Keeper will also pick a Complication; write it below the Aspect.
+      On a miss, as 7-9, but the Elixir is poorly made; cross out two of the boxes.
+    </p>
+
+    <p>
+      Each Elixir can be used by a single character (you or someone else) for an entire phase of play; write the name of
+      the character on the circle next to the Elixir. The affected character gets the feat or benefit implied by the
+      Aspect without having to mark a box. If the character under the influence of the Elixir is a Hunter, they can
+      additionally mark a box to get the mechanical benefits of an Aspect so long as it makes sense in the fiction. You
+      no longer have access to an Elixir once all Aspect boxes are marked.
+    </p>
+
+    <p>On a 12+, create two Elixirs (the same or different), if you wish.</p>
+
+    <p>
+      Once all six Elixirs have been created, you must erase one entirely from your sheet in order to make a new one.
+    </p>
+	  {editable && <CreateAnElixir character=  {character}/>}
+	<Elixirs character=  {character}/>
+	
+
+    <div className="flex justify-evenly items-start"><Section collapsible minify leftAlign title="Aspects">
+    <ul>
+      {aspects.map((aspect, index) => <li className="border-b-[1px]" key={`aspect-  ${index}-${aspect}`}>{aspect}</li>)}
+    </ul>
+	</Section>
+	<Section collapsible minify leftAlign title="Complications">
+    <ul>
+	{complications.map((complication, index) => <li className="border-b-[1px]" key=  {`complication-${index}-${complication}`}>{complication}</li>)}
+    </ul></Section></div>
+
+    <h4 className="text-center">Reagent</h4>
+    <div className="flex justify-center gap-2">  {Array.from({ length: 3 }).map((_, index) => 
+    <input key={`reagent-box-${index}`} checked=    {moveState.reagent[index] === 1} type="checkbox" onChange={() => toggleReagent(index)} />
+  )}
+		</div>
+
+    <p>
+      To replenish your Reagent, you must render and distill the essence of a deceased (or trapped) supernatural
+      creature. When you spend a whole phase of play doing so, unmark all Reagent and work with the Keeper to define one
+      new Aspect and one new Complication, inspired by the creature in question. Once all Aspects are filled in, you
+      must erase one to add a new one. Once all Complications are filled in, if you ever need to add a new one, put on a
+      Mask and then replace an existing Complication with the new one. The creature is destroyed in the Reagent process.{" "}
+    </p>
+      {editable && <CreateReagentModal character={character} />}
+  </div>
+)
+}
+
+function Elixirs({character}:{character:CharacterNotTroupe}) {
+	const {gameState, updateGameState, user:{id}} = useGame();
+	const characterState = gameState.players.find((player) => player.id === character.playerId)?.character
+	const editable = character.playerId === id;
+	if (characterState?.playbook !== "volatile") return;
+	const coreMove = characterState.coreMoveState
+	if (coreMove?.type !== "volatile") return;
+	const {elixirs} = coreMove
+	if (!elixirs) return;
+
+	const saveCharacter =(elixirIndex:number, character:string)=> {
+		const newElixirs = [...elixirs]
+		newElixirs[elixirIndex] = {...newElixirs[elixirIndex], character }
+		updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, coreMoveState: {...coreMove, elixirs: newElixirs } } } : player) });
+	}
+
+	const toggleBox = (elixirIndex:number, boxIndex:number) => {
+		const newElixirs = [...elixirs]
+		const newBoxes = newElixirs[elixirIndex].boxes
+		newBoxes[boxIndex] = newBoxes[boxIndex] === 1 ? 0 :1
+		newElixirs[elixirIndex] = {...newElixirs[elixirIndex], boxes: newBoxes }
+
+		updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, coreMoveState: {...coreMove, elixirs: newElixirs } } } : player) });
+	}
+
+	const removeElixir = (elixirIndex:number) => {
+		const newElixirs = elixirs.filter((_, index)=> index !== elixirIndex)
+		updateGameState({ players: gameState.players.map((player) => player.id === character.playerId && player.character ? { ...player, character: { ...player.character, coreMoveState: {...coreMove, elixirs: newElixirs } } } : player) });
+	}
+
+	return <Section title="Elixirs" collapsible minify>
+		{elixirs.map((elixir, index) => (
+  <Elixir
+    editable={editable}
+    elixir={elixir}
+    key={`elixir${index}-${elixir.aspect}`}
+    saveCharacter={(character) => saveCharacter(index, character)}
+    toggleBox={(boxIndex) => toggleBox(index, boxIndex)}
+	removeElixir={()=> removeElixir(index)}
+  />
+))}
+		</Section>
+}
+
+
+function Elixir({elixir, editable, saveCharacter, toggleBox, removeElixir}:{
+  elixir: {aspect:string, complication?:string, boxes:   number[], character?:string};
+  editable: boolean;
+  saveCharacter: (character:string) => void;
+  toggleBox: (index:number)=>void;
+  removeElixir: ()=>void;
+}) {
+
+	const handleSaveCharacter = (_index:number, text:string) => {
+		saveCharacter(text)
+	}
+	return <div className="flex flex-col border border-theme-bg-secondary rounded-full p-2">
+<div className="flex gap-2 justify-start items-center">
+		<div className="w-1/2 flex flex-col">
+			<div className="italic text-xs text-theme-text-muted">given to</div>
+		<EditableLine index={0} text={elixir.character ?? ""} editable={editable} onSave={handleSaveCharacter}/></div>
+		<div className="w-1/4 flex justify-center items-center">{Array.from({length:3}).map((_, index) => <button key={`elixirbox-${index}`} type="button" onClick={() => toggleBox(index)}>{elixir.boxes[index] ? (
+  <ElixirFullIcon
+    key="todo"
+    className="w-8 text-theme-text-accent"
+  />
+) : (
+  <ElixirEmptyIcon     key="todo"
+  className="w-8 text-theme-text-muted"/>
+)}</button>)}</div>
+		<div className="w-1/2 flex flex-col gap-1 justify-center items-start">
+			<div>{elixir.aspect}</div>
+			<div>{elixir.complication}</div>
+		</div>
+		</div>
+
+		<button type="button" className="w-fit mx-auto border rounded-md p-1 bg-theme-bg-secondary hover:bg-theme-bg-accent" onClick={removeElixir}>Remove</button>
+
+	</div>
+}
+
+function CreateAnElixir({character}:{character:CharacterNotTroupe}) {
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const {gameState, updateGameState, user: { id }} = useGame();
+	const [selectedAspect, setSelectedAspect] = useState<string>("")
+	const [selectedComplication, setSelectedComplication] = useState<string|undefined>(undefined)
+	if (character.coreMoveState?.type !== "volatile") return;
+	const coreMoveState = character.coreMoveState
+
+	const createElixir = () => {
+		updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, coreMoveState: {...coreMoveState, elixirs: [...(coreMoveState.elixirs ??   []), {aspect:selectedAspect, complication:selectedComplication, boxes: [0,0,0]}] } } } : player) });
+		setSelectedAspect("")
+		setSelectedComplication(undefined)
+		setIsModalOpen(false);
+	}
+
+
+	return 		<Dialog.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
+	<Dialog.Trigger asChild>
+		<div className="flex justify-center mx-auto w-1/2"><GlassyButton>Create New Elixir</GlassyButton></div>
+	</Dialog.Trigger>
+	<Dialog.Portal>
+		<Dialog.Overlay className="DialogOverlay" />
+		<Dialog.Content className="DialogContent">
+			<Dialog.Close asChild>
+				<CloseButton/>
+			</Dialog.Close>
+			<Dialog.Title className="DialogTitle">Create New Elixir</Dialog.Title>
+			<Dialog.Description className="DialogDescription">
+			Whenever you take a few hours to do so, mark Reagent
+      and roll with Reason or Sensitivity, your choice. If you have a Condition that would make the delicate process of
+      creating chemicals difficult, the Keeper can force you to roll with Composure (in addition to rolling at
+      disadvantage, as normal). On a 10+, you create an Elixir; pick an Aspect from the list below and write it on an
+      empty Elixir space. On a 7-9, as above, but the Keeper will also pick a Complication; write it below the Aspect.
+      On a miss, as 7-9, but the Elixir is poorly made; cross out two of the boxes. On a 12+, create two Elixirs (the same or different), if you wish.
+			</Dialog.Description>
+			<h3>Aspects</h3>
+			{coreMoveState.aspects.filter((aspect) => aspect !== "").map((aspect)=> <div className="flex gap-2 justify-start items-center w-full"key={aspect}><input type="radio" onChange={()=> setSelectedAspect(aspect)} checked={selectedAspect === aspect}/>{aspect}</div>)}
+			<ul className="flex flex-col justify-start items-stretch">
+    </ul>
+	<h3>Complications</h3>
+	{coreMoveState.complications.filter((complication)=> complication !== "").map((complication)=> <div className="flex gap-2 justify-start items-center w-full"key={complication}><input type="radio" onChange={()=> setSelectedComplication(complication)} checked={selectedComplication === complication}/>{complication}</div>)}
+	<div className="flex gap-2 justify-start items-center w-full"><input type="radio" onChange={()=> setSelectedComplication(undefined)} checked={selectedComplication === undefined}/>None</div>
+    <ul className="flex flex-col justify-start items-stretch">
+    </ul>
+	<div className="w-full flex justify-center"><GlassyButton onClick={createElixir}>Confirm and Close</GlassyButton></div>
+		</Dialog.Content>
+	</Dialog.Portal>
+</Dialog.Root>
+}
+
+function CreateReagentModal({character}:{character:CharacterNotTroupe}) {
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const {gameState, updateGameState, user:{id}} = useGame();
+	if (character.coreMoveState?.type !== "volatile") return;
+	const coreMoveState = character.coreMoveState
+	const {aspects, complications} = coreMoveState
+
+	const updateField = (type:"aspect"|"complication", index:number, text:string) => {
+		const newAspects = type === "aspect" ? aspects.map((a, aspectIndex) => aspectIndex===index ? text : a) : aspects;
+		const newComplications = type === "complication" ? complications.map((c, complicationIndex) => complicationIndex===index ? text : c) : complications;
+
+		updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, coreMoveState: {...coreMoveState, aspects: newAspects, complications: newComplications, reagent: [0,0,0] } } } : player) });
+	}
+
+	return 		<Dialog.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
+	<Dialog.Trigger asChild>
+		<div className="flex justify-center mx-auto w-1/2"><GlassyButton>Create New Reagent</GlassyButton></div>
+	</Dialog.Trigger>
+	<Dialog.Portal>
+		<Dialog.Overlay className="DialogOverlay" />
+		<Dialog.Content className="DialogContent">
+			<Dialog.Close asChild>
+				<CloseButton/>
+			</Dialog.Close>
+			<Dialog.Title className="DialogTitle">Create New Reagent</Dialog.Title>
+			<Dialog.Description className="DialogDescription">
+			To replenish your Reagent, you must render and distill the essence of a deceased (or trapped) supernatural
+      creature. When you spend a whole phase of play doing so, unmark all Reagent and work with the Keeper to define one
+      new Aspect and one new Complication, inspired by the creature in question. Once all Aspects are filled in, you
+      must erase one to add a new one. Once all Complications are filled in, if you ever need to add a new one, put on a
+      Mask and then replace an existing Complication with the new one. The creature is destroyed in the Reagent process.
+			</Dialog.Description>
+			<h3>Aspects</h3>
+			<ul className="flex flex-col justify-start items-stretch">
+      {aspects.map((aspect, index) => <EditableLine key={`aspect-${index}-${aspect}`}text={aspect} editable onSave={(index, value) => updateField("aspect", index,value)} index={index}/>)}
+    </ul>
+	<h3>Complications</h3>
+    <ul className="flex flex-col justify-start items-stretch">
+	{complications.map((complication, index) => <EditableLine key={`complication-${index}-${complication}`}text={complication} editable onSave={(index, value) => updateField("complication", index,value)} index={index}/>)}
+    </ul>
+	<div className="w-full flex justify-center"><GlassyButton onClick={()=>setIsModalOpen(false)}>Confirm and Close</GlassyButton></div>
+		</Dialog.Content>
+	</Dialog.Portal>
+</Dialog.Root>
+}
+
+function ExTempore({character}:{character:CharacterNotTroupe}) {
+	const {gameState, updateGameState, user: {id}} = useGame();
+	const characterState = gameState.players.find((player) => character.playerId === player.id && player.character)?.character
+	if (characterState?.playbook !== "volatile") return;
+	const moveState = characterState.moves.find((move) => move.title === "Ex Tempore")
+	if (!moveState) return;
+	const editableLines = moveState.lines ?? ["","",""]
+	const editable = character.playerId === id;
+	const checked = moveState.checks ? moveState.checks[0] : false;
+
+	const saveLine = (index:number, text:string) => {
+const newLines = [...(moveState.lines ?? [])]
+newLines[index] = text;
+updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, moves: character.moves.map((m) => m.title === "Ex Tempore" ? {...m, lines: newLines}: m) } } : player) });
+	}
+	const toggleChecked = () => {
+		updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, moves: character.moves.map((m) => m.title === "Ex Tempore" ? {...m, checks: [1]}: m) } } : player) });
+	}
+	
+	const removeElixir = () => {
+		updateGameState({ players: gameState.players.map((player) => player.id === id && player.character ? { ...player, character: { ...player.character, moves: character.moves.map((m) => m.title === "Ex Tempore" ? {...m, lines: ["","",""], checks: [0]}: m) } } : player) });
+	}
+
+	return (
+		<div className="flex flex-col gap-2 text-left">
+		<h3 className="text-sm font-bold text-theme-text-accent text-center">Ex Tempore</h3>
+		<p>When in the presence of the supernatural, mark all remaining Reagent to create a quick, limited-use Elixir right here, right now. Work with the Keeper to define one Aspect and one Complication, inspired by the supernatural source, and fill them in below. This Elixir can only be used for the remainder of the phase it was created in; erase it entirely once the phase is complete.</p>
+
+<div className="flex flex-col border border-theme-bg-secondary rounded-full p-2">
+<div className="flex gap-2 justify-start items-center ">
+<div className="w-1/2 flex flex-col"><div className="italic text-xs text-theme-text-muted">given to</div>
+<EditableLine index={0} text={  editableLines[0]} editable={editable} onSave={saveLine}/></div>
+<div className="w-1/4 flex justify-center items-center"><button type="button" onClick={toggleChecked}>{checked ? (
+<ElixirFullIcon
+className="w-8 text-theme-text-accent"
+/>
+) : (
+<ElixirEmptyIcon 
+className="w-8 text-theme-text-muted"/>
+)}</button></div>
+<div className="w-1/2 flex flex-col gap-1 justify-center items-start">
+	<div><EditableLine index={1} text={  editableLines[1]} editable={editable} onSave={saveLine}/></div>
+	<div><EditableLine index={2} text={  editableLines[2]} editable={editable} onSave={saveLine}/></div>
+</div>
+</div>
+<button type="button" className="w-fit mx-auto border rounded-md p-1 bg-theme-bg-secondary hover:bg-theme-bg-accent" onClick={removeElixir}>Remove</button>
+</div>
+
+</div>
+	)
 }

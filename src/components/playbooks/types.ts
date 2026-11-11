@@ -68,7 +68,7 @@ export const playbookKeys = {
   underground: "underground",
   facsimile: "facsimile",
   selkie: "selkie",
-  //volatile: "volatile",
+  volatile: "volatile",
   custom: "custom",
 } as const
 
@@ -133,6 +133,20 @@ const coreMoveStateSchema = z.discriminatedUnion("type", [
     type: z.literal("underground"),
     obligations: z.array(z.string()).catch(Array.from({ length: 15 }, () => "-")),
     obligationTrack: z.array(z.number()).catch(Array.from({ length: 6 }, () => 0)),
+  }),
+  z.object({
+    type: z.literal("volatile"),
+    aspects: z.array    (z.string    ()).length(9),
+    complications: z.array(z.string    ()).length    (7),
+    reagent: z.array(z.number()).length(3),
+    elixirs: z.array    (
+      z.object({
+        character: z.string().optional(),
+        aspect: z.string(),
+        complication: z.string().optional        (),
+        boxes: z.array(z.number()),
+      }),
+    ).optional    ()
   })
 ]
 )

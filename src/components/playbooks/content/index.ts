@@ -16,6 +16,7 @@ import { undeniablePlaybook } from "./undeniable"
 import { undergroundPlaybook } from "./underground"
 import { unquietPlaybook } from "./unquiet"
 import { vesselPlaybook } from "./vessel"
+import { volatilePlaybook } from "./volatile"
 
 export const playbookBases: Record<(typeof playbookKeys)[keyof typeof playbookKeys], PlaybookBase> = {
   [playbookKeys.custom]: blankPlaybook,
@@ -34,7 +35,7 @@ export const playbookBases: Record<(typeof playbookKeys)[keyof typeof playbookKe
   [playbookKeys.underground]: undergroundPlaybook,
   [playbookKeys.facsimile]: facsimilePlaybook,
   [playbookKeys.selkie]: selkiePlaybook,
-  //[playbookKeys.volatile]: volatilePlaybook,
+  [playbookKeys.volatile]: volatilePlaybook,
 }
 
 export function customFieldOrFallback(
