@@ -27,7 +27,7 @@ export function MysterySheet({
 	);
 
 	return (
-		<div className="flex flex-col justify-start items-start h-full w-full pointer-events-none">
+		<div className="flex flex-col justify-start items-start flex-1 min-h-0 w-full">
 			<Tooltip.Root>
 				<Tooltip.Trigger asChild>
 				<button
@@ -77,7 +77,7 @@ export function MysterySheet({
 							</div>
 							{/* mystery content */}
 							<AnimatePresence>
-								<div className="relative w-full h-full flex-1 overflow-y-auto">
+								<div className="relative w-full flex-1 overflow-y-auto">
 									{mysteries && mysteries.length > 0 ? (
 										mysteries.map(
 											(mystery) =>
