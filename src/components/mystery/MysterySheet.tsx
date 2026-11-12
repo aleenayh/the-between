@@ -27,7 +27,7 @@ export function MysterySheet({
 	);
 
 	return (
-		<div className="flex flex-col justify-start items-start flex-1 min-h-0 w-full pointer-events-none">
+		<div className="flex flex-col justify-start items-start flex-1 min-h-0 w-full">
 			<Tooltip.Root>
 				<Tooltip.Trigger asChild>
 				<button
