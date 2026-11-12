@@ -77,7 +77,7 @@ export function MysterySheet({
 							</div>
 							{/* mystery content */}
 							<AnimatePresence>
-								<div className="relative w-full h-full flex-1 overflow-y-auto">
+								<div className="relative w-full flex-1 overflow-y-auto">
 									{mysteries && mysteries.length > 0 ? (
 										mysteries.map(
 											(mystery) =>
