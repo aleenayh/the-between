@@ -117,7 +117,7 @@ export function MobileDrawerNavigation() {
 
 	return (
 		<div className="flex md:hidden">
-			<div className="flex absolute top-0 left-0 bottom-0 flex-1 w-full flex-col justify-start items-start pointer-events-none pb-16">
+			<div className="flex top-0 left-0 bottom-0 flex-1 w-full flex-col justify-start items-start pointer-events-none pb-16">
 			<ReferenceSheet isOpen={refOpen} setIsOpen={setRefOpen} />
 			<MysterySheet isOpen={mysteryOpen} setIsOpen={setMysteryOpen} />
 			<PullOutCharacterOverview
