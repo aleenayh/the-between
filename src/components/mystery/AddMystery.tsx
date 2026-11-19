@@ -104,7 +104,7 @@ function CustomMysteryForm({
 					},
 				],
 				theme: mystery?.theme || MysteryTheme.Rose,
-				countdownTotal: mystery?.countdownTotal || 3,
+				countdownTotal: mystery?.countdownTotal,
 				maskTitle: mystery?.mask?.title || "",
 				maskText: mystery?.mask?.text || "",
 			},
